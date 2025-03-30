@@ -1,0 +1,98 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2025-03-30T02:04:51.266120+00:00",
+  "repo": "xmzzyo/draft_llm_nm",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 2,
+      "id": "I_kwDOOQJBnc6wQc1P",
+      "title": "Add Explainability functionality to the Operator Audit Module (Section 3.3)",
+      "url": "https://github.com/xmzzyo/draft_llm_nm/issues/2",
+      "state": "OPEN",
+      "author": "shaileshprabhu95",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "While the Operator Audit Module lets the Human Operator get an oversight of the LLM Decision with a corresponding Confidence Score, it is also important to include the Explainability (with counterfactual reasoning) aspect along with the Confidence Score.\n\nI propose the following 3 key aspects of the Explainability functionality.\n\n1. **Decision Breakdown**: Each LLM-generated configuration should include a breakdown of key influencing factors. For example, the LLM Decision may also contain \"This configuration was suggested due to high network congestion detected in Telemetry Data\".\n\n2. **Justification Logs**: Extend audit records to include decision rationales alongside confidence scores. For example:\n    - **Decision**: Increase bandwidth allocation\n    - **Confidence Score**: 85%\n    - **Key Factors**: High latency in telemetry, SLA violation threshold crossed\n\n3. **Counterfactual Analysis**: The system should simulate \u201cWhat if?\u201d scenarios\nFor example, \"If no changes are made, network congestion will increase by 15% in the next 5 minutes\".\n\nPlease review and let me know if I can raise a PR to extend the current Operator Audit Module by adding the above-mentioned Explainability functionality. Thanks!",
+      "createdAt": "2025-03-28T20:15:28Z",
+      "updatedAt": "2025-03-28T20:15:28Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOOQJBnc6Qk32z",
+      "title": "Minor Editorial Fixes",
+      "url": "https://github.com/xmzzyo/draft_llm_nm/pull/1",
+      "state": "OPEN",
+      "author": "shaileshprabhu95",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-03-28T15:20:18Z",
+      "updatedAt": "2025-03-28T15:20:18Z",
+      "baseRepository": "xmzzyo/draft_llm_nm",
+      "baseRefName": "main",
+      "baseRefOid": "954d23f0c2e54ed010c746d0466385ec0b6fcec8",
+      "headRepository": "shaileshprabhu95/draft_llm_nm",
+      "headRefName": "editorial_review",
+      "headRefOid": "9ac955a7efd87e8768ad3cd2e6c2172f85923b8e",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}
