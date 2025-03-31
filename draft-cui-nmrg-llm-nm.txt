@@ -5,9 +5,9 @@
 Network Management Research Group                                 Y. Cui
 Internet-Draft                                       Tsinghua University
 Intended status: Informational                                   M. Xing
-Expires: 29 September 2025                                      L. Zhang
+Expires: 2 October 2025                                         L. Zhang
                                                  Zhongguancun Laboratory
-                                                           28 March 2025
+                                                           31 March 2025
 
 
  A Framework for LLM-Assisted Network Management with Human-in-the-Loop
@@ -17,13 +17,13 @@ Abstract
 
    This document defines an interoperable framework that facilitates
    collaborative network management between Large Language Models (LLMs)
-   and human operators.  The proposed framework introduces enhanced
-   telemetry module, LLM decision module and standardized interaction
-   data models between human operators and LLM-driven systems, and
-   workflows to enforce human oversight.  The approach ensures
-   compatibility with existing network management systems and protocols
-   while improving automation and decision-making capabilities in
-   network operations.
+   and human operators.  The proposed framework introduces an enhanced
+   telemetry module, an LLM decision module, and standardized
+   interaction data models between human operators and LLM-driven
+   systems, and workflows to enforce human oversight.  The approach
+   ensures compatibility with existing network management systems and
+   protocols while improving automation and decision-making capabilities
+   in network operations.
 
 About This Document
 
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 September 2025.
+   This Internet-Draft will expire on 2 October 2025.
 
 Copyright Notice
 
@@ -99,14 +99,14 @@ Table of Contents
 
 1.1.  Motivation
 
-   Traditional network automation systems struggle with handling
-   unanticipated scenarios and managing complex multi-domain data
-   dependencies.  Large Language Models (LLMs) offer advanced multimodal
-   data comprehension, adaptive reasoning, and generalization
+   Traditional network automation systems often face challenges in
+   handling unanticipated scenarios and managing complex multi-domain
+   data dependencies.  Large Language Models (LLMs) offer advanced
+   multimodal data comprehension, adaptive reasoning, and generalization
    capabilities, making them a promising tool for network management and
    autonomous network[TM-IG1230].  However, full automation remains
    impractical due to risks such as model hallucination, operational
-   errors, and the lack of accountability in decision-making[Huang25].
+   errors, and a lack of accountability in decision-making[Huang25].
    This document proposes a structured framework that integrates LLMs
    into network management through human-in-the-loop collaboration,
    leveraging their strengths while ensuring oversight, reliability, and
@@ -140,7 +140,7 @@ Table of Contents
 3.  Framework Overview
 
    +-------------------------------------------------------------+
-   |             LLM-Assisted Netwrok Management System          |
+   |             LLM-Assisted Network Management System          |
    +-------------------------------------------------------------+
    |+--------------------LLM Decision Module--------------------+|
    ||                                                           ||
@@ -165,7 +165,7 @@ Table of Contents
                 |                              |       |Operator <--+
                 |                              |       +---------+
    +------------v------------------------------v------------------+
-   |               Original Netwrok Management System             |
+   |               Original Network Management System             |
    +------------------------------^-------------------------------+
                                   |
    +------------------------------v-------------------------------+
@@ -237,7 +237,7 @@ Table of Contents
    To execute a specific task, such as traffic analysis, traffic
    optimization, or fault remediation, a corresponding task instance
    must be created.  A task instance consists of a selected LLM
-   foundation model, an associated prompt and fine-tuned weights.
+   foundation model, an associated prompt, and fine-tuned weights.
 
    *  Foundation Model Library.  Operators must select an appropriate
       foundation model based on the specific task requirements.
@@ -371,7 +371,7 @@ Table of Contents
 
    This structured approach ensures that all LLM-generated
    configurations undergo rigorous human review, maintaining operational
-   accountability and security.
+   accountability, and security.
 
 4.  Data Model
 
