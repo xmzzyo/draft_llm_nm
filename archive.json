@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-03-30T02:04:51.266120+00:00",
+  "timestamp": "2025-04-01T02:09:41.744909+00:00",
   "repo": "xmzzyo/draft_llm_nm",
   "labels": [
     {
@@ -57,14 +57,53 @@
       "url": "https://github.com/xmzzyo/draft_llm_nm/issues/2",
       "state": "OPEN",
       "author": "shaileshprabhu95",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "While the Operator Audit Module lets the Human Operator get an oversight of the LLM Decision with a corresponding Confidence Score, it is also important to include the Explainability (with counterfactual reasoning) aspect along with the Confidence Score.\n\nI propose the following 3 key aspects of the Explainability functionality.\n\n1. **Decision Breakdown**: Each LLM-generated configuration should include a breakdown of key influencing factors. For example, the LLM Decision may also contain \"This configuration was suggested due to high network congestion detected in Telemetry Data\".\n\n2. **Justification Logs**: Extend audit records to include decision rationales alongside confidence scores. For example:\n    - **Decision**: Increase bandwidth allocation\n    - **Confidence Score**: 85%\n    - **Key Factors**: High latency in telemetry, SLA violation threshold crossed\n\n3. **Counterfactual Analysis**: The system should simulate \u201cWhat if?\u201d scenarios\nFor example, \"If no changes are made, network congestion will increase by 15% in the next 5 minutes\".\n\nPlease review and let me know if I can raise a PR to extend the current Operator Audit Module by adding the above-mentioned Explainability functionality. Thanks!",
       "createdAt": "2025-03-28T20:15:28Z",
-      "updatedAt": "2025-03-28T20:15:28Z",
+      "updatedAt": "2025-03-31T19:03:06Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "xmzzyo",
+          "authorAssociation": "OWNER",
+          "body": "Hi Shailesh,\n\nThank you for your valuable contribution. I agree that the Explainability functionality is necessary for the Operator Audit module, and I support this enhancement along with the proposed extended fields.\n\nRegarding the counterfactual analysis, do you think we should discuss potential integration with the network digital twin?\n\nThanks!",
+          "createdAt": "2025-03-31T01:31:45Z",
+          "updatedAt": "2025-03-31T01:31:45Z"
+        },
+        {
+          "author": "shaileshprabhu95",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Hi  @xmzzyo , thanks for supporting my contribution.\n\nTo add the Explainability features to the Operator Audit Module, I've raised this PR: https://github.com/xmzzyo/draft_llm_nm/pull/3\nKindly review!\n\nIntegrating Counterfactual Analysis with the Network Digital Twin is an interesting thought. That'll provide a more reliable confidence scoring, and a better simulation scenario. I feel we should discuss this in more detail, hence I raised a separate Github Issue for this: https://github.com/xmzzyo/draft_llm_nm/issues/4",
+          "createdAt": "2025-03-31T19:03:05Z",
+          "updatedAt": "2025-03-31T19:03:05Z"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "I_kwDOOQJBnc6wgijr",
+      "title": "Discuss potential integration of Counterfactual Analysis with Network Digital Twin",
+      "url": "https://github.com/xmzzyo/draft_llm_nm/issues/4",
+      "state": "OPEN",
+      "author": "shaileshprabhu95",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This is a sub-issue of https://github.com/xmzzyo/draft_llm_nm/issues/2 to further discuss the potential integration of **Counterfactual Analysis** (of the Explainability functionality) with the **Network Digital Twin**.",
+      "createdAt": "2025-03-31T18:58:52Z",
+      "updatedAt": "2025-03-31T19:38:30Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "shaileshprabhu95",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@xmzzyo  - thanks for the idea of integration. I support the integration idea and here's why:\n\n1. The **Counterfactual Analysis just becomes more accurate**. Instead of simply predicting, \u201cIf no changes are made, congestion will increase by 15%,\u201d the Digital Twin can simulate the actual network behavior under different conditions before any real-world application.\n2. Once validated by the Network Digital Twin, the **confidence score is now based on realistic network dynamics rather than purely model-driven assumptions**.\n3. The integration provides an **Automated Feedback Loop for Continuous Improvement.**\n\nDo you think we need a separate draft for the integration? or should we work on extending the current draft with the integration elements?",
+          "createdAt": "2025-03-31T19:38:29Z",
+          "updatedAt": "2025-03-31T19:38:29Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -73,20 +112,74 @@
       "id": "PR_kwDOOQJBnc6Qk32z",
       "title": "Minor Editorial Fixes",
       "url": "https://github.com/xmzzyo/draft_llm_nm/pull/1",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "shaileshprabhu95",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-03-28T15:20:18Z",
-      "updatedAt": "2025-03-28T15:20:18Z",
+      "updatedAt": "2025-03-31T18:36:10Z",
       "baseRepository": "xmzzyo/draft_llm_nm",
       "baseRefName": "main",
       "baseRefOid": "954d23f0c2e54ed010c746d0466385ec0b6fcec8",
       "headRepository": "shaileshprabhu95/draft_llm_nm",
       "headRefName": "editorial_review",
       "headRefOid": "9ac955a7efd87e8768ad3cd2e6c2172f85923b8e",
+      "closedAt": "2025-03-31T01:04:19Z",
+      "mergedAt": "2025-03-31T01:04:19Z",
+      "mergedBy": "xmzzyo",
+      "mergeCommit": {
+        "oid": "684d6628f02b7832c155649467a6f1a58e0e8e0d"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 3,
+      "id": "PR_kwDOOQJBnc6Q0gN4",
+      "title": "Enhancing Operator Audit Module with Explainability functionality",
+      "url": "https://github.com/xmzzyo/draft_llm_nm/pull/3",
+      "state": "OPEN",
+      "author": "shaileshprabhu95",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves https://github.com/xmzzyo/draft_llm_nm/issues/2",
+      "createdAt": "2025-03-31T18:55:48Z",
+      "updatedAt": "2025-03-31T18:55:48Z",
+      "baseRepository": "xmzzyo/draft_llm_nm",
+      "baseRefName": "main",
+      "baseRefOid": "684d6628f02b7832c155649467a6f1a58e0e8e0d",
+      "headRepository": "shaileshprabhu95/draft_llm_nm",
+      "headRefName": "explain_ai",
+      "headRefOid": "b7bc991f5c8ce159587202a210f642b029c22fb0",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 5,
+      "id": "PR_kwDOOQJBnc6Q0uB2",
+      "title": "May I join as a co-author?",
+      "url": "https://github.com/xmzzyo/draft_llm_nm/pull/5",
+      "state": "OPEN",
+      "author": "shaileshprabhu95",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "**My contributions to the draft so far**:\r\n- Proposed **Explainability enhancements** to the Operator Audit Module that was well-received (Github Issue https://github.com/xmzzyo/draft_llm_nm/issues/2) and the corresponding PR https://github.com/xmzzyo/draft_llm_nm/pull/3 for text inclusion.\r\n- I intend to support the draft and continue working on these enhancements, including the potential **integration of Counterfactual Analysis with the Network Digital Twin** (Github Issue https://github.com/xmzzyo/draft_llm_nm/issues/4)\r\n- Did an **Editorial Review** of the draft in PR: https://github.com/xmzzyo/draft_llm_nm/pull/1 (merged)\r\n\r\nI am deeply interested in the ongoing work of this draft and committed to contributing further to it.\r\n@xmzzyo ",
+      "createdAt": "2025-03-31T19:24:42Z",
+      "updatedAt": "2025-03-31T19:24:42Z",
+      "baseRepository": "xmzzyo/draft_llm_nm",
+      "baseRefName": "main",
+      "baseRefOid": "684d6628f02b7832c155649467a6f1a58e0e8e0d",
+      "headRepository": "shaileshprabhu95/draft_llm_nm",
+      "headRefName": "coauthor_shailesh",
+      "headRefOid": "10b6aeee21a9d0cc79915a5c5b2d30a63e88a2b6",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
