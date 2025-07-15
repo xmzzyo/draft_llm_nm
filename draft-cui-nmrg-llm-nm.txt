@@ -5,9 +5,9 @@
 Network Management Research Group                                 Y. Cui
 Internet-Draft                                       Tsinghua University
 Intended status: Informational                                   M. Xing
-Expires: 2 October 2025                                         L. Zhang
+Expires: 16 January 2026                                        L. Zhang
                                                  Zhongguancun Laboratory
-                                                           31 March 2025
+                                                            15 July 2025
 
 
  A Framework for LLM-Assisted Network Management with Human-in-the-Loop
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 October 2025.
+   This Internet-Draft will expire on 16 January 2026.
 
 Copyright Notice
 
@@ -372,6 +372,43 @@ Table of Contents
    This structured approach ensures that all LLM-generated
    configurations undergo rigorous human review, maintaining operational
    accountability, and security.
+
+   The Operator Audit Module is enhanced with Explainability
+   functionality to improve transparency and trust in LLM-assisted
+   decision-making.  This enhancement ensures that operators can
+   understand the reasoning behind LLM-generated configurations, verify
+   their reliability, and take corrective actions when necessary.
+
+   To achieve Explainability, the module provides a structured breakdown
+   of the decision-making process by capturing key influencing factors,
+   justification logs, and confidence scores.  Each LLM-generated
+   configuration must include a detailed rationale explaining why a
+   particular decision was made.  For example, if the system recommends
+   increasing bandwidth allocation, the decision log should indicate
+   whether this was due to high latency detected in telemetry, SLA
+   thresholds being exceeded, or other contributing factors.
+
+   Additionally, the audit process incorporates counterfactual analysis,
+   allowing operators to assess alternative outcomes.  For instance, the
+   system may indicate that if no action is taken, packet loss is
+   expected to increase by 20% in the next ten minutes.  This capability
+   enhances operational decision-making by providing a comparative
+   assessment of different actions.
+
+   To further ensure reliability, the module includes a mechanism to
+   detect potential biases or hallucinations in LLM-generated outputs.
+   If an LLM decision is based on incomplete or uncertain data, the
+   system flags it accordingly, allowing operators to make informed
+   judgments.  For example, if real-time telemetry data is insufficient,
+   the system may indicate that the confidence in a particular
+   recommendation is low.
+
+   By integrating these Explainability features, the Operator Audit
+   Module strengthens human oversight, ensuring that LLM-generated
+   configurations align with business policies, security requirements,
+   and regulatory standards.  This structured approach enhances
+   accountability and mitigates risks associated with automated
+   decision-making.
 
 4.  Data Model
 
