@@ -5,9 +5,9 @@
 Network Management Research Group                                 Y. Cui
 Internet-Draft                                       Tsinghua University
 Intended status: Informational                                   M. Xing
-Expires: 16 January 2026                                        L. Zhang
+Expires: 17 January 2026                                        L. Zhang
                                                  Zhongguancun Laboratory
-                                                            15 July 2025
+                                                            16 July 2025
 
 
  A Framework for LLM-Assisted Network Management with Human-in-the-Loop
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 January 2026.
+   This Internet-Draft will expire on 17 January 2026.
 
 Copyright Notice
 
