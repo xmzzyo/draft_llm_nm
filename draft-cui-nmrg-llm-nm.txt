@@ -658,7 +658,8 @@ Table of Contents
 
 Acknowledgments
 
-   TODO acknowledge.
+   We thanks Shailesh Prabhu from Nokia for his contributions to this
+   document.
 
 Appendix
 
