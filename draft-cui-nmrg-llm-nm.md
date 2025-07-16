@@ -290,11 +290,37 @@ To further ensure reliability, the module includes a mechanism to detect potenti
 
 By integrating these Explainability features, the Operator Audit Module strengthens human oversight, ensuring that LLM-generated configurations align with business policies, security requirements, and regulatory standards. This structured approach enhances accountability and mitigates risks associated with automated decision-making.
 
-# Data Model
+
+
+
+# IANA Considerations {#IANA}
+
+This document includes no request to IANA.
+
+# Security Considerations {#Security}
+
+- Model Hallucination: A key challenge is that, without proper constraints, the LLM may produce malformed or invalid configurations. This issue can be mitigated using techniques such as Constrained Decoding, which enforces syntactic correctness by modeling the configuration syntax and restricting the output to conform to predefined rules during the generation process.
+
+- Training Data Poisoning: LLMs can be trained on malicious or biased data, potentially leading to unintended behavior or security vulnerabilities. To mitigate this risk, LLMs should be trained on curated, high-quality datasets with rigorous validation and filtering processes. Periodic retraining and adversarial testing should also be conducted to detect and correct anomalies before deployment.
+
+
+--- back
+
+# Acknowledgments
+{:numbered="false"}
+
+TODO acknowledge.
+
+# Appendix
+{:numbered="false"}
+
+## Appendix A.1 Data Model
+{:numbered="false"}
 
 This section defines the essential data models for LLM-assisted network management, including the LLM decision response and human audit records.
 
-## LLM Response Data Model
+### LLM Response Data Model
+{:numbered="false"}
 The LLM decision module should respond with the generated configuration parameters along with an associated confidence score. If the LLM is unable to generate a valid configuration, it should return an error message accompanied by an explanation of the issue.
 
 ~~~ yang
@@ -328,7 +354,8 @@ module llm-response-module {
 }
 ~~~
 
-## Human Audit Data Model
+### Human Audit Data Model
+{:numbered="false"}
 This data model defines the structure for human audit operations and record-keeping. It facilitates collaborative decision-making by allowing LLMs to generate actionable insights while ensuring that human operators retain final operational authority.
 
 ~~~ yang
@@ -383,22 +410,3 @@ module human-audit-module {
   }
 }
 ~~~
-
-
-# IANA Considerations {#IANA}
-
-This document includes no request to IANA.
-
-# Security Considerations {#Security}
-
-- Model Hallucination: A key challenge is that, without proper constraints, the LLM may produce malformed or invalid configurations. This issue can be mitigated using techniques such as Constrained Decoding, which enforces syntactic correctness by modeling the configuration syntax and restricting the output to conform to predefined rules during the generation process.
-
-- Training Data Poisoning: LLMs can be trained on malicious or biased data, potentially leading to unintended behavior or security vulnerabilities. To mitigate this risk, LLMs should be trained on curated, high-quality datasets with rigorous validation and filtering processes. Periodic retraining and adversarial testing should also be conducted to detect and correct anomalies before deployment.
-
-
---- back
-
-# Acknowledgments
-{:numbered="false"}
-
-TODO acknowledge.
