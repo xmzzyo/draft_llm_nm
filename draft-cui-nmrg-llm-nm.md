@@ -433,7 +433,7 @@ This document includes no request to IANA.
 # Acknowledgments
 {:numbered="false"}
 
-TODO acknowledge.
+We thanks Shailesh Prabhu from Nokia for his contributions to this document.
 
 # Appendix
 {:numbered="false"}
