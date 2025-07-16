@@ -142,7 +142,7 @@ informative:
 --- abstract
 
 
-This document defines an interoperable framework that facilitates collaborative network management between Large Language Models (LLMs) and human operators. The proposed framework introduces enhanced telemetry module, LLM decision module and standardized interaction data models between human operators and LLM-driven systems, and workflows to enforce human oversight. The approach ensures compatibility with existing network management systems and protocols while improving automation and decision-making capabilities in network operations.
+This document defines an interoperable framework that facilitates collaborative network management between Large Language Models (LLMs) and human operators. The proposed framework introduces an enhanced telemetry module, an LLM decision module, and standardized interaction data models between human operators and LLM-driven systems, and workflows to enforce human oversight. The approach ensures compatibility with existing network management systems and protocols while improving automation and decision-making capabilities in network operations.
 
 
 --- middle
@@ -150,7 +150,7 @@ This document defines an interoperable framework that facilitates collaborative 
 # Introduction
 
 ## Motivation
-Traditional network automation systems struggle with handling unanticipated scenarios and managing complex multi-domain data dependencies. Large Language Models (LLMs) offer advanced multimodal data comprehension, adaptive reasoning, and generalization capabilities, making them a promising tool for network management and autonomous network{{TM-IG1230}}. However, full automation remains impractical due to risks such as model hallucination, operational errors, and the lack of accountability in decision-making{{Huang25}}. This document proposes a structured framework that integrates LLMs into network management through human-in-the-loop collaboration, leveraging their strengths while ensuring oversight, reliability, and operational safety.
+Traditional network automation systems often face challenges in handling unanticipated scenarios and managing complex multi-domain data dependencies. Large Language Models (LLMs) offer advanced multimodal data comprehension, adaptive reasoning, and generalization capabilities, making them a promising tool for network management and autonomous network{{TM-IG1230}}. However, full automation remains impractical due to risks such as model hallucination, operational errors, and a lack of accountability in decision-making{{Huang25}}. This document proposes a structured framework that integrates LLMs into network management through human-in-the-loop collaboration, leveraging their strengths while ensuring oversight, reliability, and operational safety.
 
 
 ## Problem Statement
@@ -173,7 +173,7 @@ Addressing these requirements is critical to integrating LLMs effectively into n
 # Framework Overview
 
     +-------------------------------------------------------------+
-    |             LLM-Assisted Netwrok Management System          |
+    |             LLM-Assisted Network Management System          |
     +-------------------------------------------------------------+
     |+--------------------LLM Decision Module--------------------+|
     ||                                                           ||
@@ -198,7 +198,7 @@ Addressing these requirements is critical to integrating LLMs effectively into n
                  |                              |       |Operator <--+ 
                  |                              |       +---------+
     +------------v------------------------------v------------------+
-    |               Original Netwrok Management System             |
+    |               Original Network Management System             |
     +------------------------------^-------------------------------+
                                    |
     +------------------------------v-------------------------------+
@@ -230,7 +230,8 @@ The retrieved textual data is stored in a database, either as raw text or in a v
 
 
 ### Task Instance Module
-To execute a specific task, such as traffic analysis, traffic optimization, or fault remediation, a corresponding task instance must be created. A task instance consists of a selected LLM foundation model, an associated prompt and fine-tuned weights.
+
+To execute a specific task, such as traffic analysis, traffic optimization, or fault remediation, a corresponding task instance must be created. A task instance consists of a selected LLM foundation model, an associated prompt, and fine-tuned weights.
 
 - Foundation Model Library. Operators must select an appropriate foundation model based on the specific task requirements. Examples include general-purpose models such as GPT-4, LLaMA, and DeepSeek, as well as domain-specific models fine-tuned on private datasets. Since foundation models are trained on different datasets using varying methodologies, their performance may differ across tasks.
 - Fine-Tuned Weight Library. For domain-specific applications, fine-tuned weights can be applied on top of a foundation model to efficiently adapt it to private datasets. One commonly used approach is to store the fine-tuned weights as the difference between the original foundation model and the adapted model, which can largely reduce storage requirements.
@@ -277,7 +278,17 @@ Upon completing the audit, the system maintains an audit decision record to ensu
 - Executed command reflecting the final action taken
 - Operation type (e.g., configuration update, deletion, or execution)
 
-This structured approach ensures that all LLM-generated configurations undergo rigorous human review, maintaining operational accountability and security. 
+This structured approach ensures that all LLM-generated configurations undergo rigorous human review, maintaining operational accountability, and security.
+
+The Operator Audit Module is enhanced with Explainability functionality to improve transparency and trust in LLM-assisted decision-making. This enhancement ensures that operators can understand the reasoning behind LLM-generated configurations, verify their reliability, and take corrective actions when necessary.
+
+To achieve Explainability, the module provides a structured breakdown of the decision-making process by capturing key influencing factors, justification logs, and confidence scores. Each LLM-generated configuration must include a detailed rationale explaining why a particular decision was made. For example, if the system recommends increasing bandwidth allocation, the decision log should indicate whether this was due to high latency detected in telemetry, SLA thresholds being exceeded, or other contributing factors.
+
+Additionally, the audit process incorporates counterfactual analysis, allowing operators to assess alternative outcomes. For instance, the system may indicate that if no action is taken, packet loss is expected to increase by 20% in the next ten minutes. This capability enhances operational decision-making by providing a comparative assessment of different actions.
+
+To further ensure reliability, the module includes a mechanism to detect potential biases or hallucinations in LLM-generated outputs. If an LLM decision is based on incomplete or uncertain data, the system flags it accordingly, allowing operators to make informed judgments. For example, if real-time telemetry data is insufficient, the system may indicate that the confidence in a particular recommendation is low.
+
+By integrating these Explainability features, the Operator Audit Module strengthens human oversight, ensuring that LLM-generated configurations align with business policies, security requirements, and regulatory standards. This structured approach enhances accountability and mitigates risks associated with automated decision-making.
 
 # Data Model
 
