@@ -11,7 +11,7 @@ Expires: 18 January 2026                                        L. Zhang
 
 
  A Framework for LLM-Assisted Network Management with Human-in-the-Loop
-                        draft-cui-nmrg-llm-nm-00
+                        draft-cui-nmrg-llm-nm-01
 
 Abstract
 
