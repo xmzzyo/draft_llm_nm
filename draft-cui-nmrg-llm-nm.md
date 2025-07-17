@@ -23,7 +23,7 @@ title: "A Framework for LLM-Assisted Network Management with Human-in-the-Loop"
 abbrev: "LLM4Net"
 category: info
 
-docname: draft-cui-nmrg-llm-nm-00
+docname: draft-cui-nmrg-llm-nm-01
 submissiontype: IRTF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date:
