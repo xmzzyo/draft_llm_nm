@@ -53,7 +53,7 @@ author:
   region: Beijing # not always available
   code: 100084
   country: China # use TLD (except UK) or country name
-  phone: 
+  phone:
   email: cuiyong@tsinghua.edu.cn
   uri: http://www.cuiyong.net/
 - role: # remove if not true
@@ -61,7 +61,7 @@ author:
   name: Mingzhe Xing
   org: Zhongguancun Laboratory
   street:
-  city: 
+  city:
   region: Beijing # not always available
   code: 100094
   country: China # use TLD (except UK) or country name
@@ -72,11 +72,11 @@ author:
   name: Lei Zhang
   org: Zhongguancun Laboratory
   street:
-  city: 
+  city:
   region: Beijing # not always available
   code: 100094
   country: China # use TLD (except UK) or country name
-  phone: 
+  phone:
   email: zhanglei@zgclab.edu.cn
 
 normative:
@@ -162,10 +162,10 @@ Traditional network automation systems often face challenges in handling unantic
 
 
 ## Problem Statement
-Network management faces significant challenges, including the complexity of multi-vendor configurations, the real-time correlation of heterogeneous telemetry data, and the need for rapid responses to dynamic security threats. 
-LLMs offer a promising approach to addressing these challenges through their advanced multimodal data understanding and adaptive reasoning capabilities. 
-However, the direct application of LLMs in network management introduces several technical considerations. 
-These include the need for semantic enrichment of network telemetry to enhance LLM comprehension, a dual-channel decision execution mechanism with confidence-based escalation, and auditability of LLM-generated decisions through provenance tracking. 
+Network management faces significant challenges, including the complexity of multi-vendor configurations, the real-time correlation of heterogeneous telemetry data, and the need for rapid responses to dynamic security threats.
+LLMs offer a promising approach to addressing these challenges through their advanced multimodal data understanding and adaptive reasoning capabilities.
+However, the direct application of LLMs in network management introduces several technical considerations.
+These include the need for semantic enrichment of network telemetry to enhance LLM comprehension, a dual-channel decision execution mechanism with confidence-based escalation, and auditability of LLM-generated decisions through provenance tracking.
 Addressing these requirements is critical to integrating LLMs effectively into network management workflows while maintaining reliability, transparency, and interoperability.
 
 
@@ -205,7 +205,7 @@ Addressing these requirements is critical to integrating LLMs effectively into n
     |+-----------^-------------+ +--------------|-------------^--+|  |
     +------------|------------------------------|-------------|---+  |
                  |                              |       +-----v---+  |
-                 |                              |       |Operator <--+ 
+                 |                              |       |Operator <--+
                  |                              |       +---------+
     +------------v------------------------------v------------------+
     |               Original Network Management System             |
@@ -267,15 +267,15 @@ The Network Configuration Access Control Model defined in {{RFC8341}} provides a
 - User and Group: Each task agent should be registered as a specific user, representing an entity with defined access permissions for particular devices. These permissions control the types of operations the LLM is authorized to perform. A task agent (i.e., user) is identified by a unique string within the system. Access control can also be applied at the group level, where a group consists of zero or more members, and a task agent can belong to multiple groups.
 - Access Operation Types: These define the types of operations permitted, including create, read, update, delete, and execute. Each task agent may support different sets of operations depending on its assigned permissions.
 - Action Types: These specify whether a given operation is permitted or denied. This mechanism determines whether an LLM request to perform an operation is allowed based on predefined access control rules.
-- Rule List: A rule governs access control by specifying the content and operations a task agent is authorized to handle within the system. 
+- Rule List: A rule governs access control by specifying the content and operations a task agent is authorized to handle within the system.
 
 This module must enforce explicit restrictions on the actions an LLM is permitted to perform, ensuring that network configurations remain secure and compliant with operational policies.
 
 ## Operator Audit Module
 
-The Operator Audit Module provides a structured mechanism for human oversight of LLM-generated configurations before deployment. 
+The Operator Audit Module provides a structured mechanism for human oversight of LLM-generated configurations before deployment.
 The output from the LLM Decision Module should include both the generated configuration parameters and an associated confidence score.
-The configuration parameters are validated for compliance with the YANG model and are subject to Access Control Rules enforcement. 
+The configuration parameters are validated for compliance with the YANG model and are subject to Access Control Rules enforcement.
 The confidence score, e.g., ranging from 0 to 100, serves as a reference for operators to assess the reliability of the generated configuration.
 Each audit process must track the input context (e.g., input data, RAG query content, model selection, configuration files) and the corresponding output results. The auditing steps are as follows:
 
@@ -312,12 +312,12 @@ Distributed Denial of Service (DDoS) attacks remain a critical operational threa
 
 This use case demonstrates how the LLM-assisted framework enables intelligent filtering rule generation and secure deployment with human oversight.
 
-1. **Telemetry Collection and Semantic Enrichment**  
+1. **Telemetry Collection and Semantic Enrichment**
    The Enhanced Telemetry Module retrieves real-time traffic statistics and interface metrics from network devices using NETCONF. These raw telemetry data are semantically enriched by referencing YANG models and device-specific documentation to generate a context-rich dataset suitable for LLM processing.
 
-2. **DDoS Filtering Task Instantiation**  
-   The operator initiates a `ddos-mitigation` task. The Task Agent Module selects a security-specialized foundation model and task-specific prompt. 
-   
+2. **DDoS Filtering Task Instantiation**
+   The operator initiates a `ddos-mitigation` task. The Task Agent Module selects a security-specialized foundation model and task-specific prompt.
+
    It first analyzes the following conclusions:
    - Interface `GigabitEthernet0/1` receiving sustained traffic > 100,000 pps
    - 95% of incoming packets are TCP SYN
@@ -326,9 +326,9 @@ This use case demonstrates how the LLM-assisted framework enables intelligent fi
    The RAG Module supplements the analysis with:
    - Cisco ACL syntax documentation
    - Prior incident response templates
-  
 
-3. **LLM-Generated Firewall Configuration Output**  
+
+3. **LLM-Generated Firewall Configuration Output**
    The LLM reasons that a TCP SYN flood is underway and generates the following ACL-based filtering policy:
 
 ~~~ shell
@@ -343,7 +343,7 @@ ip access-group BLOCK-DDOS in
 
 This configuration includes both source-based filtering and a global SYN rate-limiter. It is passed to the Config Verify Module for syntax validation and to the Access Control Module for permission checks.
 
-4. **Operator Audit and Decision**  
+4. **Operator Audit and Decision**
 The Operator Audit Module provides the following metadata:
 
 - **Task Agent ID**: `ddos-mitigation-task-01`
@@ -375,13 +375,13 @@ In large-scale networks, dynamic traffic scheduling is required to adapt to fluc
 
 The proposed framework enables intelligent, context-aware traffic scheduling through LLM-based reasoning. The following illustrates the process:
 
-1. **Telemetry Data Acquisition**  
+1. **Telemetry Data Acquisition**
 The Enhanced Telemetry Module gathers link utilization, queue occupancy, and delay metrics from multiple routers. The semantic enrichment process tags each metric with human-readable labels from the YANG model, including path topology and policy tags (e.g., gold/silver/bronze service classes).
 
-2. **Optimization Task Execution**  
+2. **Optimization Task Execution**
 An operator initiates a traffic scheduling task. The Task Agent Module selects a foundation model fine-tuned on traffic engineering datasets and uses a structured prompt to describe current constraints: high utilization on core links `L1-L3`, SLA violations for gold-class VoIP traffic.
 
-3. **Sample Configuration Output**  
+3. **Sample Configuration Output**
 The LLM suggests adjusting RSVP-TE path metrics to reroute gold traffic via underutilized backup paths:
 
 ~~~ shell
@@ -409,12 +409,12 @@ protocols {
 
 This configuration is syntax-validated and checked against the Access Control Module to ensure that traffic engineering policy updates are permitted for this task agent.
 
-4. **Operator Audit and Decision**  
+4. **Operator Audit and Decision**
 The Operator Audit Module presents:
 
-- **Confidence Score**: 91/100  
-- **Audit Metadata**:  
-  - Task Agent: `traffic-opt-te-v2`  
+- **Confidence Score**: 91/100
+- **Audit Metadata**:
+  - Task Agent: `traffic-opt-te-v2`
   - Input Context: “Link L1 (95% utilization), gold-voip SLA latency breach”
   - Recommendation: “Increase TE path metric to reroute VoIP via L2 backup path”
 
@@ -475,13 +475,13 @@ module llm-response-module {
   namespace "urn:ietf:params:xml:ns:yang:ietf-nmrg-llmn4et";
   prefix llmresponse;
   container llm-response {
-    leaf config {  
+    leaf config {
       type string;
     }
-    leaf confidence { 
+    leaf confidence {
       type uint64;
     }
-    leaf error-reason {  
+    leaf error-reason {
       type enumeration {
         enum unsupported-task;
         enum unsupported-vendor;
@@ -517,31 +517,31 @@ module human-audit-module {
   import ietf-yang-types { prefix yang; }
 
   container human-audit {
-    leaf task-id { 
-      type string; 
+    leaf task-id {
+      type string;
       }
-    leaf generated-config { 
-      type string; 
-      }  
-    leaf confidence { 
-      type int64; 
+    leaf generated-config {
+      type string;
       }
-    container human-actions {                  
-      leaf operator { 
-        type string; 
-        } 
-      leaf action { 
-        type enumeration { 
-          enum approve; 
-          enum modify; 
-          enum reject; 
-          } 
+    leaf confidence {
+      type int64;
+      }
+    container human-actions {
+      leaf operator {
+        type string;
         }
-      leaf modified-config { 
-        type string; 
+      leaf action {
+        type enumeration {
+          enum approve;
+          enum modify;
+          enum reject;
+          }
         }
-      leaf timestamp { 
-        type yang:date-and-time; 
+      leaf modified-config {
+        type string;
+        }
+      leaf timestamp {
+        type yang:date-and-time;
         }
     }
   }
