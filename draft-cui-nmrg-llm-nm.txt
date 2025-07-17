@@ -442,17 +442,16 @@ Table of Contents
    intelligent filtering rule generation and secure deployment with
    human oversight.
 
-   1.  *Telemetry Collection and Semantic Enrichment*
-       The Enhanced Telemetry Module retrieves real-time traffic
-       statistics and interface metrics from network devices using
-       NETCONF.  These raw telemetry data are semantically enriched by
-       referencing YANG models and device-specific documentation to
-       generate a context-rich dataset suitable for LLM processing.
+   1.  *Telemetry Collection and Semantic Enrichment* The Enhanced
+       Telemetry Module retrieves real-time traffic statistics and
+       interface metrics from network devices using NETCONF.  These raw
+       telemetry data are semantically enriched by referencing YANG
+       models and device-specific documentation to generate a context-
+       rich dataset suitable for LLM processing.
 
-   2.  *DDoS Filtering Task Instantiation*
-       The operator initiates a ddos-mitigation task.  The Task Agent
-       Module selects a security-specialized foundation model and task-
-       specific prompt.
+   2.  *DDoS Filtering Task Instantiation* The operator initiates a
+       ddos-mitigation task.  The Task Agent Module selects a security-
+       specialized foundation model and task-specific prompt.
 
        It first analyzes the following conclusions: - Interface
        GigabitEthernet0/1 receiving sustained traffic > 100,000 pps -
@@ -462,9 +461,9 @@ Table of Contents
        The RAG Module supplements the analysis with: - Cisco ACL syntax
        documentation - Prior incident response templates
 
-   3.  *LLM-Generated Firewall Configuration Output*
-       The LLM reasons that a TCP SYN flood is underway and generates
-       the following ACL-based filtering policy:
+   3.  *LLM-Generated Firewall Configuration Output* The LLM reasons
+       that a TCP SYN flood is underway and generates the following ACL-
+       based filtering policy:
 
    ip access-list extended BLOCK-DDOS
    deny tcp IP1 0.0.0.255 any
@@ -479,8 +478,8 @@ Table of Contents
    syntax validation and to the Access Control Module for permission
    checks.
 
-   1.  *Operator Audit and Decision*
-       The Operator Audit Module provides the following metadata:
+   1.  *Operator Audit and Decision* The Operator Audit Module provides
+       the following metadata:
 
    *  *Task Agent ID*: ddos-mitigation-task-01
 
@@ -535,23 +534,23 @@ Table of Contents
    scheduling through LLM-based reasoning.  The following illustrates
    the process:
 
-   1.  *Telemetry Data Acquisition*
-       The Enhanced Telemetry Module gathers link utilization, queue
-       occupancy, and delay metrics from multiple routers.  The semantic
-       enrichment process tags each metric with human-readable labels
-       from the YANG model, including path topology and policy tags
-       (e.g., gold/silver/bronze service classes).
+   1.  *Telemetry Data Acquisition* The Enhanced Telemetry Module
+       gathers link utilization, queue occupancy, and delay metrics from
+       multiple routers.  The semantic enrichment process tags each
+       metric with human-readable labels from the YANG model, including
+       path topology and policy tags (e.g., gold/silver/bronze service
+       classes).
 
-   2.  *Optimization Task Execution*
-       An operator initiates a traffic scheduling task.  The Task Agent
-       Module selects a foundation model fine-tuned on traffic
-       engineering datasets and uses a structured prompt to describe
-       current constraints: high utilization on core links L1-L3, SLA
-       violations for gold-class VoIP traffic.
+   2.  *Optimization Task Execution* An operator initiates a traffic
+       scheduling task.  The Task Agent Module selects a foundation
+       model fine-tuned on traffic engineering datasets and uses a
+       structured prompt to describe current constraints: high
+       utilization on core links L1-L3, SLA violations for gold-class
+       VoIP traffic.
 
-   3.  *Sample Configuration Output*
-       The LLM suggests adjusting RSVP-TE path metrics to reroute gold
-       traffic via underutilized backup paths:
+   3.  *Sample Configuration Output* The LLM suggests adjusting RSVP-TE
+       path metrics to reroute gold traffic via underutilized backup
+       paths:
 
    policy-options {
        policy-statement reroute-gold {
@@ -578,8 +577,7 @@ Table of Contents
    Control Module to ensure that traffic engineering policy updates are
    permitted for this task agent.
 
-   1.  *Operator Audit and Decision*
-       The Operator Audit Module presents:
+   1.  *Operator Audit and Decision* The Operator Audit Module presents:
 
    *  *Confidence Score*: 91/100
 
