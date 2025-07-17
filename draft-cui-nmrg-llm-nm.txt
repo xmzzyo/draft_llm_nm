@@ -141,6 +141,10 @@ Table of Contents
 
    *  RAG: Retrieve Augmented Generation
 
+   *  MCP: Model Context Protocol
+
+   *  A2A: Agent-to-Agent Protocol
+
 3.  Framework Overview
 
    +-------------------------------------------------------------+
