@@ -9,19 +9,19 @@ number:
 date:
 consensus: true
 v: 3
-area: IRTF
-workgroup: Network Management Research Group
+area: "IRTF"
+workgroup: "Network Management"
 keyword:
   - Large Language Model
   - Network Management
   - Human in The Loop
 venue:
-  group: WG
-  type: Working Group
-  mail: WG@example.com
-  arch: https://example.com/WG
-  github: USER/REPO
-  latest: https://example.com/LATEST
+  group: "Network Management"
+  type: "Research Group"
+  mail: "nmrg@irtf.org"
+  arch: "https://mailarchive.ietf.org/arch/browse/nmrg"
+  github: "xmzzyo/draft_llm_nm"
+  latest: "https://xmzzyo.github.io/draft_llm_nm/draft-cui-nmrg-llm-nm.html"
 
 author:
 - role:  # remove if not true
