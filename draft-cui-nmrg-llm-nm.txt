@@ -5,9 +5,9 @@
 Network Management Research Group                                 Y. Cui
 Internet-Draft                                       Tsinghua University
 Intended status: Informational                                   M. Xing
-Expires: 17 January 2026                                        L. Zhang
+Expires: 18 January 2026                                        L. Zhang
                                                  Zhongguancun Laboratory
-                                                            16 July 2025
+                                                            17 July 2025
 
 
  A Framework for LLM-Assisted Network Management with Human-in-the-Loop
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 January 2026.
+   This Internet-Draft will expire on 18 January 2026.
 
 Copyright Notice
 
@@ -79,8 +79,8 @@ Table of Contents
      3.1.  Enhanced Telemetry Module
      3.2.  LLM Decision Module
        3.2.1.  RAG Module
-       3.2.2.  Task Instance Module
-       3.2.3.  Task Instance Management Module
+       3.2.2.  Task Agent Module
+       3.2.3.  Task Agent Management Module
        3.2.4.  Config Verify Module
        3.2.5.  Access Control Module
      3.3.  Operator Audit Module
@@ -148,18 +148,18 @@ Table of Contents
    +-------------------------------------------------------------+
    |+--------------------LLM Decision Module--------------------+|
    ||                                                           ||
-   ||               +--Task Instance Module--+  +-------------+ ||
-   ||               | +------+  +----------+ |  |Task Instance<-----+
-   ||               | |Prompt|  |Fine-Tuned| <->| Mgt Module  | ||  |
+   ||               +----Task Agent Module---+  +-------------+ ||
+   ||               | +---------------------+|  | Task Agent  <-----+
+   ||               | |      Tool Lib       ||<-> Mgt Module  | ||  |
+   ||               | +---------------------+|  +-------------+ ||  |
+   ||               | +------+  +----------+ |  |Config Verify| ||  |
+   ||               | |Prompt|  |Fine-Tuned| <->|     Module  | ||  |
    ||               | | Lib  |  |Weight Lib| |  +-------------+ ||  |
-   || +----------+  | +------+  +----------+ |  +-------------+ ||  |
-   || |RAG Module|<-> +--------------------+ |  |Config Verify| ||  |
-   || +-----^----+  | |Foundation Model Lib| -->|    Module   | ||  |
-   ||       |       | +--------------------+ |  +-------|-----+ ||  |
-   ||       |       +----^---------------^---+  +-------v------+||  |
-   ||       |            |               |      |Access Control|||  |
-   ||       |            |               |      |    Module    |||  |
-   ||       |            |               |      +-------|------+||  |
+   || +----------+  | +------+  +----------+ |  +--------------+||  |
+   || |RAG Module|<-> +--------------------+ |  |Access Control|||  |
+   || +-----^----+  | |Foundation Model Lib| -->|    Module    |||  |
+   ||       |       | +--------------------+ |  +-------|------+||  |
+   ||       |       +----^---------------^---+          |       ||  |
    |+-------|------------|---------------|--------------|-------+|  |
    |+-------v------------v----+ +--------v--------------v-------+|  |
    ||Enhanced Telemetry Module| |   Operator Audit Module       ||  |
@@ -180,20 +180,20 @@ Table of Contents
 
    The proposed framework is shown in Figure 1, highlighting the key
    components of LLM-assisted network management.  The human operator
-   can generate a specific task instance, e.g., fault analysis or
-   topology optimization, using the task instance management module.
-   According to the task type, the task instance module can instantiate
-   a task instance with specific foundation model, prompt, and
-   adaptation fine-tuned parameters[Hu22].  The enahnced telemetry
-   module improves the semantics of raw telemetry data from original
-   network management system, providing supplementary information to the
-   LLM decision module for more informed decision-making.  After the
-   decision-making, the generated configuration parameters are validated
-   against the YANG model and enforced with access control rules.  The
-   operator audit module provides a structured mechanism for human
-   oversight of LLM-generated configurations, and the configuration can
-   be issued to the original network management system for deployment
-   once the operator approves.
+   can generate a specific task agent, e.g., fault analysis or topology
+   optimization, using the task agent management module.  According to
+   the task type, the task agent module can instantiate a task agent
+   with specific foundation model, prompt, and adaptation fine-tuned
+   parameters[Hu22].  The enahnced telemetry module improves the
+   semantics of raw telemetry data from original network management
+   system, providing supplementary information to the LLM decision
+   module for more informed decision-making.  After the decision-making,
+   the generated configuration parameters are validated against the YANG
+   model and enforced with access control rules.  The operator audit
+   module provides a structured mechanism for human oversight of LLM-
+   generated configurations, and the configuration can be issued to the
+   original network management system for deployment once the operator
+   approves.
 
 3.1.  Enhanced Telemetry Module
 
@@ -236,12 +236,12 @@ Table of Contents
    knowledge from the database and incorporates it into the input
    context, improving the understanding and response accuracy of LLM.
 
-3.2.2.  Task Instance Module
+3.2.2.  Task Agent Module
 
    To execute a specific task, such as traffic analysis, traffic
-   optimization, or fault remediation, a corresponding task instance
-   must be created.  A task instance consists of a selected LLM
-   foundation model, an associated prompt, and fine-tuned weights.
+   optimization, or fault remediation, a corresponding task agent must
+   be created.  A task agent consists of a selected LLM foundation
+   model, an associated prompt, and fine-tuned weights.
 
    *  Foundation Model Library.  Operators must select an appropriate
       foundation model based on the specific task requirements.
@@ -273,12 +273,22 @@ Table of Contents
       ensuring a structured and consistent interaction with the language
       model.
 
-3.2.3.  Task Instance Management Module
+   *  Tool Library.  Operators can specify the tools used for the task
+      agent, such as a Python script or an API call.  These tools are
+      stored in a tool library, and can be interacted with the agent via
+      Model Context Prtocol (MCP)[mcp].
 
-   The Task Instance Management Module is responsible for the creation,
-   update, and deletion of task instances.  This module ensures that
-   each instance is appropriately configured to align with the intended
-   network management objective.
+3.2.3.  Task Agent Management Module
+
+   The Task Agent Management Module is responsible for the creation,
+   update, and deletion of task agents.  This module ensures that each
+   agent is appropriately configured to align with the intended network
+   management objective.  Note that there can be multiple agents
+   colloboratively to achieve the same objective.  In this scenario, the
+   Task Agent Management Module can be used to coordinate the task
+   agents, ensuring they are executed in a synchronized and efficient
+   manner.  The agents can communicate with each other with the Agent-
+   to-Agent Protocol (A2A)[a2a].
 
 3.2.4.  Config Verify Module
 
@@ -293,27 +303,27 @@ Table of Contents
    Although the Configuration Verify Module can guarantee the syntactic
    correction, LLMs may generate unintended or potentially harmful
    operations on critical network devices, it is essential for operators
-   to enforce clear permission boundaries for LLM task instance to
-   ensure security and operational integrity.  The Network Configuration
-   Access Control Model defined in [RFC8341] provides a framework for
+   to enforce clear permission boundaries for LLM task agent to ensure
+   security and operational integrity.  The Network Configuration Access
+   Control Model defined in [RFC8341] provides a framework for
    specifying access permissions, which can be used to grant access to
-   LLM task instances.  This data model includes the concepts of users,
+   LLM task agents.  This data model includes the concepts of users,
    groups, access operation types, and action types, which can be
    applied as follows:
 
-   *  User and Group: Each task instance should be registered as a
-      specific user, representing an entity with defined access
-      permissions for particular devices.  These permissions control the
-      types of operations the LLM is authorized to perform.  A task
-      instance (i.e., user) is identified by a unique string within the
-      system.  Access control can also be applied at the group level,
-      where a group consists of zero or more members, and a task
-      instance can belong to multiple groups.
+   *  User and Group: Each task agent should be registered as a specific
+      user, representing an entity with defined access permissions for
+      particular devices.  These permissions control the types of
+      operations the LLM is authorized to perform.  A task agent (i.e.,
+      user) is identified by a unique string within the system.  Access
+      control can also be applied at the group level, where a group
+      consists of zero or more members, and a task agent can belong to
+      multiple groups.
 
    *  Access Operation Types: These define the types of operations
       permitted, including create, read, update, delete, and execute.
-      Each task instance may support different sets of operations
-      depending on its assigned permissions.
+      Each task agent may support different sets of operations depending
+      on its assigned permissions.
 
    *  Action Types: These specify whether a given operation is permitted
       or denied.  This mechanism determines whether an LLM request to
@@ -321,7 +331,7 @@ Table of Contents
       rules.
 
    *  Rule List: A rule governs access control by specifying the content
-      and operations a task instance is authorized to handle within the
+      and operations a task agent is authorized to handle within the
       system.
 
    This module must enforce explicit restrictions on the actions an LLM
@@ -363,7 +373,7 @@ Table of Contents
 
    *  Timestamp of the audit action
 
-   *  LLM Task Instance ID associated with the action
+   *  LLM Task Agent ID associated with the action
 
    *  Operator decisions, including approval, rejection, modification,
       or pending status
@@ -436,7 +446,7 @@ Table of Contents
        generate a context-rich dataset suitable for LLM processing.
 
    2.  *DDoS Filtering Task Instantiation*
-       The operator initiates a ddos-mitigation task.  The Task Instance
+       The operator initiates a ddos-mitigation task.  The Task Agent
        Module selects a security-specialized foundation model and task-
        specific prompt.
 
@@ -468,7 +478,7 @@ Table of Contents
    1.  *Operator Audit and Decision*
        The Operator Audit Module provides the following metadata:
 
-   *  *Task Instance ID*: ddos-mitigation-task-01
+   *  *Task Agent ID*: ddos-mitigation-task-01
 
    *  *Confidence Score*: 85/100
 
@@ -529,8 +539,8 @@ Table of Contents
        (e.g., gold/silver/bronze service classes).
 
    2.  *Optimization Task Execution*
-       An operator initiates a traffic scheduling task.  The Task
-       Instance Module selects a foundation model fine-tuned on traffic
+       An operator initiates a traffic scheduling task.  The Task Agent
+       Module selects a foundation model fine-tuned on traffic
        engineering datasets and uses a structured prompt to describe
        current constraints: high utilization on core links L1-L3, SLA
        violations for gold-class VoIP traffic.
@@ -540,29 +550,29 @@ Table of Contents
        traffic via underutilized backup paths:
 
    policy-options {
-   policy-statement reroute-gold {
-   term gold-traffic {
-   from {
-   community gold-voip;
-   }
-   then {
-   metric 10;
-   next-hop [IP];
-   }
-   }
-   }
+       policy-statement reroute-gold {
+           term gold-traffic {
+               from {
+                   community gold-voip;
+               }
+               then {
+                   metric 10;
+                   next-hop [IP];
+               }
+           }
+       }
    }
    protocols {
-   rsvp {
-   interface ge-0/0/0 {
-   bandwidth 500m;
-   }
-   }
+       rsvp {
+           interface ge-0/0/0 {
+               bandwidth 500m;
+           }
+       }
    }
 
    This configuration is syntax-validated and checked against the Access
    Control Module to ensure that traffic engineering policy updates are
-   permitted for this task instance.
+   permitted for this task agent.
 
    1.  *Operator Audit and Decision*
        The Operator Audit Module presents:
@@ -571,7 +581,7 @@ Table of Contents
 
    *  *Audit Metadata*:
 
-      -  Task Instance: traffic-opt-te-v2
+      -  Task Agent: traffic-opt-te-v2
 
       -  Input Context: “Link L1 (95% utilization), gold-voip SLA
          latency breach”
@@ -635,6 +645,10 @@ Table of Contents
 
 7.2.  Informative References
 
+   [a2a]      "Announcing the Agent2Agent Protocol (A2A)", July 2025,
+              <https://developers.googleblog.com/en/a2a-a-new-era-of-
+              agent-interoperability/>.
+
    [Hu22]     Hu, E. J., Shen, Y., Wallis, P., Allen-Zhu, Z., Li, Y.,
               Wang, S., Wang, L., and W. Chen, "LoRA Low-Rank Adaptation
               of Large Language Models", n.d..
@@ -649,6 +663,9 @@ Table of Contents
               V., Goyal, N., Küttler, H., Lewis, M., Yih, W.-t.,
               Rocktäschel, T., and S. Riede, "Retrieval-augmented
               generation for knowledge-intensive NLP tasks", n.d..
+
+   [mcp]      "Model Context Protocol", July 2025,
+              <https://modelcontextprotocol.io/introduction>.
 
    [TM-IG1230]
               McDonnell, K., Machwe, A., Milham, D., O’Sullivan, J.,
