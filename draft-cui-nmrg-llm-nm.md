@@ -175,6 +175,8 @@ Addressing these requirements is critical to integrating LLMs effectively into n
 
 - LLM: Large Language Model
 - RAG: Retrieve Augmented Generation
+- MCP: Model Context Protocol
+- A2A: Agent-to-Agent Protocol
 
 
 
