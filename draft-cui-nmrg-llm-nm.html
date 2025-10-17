@@ -1200,10 +1200,13 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-config-verification-module" class="internal xref">Config Verification Module</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.1">
-                    <p id="section-toc.1-1.3.2.3.2.1.1"><a href="#section-3.3.1" class="auto internal xref">3.3.1</a>.  <a href="#name-access-control-module" class="internal xref">Access Control Module</a></p>
+                    <p id="section-toc.1-1.3.2.3.2.1.1"><a href="#section-3.3.1" class="auto internal xref">3.3.1</a>.  <a href="#name-syntax-validation-module" class="internal xref">Syntax Validation Module</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.2">
-                    <p id="section-toc.1-1.3.2.3.2.2.1"><a href="#section-3.3.2" class="auto internal xref">3.3.2</a>.  <a href="#name-feedback-module" class="internal xref">Feedback Module</a></p>
+                    <p id="section-toc.1-1.3.2.3.2.2.1"><a href="#section-3.3.2" class="auto internal xref">3.3.2</a>.  <a href="#name-access-control-module" class="internal xref">Access Control Module</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.3">
+                    <p id="section-toc.1-1.3.2.3.2.3.1"><a href="#section-3.3.3" class="auto internal xref">3.3.3</a>.  <a href="#name-feedback-module" class="internal xref">Feedback Module</a></p>
 </li>
                 </ul>
 </li>
@@ -1424,24 +1427,58 @@ The Fine-Tuned Weights Module supports the selection and loading of an appropria
 <p id="section-3.2.3-1">Task agent can interact with external tools (e.g., Python scripts, Batfish or ILP solver) to acquire additional knowledge and perform specific actions.
 The Model Context Prtocol (MCP)<span>[<a href="#mcp" class="cite xref">mcp</a>]</span> enables task agents to securely and efficiently interact with external tools and services.
 MCP defines a standardized interface for tool invocation, data exchange, and state synchronization between the agent and external systems.
-MCP consists of two primary components:
-- MCP Client: Embedded within the task agent, the MCP client is responsible for:
-  - Serializing agent-generated tool invocation requests into structured MCP messages.
-  - Managing authentication and session tokens for secure tool access.
-  - Handling timeouts, retries, and error propagation from tool responses.
-  - Injecting tool outputs back into the agent context as structured observations.
-- MCP Server: Hosted alongside or within external tools, the MCP server:
-  - Exposes a well-defined set of capabilities via a manifest (e.g., <code>tool_name</code>, <code>tool_description</code>, <code>input_schema</code>, <code>output_schema</code>, <code>authentication_method</code>).
-  - Validates incoming MCP requests against the tool’s schema and permissions.
-  - Executes the requested operation and returns structured results in a deterministic format.
-  - Supports streaming for long-running operations (e.g., iterative optimization or real-time telemetry polling).<a href="#section-3.2.3-1" class="pilcrow">¶</a></p>
-<p id="section-3.2.3-2">In many complex scenarios, multiple task agents MAY collaborate to achieve a shared network management objective.
+MCP consists of two primary components:<a href="#section-3.2.3-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.2.3-2.1">
+              <p id="section-3.2.3-2.1.1">MCP Client: Embedded within the task agent, the MCP client is responsible for:<a href="#section-3.2.3-2.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.2.3-2.1.2.1">
+                  <p id="section-3.2.3-2.1.2.1.1">Serializing agent-generated tool invocation requests into structured MCP messages.<a href="#section-3.2.3-2.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-3.2.3-2.1.2.2">
+                  <p id="section-3.2.3-2.1.2.2.1">Managing authentication and session tokens for secure tool access.<a href="#section-3.2.3-2.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-3.2.3-2.1.2.3">
+                  <p id="section-3.2.3-2.1.2.3.1">Handling timeouts, retries, and error propagation from tool responses.<a href="#section-3.2.3-2.1.2.3.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-3.2.3-2.1.2.4">
+                  <p id="section-3.2.3-2.1.2.4.1">Injecting tool outputs back into the agent context as structured observations.<a href="#section-3.2.3-2.1.2.4.1" class="pilcrow">¶</a></p>
+</li>
+              </ul>
+</li>
+            <li class="normal" id="section-3.2.3-2.2">
+              <p id="section-3.2.3-2.2.1">MCP Server: Hosted alongside or within external tools, the MCP server:<a href="#section-3.2.3-2.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.2.3-2.2.2.1">
+                  <p id="section-3.2.3-2.2.2.1.1">Exposes a well-defined set of capabilities via a manifest (e.g., <code>tool_name</code>, <code>tool_description</code>, <code>input_schema</code>, <code>output_schema</code>, <code>authentication_method</code>).<a href="#section-3.2.3-2.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-3.2.3-2.2.2.2">
+                  <p id="section-3.2.3-2.2.2.2.1">Validates incoming MCP requests against the tool’s schema and permissions.<a href="#section-3.2.3-2.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-3.2.3-2.2.2.3">
+                  <p id="section-3.2.3-2.2.2.3.1">Executes the requested operation and returns structured results in a deterministic format.<a href="#section-3.2.3-2.2.2.3.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-3.2.3-2.2.2.4">
+                  <p id="section-3.2.3-2.2.2.4.1">Supports streaming for long-running operations (e.g., iterative optimization or real-time telemetry polling).<a href="#section-3.2.3-2.2.2.4.1" class="pilcrow">¶</a></p>
+</li>
+              </ul>
+</li>
+          </ul>
+<p id="section-3.2.3-3">In many complex scenarios, multiple task agents MAY collaborate to achieve a shared network management objective.
 The Agent-to-Agent Protocol (A2A)<span>[<a href="#a2a" class="cite xref">a2a</a>]</span> is a coordination protocol that enables multiple task agents to exchange information, delegate subtasks, negotiate resource usage, and synchronize execution states in a distributed network management environment. A2A ensures semantic interoperability, temporal consistency, and conflict avoidance across heterogeneous agents.
-Key design principles of A2A include:
-- Decentralized orchestration: No central controller is required; agents coordinate peer-to-peer using shared intents and commitments.
-- Intent-based messaging: Communication is driven by high-level intents (e.g., “optimize latency for flow X”) rather than low-level commands, allowing flexibility in implementation.
-- State-aware handoffs: Agents share partial execution states (e.g., intermediate results, constraints, confidence scores) to enable context-preserving collaboration.<a href="#section-3.2.3-2" class="pilcrow">¶</a></p>
-<p id="section-3.2.3-3">Additionally, A2A integrates with the Task Agent Management Module to dynamically spawn or terminate agents based on collaboration needs, ensuring scalability and resource efficiency.<a href="#section-3.2.3-3" class="pilcrow">¶</a></p>
+Key design principles of A2A include:<a href="#section-3.2.3-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.2.3-4.1">
+              <p id="section-3.2.3-4.1.1">Decentralized orchestration: No central controller is required; agents coordinate peer-to-peer using shared intents and commitments.<a href="#section-3.2.3-4.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-3.2.3-4.2">
+              <p id="section-3.2.3-4.2.1">Intent-based messaging: Communication is driven by high-level intents (e.g., “optimize latency for flow X”) rather than low-level commands, allowing flexibility in implementation.<a href="#section-3.2.3-4.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-3.2.3-4.3">
+              <p id="section-3.2.3-4.3.1">State-aware handoffs: Agents share partial execution states (e.g., intermediate results, constraints, confidence scores) to enable context-preserving collaboration.<a href="#section-3.2.3-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+<p id="section-3.2.3-5">Additionally, A2A integrates with the Task Agent Management Module to dynamically spawn or terminate agents based on collaboration needs, ensuring scalability and resource efficiency.<a href="#section-3.2.3-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="task-agent-management-module">
@@ -1450,29 +1487,61 @@ Key design principles of A2A include:
 <a href="#section-3.2.4" class="section-number selfRef">3.2.4. </a><a href="#name-task-agent-management-modul" class="section-name selfRef">Task Agent Management Module</a>
           </h4>
 <p id="section-3.2.4-1">The Task Agent Management Module is responsible for the creation, update, and deletion of task agents. This module ensures that each agent is appropriately configured to align with the intended network management objective.<a href="#section-3.2.4-1" class="pilcrow">¶</a></p>
-<p id="section-3.2.4-2">The agent lifecycle operations are defined as follows:
-1. Creation of Task Agents
-A task agent is instantiated in response to an operator request, an automated policy trigger, or a higher-level orchestration workflow. The creation process involves the following steps:
-- Intent Parsing: The module parses the high-level intent (e.g., “remediate BGP flapping on router R5”) to identify the required task type, target network scope, and performance constraints.
-- Agent Template Selection: Based on the parsed intent, the module selects a pre-registered agent template from the Prompt Library.
-- Resource Allocation: The module allocates necessary compute resources (CPU/GPU, memory) and instantiates the LLM runtime environment.
-- Context Initialization: The agent is initialized with: Network context (e.g., device inventory, topology from Enhanced Telemetry), security credentials, and session ID and logging context for auditability
-- Registration: The newly created agent is registered with its metadata, status (“initializing”), and heartbeat endpoint.<a href="#section-3.2.4-2" class="pilcrow">¶</a></p>
+<p id="section-3.2.4-2">The agent lifecycle operations are defined as follows:<a href="#section-3.2.4-2" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-3.2.4-3">
 <li id="section-3.2.4-3.1">
-              <p id="section-3.2.4-3.1.1">Update of Task Agents
-Task agents may require updates due to changing network conditions, model improvements, or revised operator policies. Updates SHOULD be performed in a non-disruptive manner whenever possible:
-- Configuration Update: Operators or automated controllers MAY modify agent parameters (e.g., optimization thresholds, output verbosity).
-- Model or Weight Swapping: If a newer fine-tuned weight version becomes available, the module can hot-swap the adapter weights while preserving the agent’s execution state, provided the base foundation model remains compatible.
-- State Preservation: During updates, the module snapshots the agent’s working memory (e.g., conversation history, intermediate plans) and restores it post-update to maintain task continuity.<a href="#section-3.2.4-3.1.1" class="pilcrow">¶</a></p>
+              <p id="section-3.2.4-3.1.1">Creation of Task Agents.
+A task agent is instantiated in response to an operator request, an automated policy trigger, or a higher-level orchestration workflow. The creation process involves the following steps:<a href="#section-3.2.4-3.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.2.4-3.1.2.1">
+                  <p id="section-3.2.4-3.1.2.1.1">Intent Parsing: The module parses the high-level intent (e.g., “remediate BGP flapping on router R5”) to identify the required task type, target network scope, and performance constraints.<a href="#section-3.2.4-3.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-3.2.4-3.1.2.2">
+                  <p id="section-3.2.4-3.1.2.2.1">Agent Template Selection: Based on the parsed intent, the module selects a pre-registered agent template from the Prompt Library.<a href="#section-3.2.4-3.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-3.2.4-3.1.2.3">
+                  <p id="section-3.2.4-3.1.2.3.1">Resource Allocation: The module allocates necessary compute resources (CPU/GPU, memory) and instantiates the LLM runtime environment.<a href="#section-3.2.4-3.1.2.3.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-3.2.4-3.1.2.4">
+                  <p id="section-3.2.4-3.1.2.4.1">Context Initialization: The agent is initialized with: Network context (e.g., device inventory, topology from Enhanced Telemetry), security credentials, and session ID and logging context for auditability<a href="#section-3.2.4-3.1.2.4.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-3.2.4-3.1.2.5">
+                  <p id="section-3.2.4-3.1.2.5.1">Registration: The newly created agent is registered with its metadata, status (“initializing”), and heartbeat endpoint.<a href="#section-3.2.4-3.1.2.5.1" class="pilcrow">¶</a></p>
+</li>
+              </ul>
 </li>
             <li id="section-3.2.4-3.2">
-              <p id="section-3.2.4-3.2.1">Deletion of Task Agents
-Task agents are terminated when their assigned task completes, when an unrecoverable error occurs, or upon an explicit teardown request. The deletion process ensures proper resource reclamation and audit compliance:
-- Graceful Shutdown: The module issues a termination signal, allowing the agent to complete any pending operations (e.g., commit configuration changes, MCP calls, A2A communications).
-- State Archival: The final agent state, including input context, generated actions, and performance metrics, is serialized and stored in the Audit Log for replayability and compliance.
-- Resource Deallocation: Compute resources (GPU memory, threads) are released, and MCP sessions are invalidated.
-- Deregistration: The agent entry is removed, and its lifecycle event is logged.<a href="#section-3.2.4-3.2.1" class="pilcrow">¶</a></p>
+              <p id="section-3.2.4-3.2.1">Update of Task Agents.
+Task agents may require updates due to changing network conditions, model improvements, or revised operator policies. Updates SHOULD be performed in a ßnon-disruptive manner whenever possible:<a href="#section-3.2.4-3.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.2.4-3.2.2.1">
+                  <p id="section-3.2.4-3.2.2.1.1">Configuration Update: Operators or automated controllers MAY modify agent parameters (e.g., optimization thresholds, output verbosity).<a href="#section-3.2.4-3.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-3.2.4-3.2.2.2">
+                  <p id="section-3.2.4-3.2.2.2.1">Model or Weight Swapping: If a newer fine-tuned weight version becomes available, the module can hot-swap the adapter weights while preserving the agent’s execution state, provided the base foundation model remains compatible.<a href="#section-3.2.4-3.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-3.2.4-3.2.2.3">
+                  <p id="section-3.2.4-3.2.2.3.1">State Preservation: During updates, the module snapshots the agent’s working memory (e.g., conversation history, intermediate plans) and restores it post-update to maintain task continuity.<a href="#section-3.2.4-3.2.2.3.1" class="pilcrow">¶</a></p>
+</li>
+              </ul>
+</li>
+            <li id="section-3.2.4-3.3">
+              <p id="section-3.2.4-3.3.1">Deletion of Task Agents.
+Task agents are terminated when their assigned task completes, when an unrecoverable error occurs, or upon an explicit teardown request. The deletion process ensures proper resource reclamation and audit compliance:<a href="#section-3.2.4-3.3.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.2.4-3.3.2.1">
+                  <p id="section-3.2.4-3.3.2.1.1">Graceful Shutdown: The module issues a termination signal, allowing the agent to complete any pending operations (e.g., commit configuration changes, MCP calls, A2A communications).<a href="#section-3.2.4-3.3.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-3.2.4-3.3.2.2">
+                  <p id="section-3.2.4-3.3.2.2.1">State Archival: The final agent state, including input context, generated actions, and performance metrics, is serialized and stored in the Audit Log for replayability and compliance.<a href="#section-3.2.4-3.3.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-3.2.4-3.3.2.3">
+                  <p id="section-3.2.4-3.3.2.3.1">Resource Deallocation: Compute resources (GPU memory, threads) are released, and MCP sessions are invalidated.<a href="#section-3.2.4-3.3.2.3.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-3.2.4-3.3.2.4">
+                  <p id="section-3.2.4-3.3.2.4.1">Deregistration: The agent entry is removed, and its lifecycle event is logged.<a href="#section-3.2.4-3.3.2.4.1" class="pilcrow">¶</a></p>
+</li>
+              </ul>
 </li>
           </ol>
 <p id="section-3.2.4-4">By providing structured, auditable, and policy-governed lifecycle management, the Task Agent Management Module enables scalable and trustworthy deployment of LLM Agent-driven network automation.<a href="#section-3.2.4-4" class="pilcrow">¶</a></p>
@@ -1485,39 +1554,45 @@ Task agents are terminated when their assigned task completes, when an unrecover
         <h3 id="name-config-verification-module">
 <a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-config-verification-module" class="section-name selfRef">Config Verification Module</a>
         </h3>
-<p id="section-3.3-1">### Syntax Validation Module
-To ensure correctness and policy compliance, LLM-generated configurations MUST pass the YANG schema validation steps before being queued for human approval.
-This module ensures that only syntactically correct configurations are presented for operator review, thereby reducing errors and enhancing network reliability.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
-<div id="access-control-module">
+<div id="syntax-validation-module">
 <section id="section-3.3.1">
-          <h4 id="name-access-control-module">
-<a href="#section-3.3.1" class="section-number selfRef">3.3.1. </a><a href="#name-access-control-module" class="section-name selfRef">Access Control Module</a>
+          <h4 id="name-syntax-validation-module">
+<a href="#section-3.3.1" class="section-number selfRef">3.3.1. </a><a href="#name-syntax-validation-module" class="section-name selfRef">Syntax Validation Module</a>
           </h4>
-<p id="section-3.3.1-1">Although the Configuration Verify Module can guarantee the syntactic correction, LLMs may generate unintended or potentially harmful operations on critical network devices, it is essential for operators to enforce clear permission boundaries for LLM task agent to ensure security and operational integrity.
-The Network Configuration Access Control Model defined in <span>[<a href="#RFC8341" class="cite xref">RFC8341</a>]</span> provides a framework for specifying access permissions, which can be used to grant access to LLM task agents. This data model includes the concepts of users, groups, access operation types, and action types, which can be applied as follows:<a href="#section-3.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.1-1">To ensure correctness and policy compliance, LLM-generated configurations MUST pass the YANG schema validation steps before being queued for human approval.
+This module ensures that only syntactically correct configurations are presented for operator review, thereby reducing errors and enhancing network reliability.<a href="#section-3.3.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="access-control-module">
+<section id="section-3.3.2">
+          <h4 id="name-access-control-module">
+<a href="#section-3.3.2" class="section-number selfRef">3.3.2. </a><a href="#name-access-control-module" class="section-name selfRef">Access Control Module</a>
+          </h4>
+<p id="section-3.3.2-1">Although the Configuration Verify Module can guarantee the syntactic correction, LLMs may generate unintended or potentially harmful operations on critical network devices, it is essential for operators to enforce clear permission boundaries for LLM task agent to ensure security and operational integrity.
+The Network Configuration Access Control Model defined in <span>[<a href="#RFC8341" class="cite xref">RFC8341</a>]</span> provides a framework for specifying access permissions, which can be used to grant access to LLM task agents. This data model includes the concepts of users, groups, access operation types, and action types, which can be applied as follows:<a href="#section-3.3.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.3.1-2.1">
-              <p id="section-3.3.1-2.1.1">User and Group: Each task agent should be registered as a specific user, representing an entity with defined access permissions for particular devices. These permissions control the types of operations the LLM is authorized to perform. A task agent (i.e., user) is identified by a unique string within the system. Access control can also be applied at the group level, where a group consists of zero or more members, and a task agent can belong to multiple groups.<a href="#section-3.3.1-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.3.2-2.1">
+              <p id="section-3.3.2-2.1.1">User and Group: Each task agent should be registered as a specific user, representing an entity with defined access permissions for particular devices. These permissions control the types of operations the LLM is authorized to perform. A task agent (i.e., user) is identified by a unique string within the system. Access control can also be applied at the group level, where a group consists of zero or more members, and a task agent can belong to multiple groups.<a href="#section-3.3.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-3.3.1-2.2">
-              <p id="section-3.3.1-2.2.1">Access Operation Types: These define the types of operations permitted, including create, read, update, delete, and execute. Each task agent may support different sets of operations depending on its assigned permissions.<a href="#section-3.3.1-2.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-3.3.2-2.2">
+              <p id="section-3.3.2-2.2.1">Access Operation Types: These define the types of operations permitted, including create, read, update, delete, and execute. Each task agent may support different sets of operations depending on its assigned permissions.<a href="#section-3.3.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-3.3.1-2.3">
-              <p id="section-3.3.1-2.3.1">Action Types: These specify whether a given operation is permitted or denied. This mechanism determines whether an LLM request to perform an operation is allowed based on predefined access control rules.<a href="#section-3.3.1-2.3.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-3.3.2-2.3">
+              <p id="section-3.3.2-2.3.1">Action Types: These specify whether a given operation is permitted or denied. This mechanism determines whether an LLM request to perform an operation is allowed based on predefined access control rules.<a href="#section-3.3.2-2.3.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-3.3.1-2.4">
-              <p id="section-3.3.1-2.4.1">Rule List: A rule governs access control by specifying the content and operations a task agent is authorized to handle within the system.<a href="#section-3.3.1-2.4.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-3.3.2-2.4">
+              <p id="section-3.3.2-2.4.1">Rule List: A rule governs access control by specifying the content and operations a task agent is authorized to handle within the system.<a href="#section-3.3.2-2.4.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-3.3.1-3">This module must enforce explicit restrictions on the actions an LLM is permitted to perform, ensuring that network configurations remain secure and compliant with operational policies.<a href="#section-3.3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.3.2-3">This module must enforce explicit restrictions on the actions an LLM is permitted to perform, ensuring that network configurations remain secure and compliant with operational policies.<a href="#section-3.3.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="feedback-module">
-<section id="section-3.3.2">
+<section id="section-3.3.3">
           <h4 id="name-feedback-module">
-<a href="#section-3.3.2" class="section-number selfRef">3.3.2. </a><a href="#name-feedback-module" class="section-name selfRef">Feedback Module</a>
+<a href="#section-3.3.3" class="section-number selfRef">3.3.3. </a><a href="#name-feedback-module" class="section-name selfRef">Feedback Module</a>
           </h4>
-<p id="section-3.3.2-1">As the generated configuration might not be always aligned with YANG model schema, access control, or bussiness constrains, they need further modification to meet the multi-dimensional requirements. The Feedback Module is used to provide semantic-rich feedback (e.g., represented in structure text) and hints to LLM to improve the generated configuration.<a href="#section-3.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.3-1">As the generated configuration might not be always aligned with YANG model schema, access control, or bussiness constrains, they need further modification to meet the multi-dimensional requirements. The Feedback Module is used to provide semantic-rich feedback (e.g., represented in structure text) and hints to LLM to improve the generated configuration.<a href="#section-3.3.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>

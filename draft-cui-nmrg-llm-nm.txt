@@ -85,8 +85,9 @@ Table of Contents
        3.2.3.  Task Agent Communication Module
        3.2.4.  Task Agent Management Module
      3.3.  Config Verification Module
-       3.3.1.  Access Control Module
-       3.3.2.  Feedback Module
+       3.3.1.  Syntax Validation Module
+       3.3.2.  Access Control Module
+       3.3.3.  Feedback Module
      3.4.  Operator Audit Module
    4.  Use Cases
      4.1.  DDoS Intelligent Defense
@@ -289,21 +290,38 @@ Table of Contents
    agents to securely and efficiently interact with external tools and
    services.  MCP defines a standardized interface for tool invocation,
    data exchange, and state synchronization between the agent and
-   external systems.  MCP consists of two primary components: - MCP
-   Client: Embedded within the task agent, the MCP client is responsible
-   for: - Serializing agent-generated tool invocation requests into
-   structured MCP messages.  - Managing authentication and session
-   tokens for secure tool access.  - Handling timeouts, retries, and
-   error propagation from tool responses.  - Injecting tool outputs back
-   into the agent context as structured observations. - MCP Server:
-   Hosted alongside or within external tools, the MCP server: - Exposes
-   a well-defined set of capabilities via a manifest (e.g., tool_name,
-   tool_description, input_schema, output_schema,
-   authentication_method).  - Validates incoming MCP requests against
-   the tool’s schema and permissions.  - Executes the requested
-   operation and returns structured results in a deterministic format.
-   - Supports streaming for long-running operations (e.g., iterative
-   optimization or real-time telemetry polling).
+   external systems.  MCP consists of two primary components:
+
+   *  MCP Client: Embedded within the task agent, the MCP client is
+      responsible for:
+
+      -  Serializing agent-generated tool invocation requests into
+         structured MCP messages.
+
+      -  Managing authentication and session tokens for secure tool
+         access.
+
+      -  Handling timeouts, retries, and error propagation from tool
+         responses.
+
+      -  Injecting tool outputs back into the agent context as
+         structured observations.
+
+   *  MCP Server: Hosted alongside or within external tools, the MCP
+      server:
+
+      -  Exposes a well-defined set of capabilities via a manifest
+         (e.g., tool_name, tool_description, input_schema,
+         output_schema, authentication_method).
+
+      -  Validates incoming MCP requests against the tool’s schema and
+         permissions.
+
+      -  Executes the requested operation and returns structured results
+         in a deterministic format.
+
+      -  Supports streaming for long-running operations (e.g., iterative
+         optimization or real-time telemetry polling).
 
    In many complex scenarios, multiple task agents MAY collaborate to
    achieve a shared network management objective.  The Agent-to-Agent
@@ -312,15 +330,19 @@ Table of Contents
    resource usage, and synchronize execution states in a distributed
    network management environment.  A2A ensures semantic
    interoperability, temporal consistency, and conflict avoidance across
-   heterogeneous agents.  Key design principles of A2A include: -
-   Decentralized orchestration: No central controller is required;
-   agents coordinate peer-to-peer using shared intents and commitments.
-   - Intent-based messaging: Communication is driven by high-level
-   intents (e.g., “optimize latency for flow X”) rather than low-level
-   commands, allowing flexibility in implementation. - State-aware
-   handoffs: Agents share partial execution states (e.g., intermediate
-   results, constraints, confidence scores) to enable context-preserving
-   collaboration.
+   heterogeneous agents.  Key design principles of A2A include:
+
+   *  Decentralized orchestration: No central controller is required;
+      agents coordinate peer-to-peer using shared intents and
+      commitments.
+
+   *  Intent-based messaging: Communication is driven by high-level
+      intents (e.g., “optimize latency for flow X”) rather than low-
+      level commands, allowing flexibility in implementation.
+
+   *  State-aware handoffs: Agents share partial execution states (e.g.,
+      intermediate results, constraints, confidence scores) to enable
+      context-preserving collaboration.
 
    Additionally, A2A integrates with the Task Agent Management Module to
    dynamically spawn or terminate agents based on collaboration needs,
@@ -333,51 +355,72 @@ Table of Contents
    agent is appropriately configured to align with the intended network
    management objective.
 
-   The agent lifecycle operations are defined as follows: 1.  Creation
-   of Task Agents A task agent is instantiated in response to an
-   operator request, an automated policy trigger, or a higher-level
-   orchestration workflow.  The creation process involves the following
-   steps: - Intent Parsing: The module parses the high-level intent
-   (e.g., “remediate BGP flapping on router R5”) to identify the
-   required task type, target network scope, and performance
-   constraints. - Agent Template Selection: Based on the parsed intent,
-   the module selects a pre-registered agent template from the Prompt
-   Library. - Resource Allocation: The module allocates necessary
-   compute resources (CPU/GPU, memory) and instantiates the LLM runtime
-   environment. - Context Initialization: The agent is initialized with:
-   Network context (e.g., device inventory, topology from Enhanced
-   Telemetry), security credentials, and session ID and logging context
-   for auditability - Registration: The newly created agent is
-   registered with its metadata, status (“initializing”), and heartbeat
-   endpoint.
+   The agent lifecycle operations are defined as follows:
 
-   1.  Update of Task Agents Task agents may require updates due to
+   1.  Creation of Task Agents.  A task agent is instantiated in
+       response to an operator request, an automated policy trigger, or
+       a higher-level orchestration workflow.  The creation process
+       involves the following steps:
+
+       *  Intent Parsing: The module parses the high-level intent (e.g.,
+          “remediate BGP flapping on router R5”) to identify the
+          required task type, target network scope, and performance
+          constraints.
+
+       *  Agent Template Selection: Based on the parsed intent, the
+          module selects a pre-registered agent template from the Prompt
+          Library.
+
+       *  Resource Allocation: The module allocates necessary compute
+          resources (CPU/GPU, memory) and instantiates the LLM runtime
+          environment.
+
+       *  Context Initialization: The agent is initialized with: Network
+          context (e.g., device inventory, topology from Enhanced
+          Telemetry), security credentials, and session ID and logging
+          context for auditability
+
+       *  Registration: The newly created agent is registered with its
+          metadata, status (“initializing”), and heartbeat endpoint.
+
+   2.  Update of Task Agents.  Task agents may require updates due to
        changing network conditions, model improvements, or revised
-       operator policies.  Updates SHOULD be performed in a non-
-       disruptive manner whenever possible: - Configuration Update:
-       Operators or automated controllers MAY modify agent parameters
-       (e.g., optimization thresholds, output verbosity). - Model or
-       Weight Swapping: If a newer fine-tuned weight version becomes
-       available, the module can hot-swap the adapter weights while
-       preserving the agent’s execution state, provided the base
-       foundation model remains compatible. - State Preservation: During
-       updates, the module snapshots the agent’s working memory (e.g.,
-       conversation history, intermediate plans) and restores it post-
-       update to maintain task continuity.
+       operator policies.  Updates SHOULD be performed in a ßnon-
+       disruptive manner whenever possible:
 
-   2.  Deletion of Task Agents Task agents are terminated when their
+       *  Configuration Update: Operators or automated controllers MAY
+          modify agent parameters (e.g., optimization thresholds, output
+          verbosity).
+
+       *  Model or Weight Swapping: If a newer fine-tuned weight version
+          becomes available, the module can hot-swap the adapter weights
+          while preserving the agent’s execution state, provided the
+          base foundation model remains compatible.
+
+       *  State Preservation: During updates, the module snapshots the
+          agent’s working memory (e.g., conversation history,
+          intermediate plans) and restores it post-update to maintain
+          task continuity.
+
+   3.  Deletion of Task Agents.  Task agents are terminated when their
        assigned task completes, when an unrecoverable error occurs, or
        upon an explicit teardown request.  The deletion process ensures
-       proper resource reclamation and audit compliance: - Graceful
-       Shutdown: The module issues a termination signal, allowing the
-       agent to complete any pending operations (e.g., commit
-       configuration changes, MCP calls, A2A communications). - State
-       Archival: The final agent state, including input context,
-       generated actions, and performance metrics, is serialized and
-       stored in the Audit Log for replayability and compliance. -
-       Resource Deallocation: Compute resources (GPU memory, threads)
-       are released, and MCP sessions are invalidated. - Deregistration:
-       The agent entry is removed, and its lifecycle event is logged.
+       proper resource reclamation and audit compliance:
+
+       *  Graceful Shutdown: The module issues a termination signal,
+          allowing the agent to complete any pending operations (e.g.,
+          commit configuration changes, MCP calls, A2A communications).
+
+       *  State Archival: The final agent state, including input
+          context, generated actions, and performance metrics, is
+          serialized and stored in the Audit Log for replayability and
+          compliance.
+
+       *  Resource Deallocation: Compute resources (GPU memory, threads)
+          are released, and MCP sessions are invalidated.
+
+       *  Deregistration: The agent entry is removed, and its lifecycle
+          event is logged.
 
    By providing structured, auditable, and policy-governed lifecycle
    management, the Task Agent Management Module enables scalable and
@@ -385,14 +428,15 @@ Table of Contents
 
 3.3.  Config Verification Module
 
-   ### Syntax Validation Module To ensure correctness and policy
-   compliance, LLM-generated configurations MUST pass the YANG schema
-   validation steps before being queued for human approval.  This module
-   ensures that only syntactically correct configurations are presented
-   for operator review, thereby reducing errors and enhancing network
-   reliability.
+3.3.1.  Syntax Validation Module
 
-3.3.1.  Access Control Module
+   To ensure correctness and policy compliance, LLM-generated
+   configurations MUST pass the YANG schema validation steps before
+   being queued for human approval.  This module ensures that only
+   syntactically correct configurations are presented for operator
+   review, thereby reducing errors and enhancing network reliability.
+
+3.3.2.  Access Control Module
 
    Although the Configuration Verify Module can guarantee the syntactic
    correction, LLMs may generate unintended or potentially harmful
@@ -432,7 +476,7 @@ Table of Contents
    is permitted to perform, ensuring that network configurations remain
    secure and compliant with operational policies.
 
-3.3.2.  Feedback Module
+3.3.3.  Feedback Module
 
    As the generated configuration might not be always aligned with YANG
    model schema, access control, or bussiness constrains, they need
