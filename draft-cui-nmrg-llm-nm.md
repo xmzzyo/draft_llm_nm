@@ -169,9 +169,9 @@ Addressing these requirements is critical to integrating LLMs effectively into n
     ||                                                           ||
     ||               +----Task Agent Module---+  +-------------+ ||
     ||               | +---------------------+|  | Task Agent  <-----+
-    ||               | |      Tool Lib       ||<-> Mgt Module  | ||  |
+    ||               | |      MCP & A2A      ||<-> Mgt Module  | ||  |
     ||               | +---------------------+|  +-------------+ ||  |
-    ||               | +------+  +----------+ |  |Config Verify| ||  |
+    ||               | +------+  +----------+ |  |Syntax Verify| ||  |
     ||               | |Prompt|  |Fine-Tuned| <->|     Module  | ||  |
     ||               | | Lib  |  |Weight Lib| |  +-------------+ ||  |
     || +----------+  | +------+  +----------+ |  +--------------+||  |
@@ -227,16 +227,65 @@ To execute a specific task, such as traffic analysis, traffic optimization, or f
 - Fine-Tuned Weight Library. For domain-specific applications, fine-tuned weights can be applied on top of a foundation model to efficiently adapt it to private datasets. One commonly used approach is to store the fine-tuned weights as the difference between the original foundation model and the adapted model, which can largely reduce storage requirements.
 The Fine-Tuned Weights Module supports the selection and loading of an appropriate foundation model along with the corresponding fine-tuned weights, based on the selection of operators. This ensures flexibility in leveraging both general-purpose and domain-specific knowledge while maintaining computational efficiency.
 - Prompt Library. For each task, it is essential to accurately define the task description, the format of its inputs and outputs. These definitions are stored in a structured prompt library. When an operator instantiates a task, the corresponding prompt, including placeholders for contextual information, is automatically retrieved. operator inputs and device data are then incorporated into the prompt at the designated placeholders, ensuring a structured and consistent interaction with the language model.
-- Tool Library. Operators can specify the tools used for the task agent, such as a Python script or an API call. These tools are stored in a tool library, and can be interacted with the agent via Model Context Prtocol (MCP){{mcp}}.
+
+
+### Task Agent Communication Module
+Task agent can interact with external tools (e.g., Python scripts, Batfish or ILP solver) to acquire additional knowledge and perform specific actions.
+The Model Context Prtocol (MCP){{mcp}} enables task agents to securely and efficiently interact with external tools and services.
+MCP defines a standardized interface for tool invocation, data exchange, and state synchronization between the agent and external systems.
+MCP consists of two primary components:
+- MCP Client: Embedded within the task agent, the MCP client is responsible for:
+  - Serializing agent-generated tool invocation requests into structured MCP messages.
+  - Managing authentication and session tokens for secure tool access.
+  - Handling timeouts, retries, and error propagation from tool responses.
+  - Injecting tool outputs back into the agent context as structured observations.
+- MCP Server: Hosted alongside or within external tools, the MCP server:
+  - Exposes a well-defined set of capabilities via a manifest (e.g., `tool_name`, `tool_description`, `input_schema`, `output_schema`, `authentication_method`).
+  - Validates incoming MCP requests against the tool’s schema and permissions.
+  - Executes the requested operation and returns structured results in a deterministic format.
+  - Supports streaming for long-running operations (e.g., iterative optimization or real-time telemetry polling).
+
+In many complex scenarios, multiple task agents MAY collaborate to achieve a shared network management objective.
+The Agent-to-Agent Protocol (A2A){{a2a}} is a coordination protocol that enables multiple task agents to exchange information, delegate subtasks, negotiate resource usage, and synchronize execution states in a distributed network management environment. A2A ensures semantic interoperability, temporal consistency, and conflict avoidance across heterogeneous agents.
+Key design principles of A2A include:
+- Decentralized orchestration: No central controller is required; agents coordinate peer-to-peer using shared intents and commitments.
+- Intent-based messaging: Communication is driven by high-level intents (e.g., “optimize latency for flow X”) rather than low-level commands, allowing flexibility in implementation.
+- State-aware handoffs: Agents share partial execution states (e.g., intermediate results, constraints, confidence scores) to enable context-preserving collaboration.
+
+Additionally, A2A integrates with the Task Agent Management Module to dynamically spawn or terminate agents based on collaboration needs, ensuring scalability and resource efficiency.
+
 
 
 ### Task Agent Management Module
 The Task Agent Management Module is responsible for the creation, update, and deletion of task agents. This module ensures that each agent is appropriately configured to align with the intended network management objective.
-Note that there can be multiple agents colloboratively to achieve the same objective.
-In this scenario, the Task Agent Management Module can be used to coordinate the task agents, ensuring they are executed in a synchronized and efficient manner.
-The agents can communicate with each other with the Agent-to-Agent Protocol (A2A){{a2a}}.
 
-### Config Verify Module
+The agent lifecycle operations are defined as follows:
+1. Creation of Task Agents
+A task agent is instantiated in response to an operator request, an automated policy trigger, or a higher-level orchestration workflow. The creation process involves the following steps:
+- Intent Parsing: The module parses the high-level intent (e.g., “remediate BGP flapping on router R5”) to identify the required task type, target network scope, and performance constraints.
+- Agent Template Selection: Based on the parsed intent, the module selects a pre-registered agent template from the Prompt Library.
+- Resource Allocation: The module allocates necessary compute resources (CPU/GPU, memory) and instantiates the LLM runtime environment.
+- Context Initialization: The agent is initialized with: Network context (e.g., device inventory, topology from Enhanced Telemetry), security credentials, and session ID and logging context for auditability
+- Registration: The newly created agent is registered with its metadata, status (“initializing”), and heartbeat endpoint.
+
+2. Update of Task Agents
+Task agents may require updates due to changing network conditions, model improvements, or revised operator policies. Updates SHOULD be performed in a non-disruptive manner whenever possible:
+- Configuration Update: Operators or automated controllers MAY modify agent parameters (e.g., optimization thresholds, output verbosity).
+- Model or Weight Swapping: If a newer fine-tuned weight version becomes available, the module can hot-swap the adapter weights while preserving the agent’s execution state, provided the base foundation model remains compatible.
+- State Preservation: During updates, the module snapshots the agent’s working memory (e.g., conversation history, intermediate plans) and restores it post-update to maintain task continuity.
+
+3. Deletion of Task Agents
+Task agents are terminated when their assigned task completes, when an unrecoverable error occurs, or upon an explicit teardown request. The deletion process ensures proper resource reclamation and audit compliance:
+- Graceful Shutdown: The module issues a termination signal, allowing the agent to complete any pending operations (e.g., commit configuration changes, MCP calls, A2A communications).
+- State Archival: The final agent state, including input context, generated actions, and performance metrics, is serialized and stored in the Audit Log for replayability and compliance.
+- Resource Deallocation: Compute resources (GPU memory, threads) are released, and MCP sessions are invalidated.
+- Deregistration: The agent entry is removed, and its lifecycle event is logged.
+
+By providing structured, auditable, and policy-governed lifecycle management, the Task Agent Management Module enables scalable and trustworthy deployment of LLM Agent-driven network automation.
+
+
+## Config Verification Module
+### Syntax Validation Module
 To ensure correctness and policy compliance, LLM-generated configurations MUST pass the YANG schema validation steps before being queued for human approval.
 This module ensures that only syntactically correct configurations are presented for operator review, thereby reducing errors and enhancing network reliability.
 
@@ -250,6 +299,14 @@ The Network Configuration Access Control Model defined in {{RFC8341}} provides a
 - Rule List: A rule governs access control by specifying the content and operations a task agent is authorized to handle within the system.
 
 This module must enforce explicit restrictions on the actions an LLM is permitted to perform, ensuring that network configurations remain secure and compliant with operational policies.
+
+
+### Feedback Module
+
+As the generated configuration might not be always aligned with YANG model schema, access control, or bussiness constrains, they need further modification to meet the multi-dimensional requirements. The Feedback Module is used to provide semantic-rich feedback (e.g., represented in structure text) and hints to LLM to improve the generated configuration.
+
+
+
 
 ## Operator Audit Module
 
