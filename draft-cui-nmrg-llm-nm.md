@@ -1,5 +1,5 @@
 ---
-title: "A Framework for LLM-Assisted Network Management with Human-in-the-Loop"
+title: "A Framework for LLM Agent-Assisted Network Management with Human-in-the-Loop"
 abbrev: "LLM4Net"
 category: info
 
@@ -13,6 +13,7 @@ area: "IRTF"
 workgroup: "Network Management"
 keyword:
   - Large Language Model
+  - Autonomous Agent
   - Network Management
   - Human in The Loop
 venue:
@@ -130,7 +131,7 @@ informative:
 --- abstract
 
 
-This document defines an interoperable framework that facilitates collaborative network management between Large Language Models (LLMs) and human operators. The proposed framework introduces an enhanced telemetry module, an LLM decision module, and standardized interaction data models between human operators and LLM-driven systems, and workflows to enforce human oversight. The approach ensures compatibility with existing network management systems and protocols while improving automation and decision-making capabilities in network operations.
+This document defines an interoperable framework that facilitates collaborative network management between Large Language Models (LLMs) agents and human operators. The proposed framework introduces an enhanced telemetry module, an LLM agent decision module, and interaction data models between human operators and LLM agent-driven systems, and workflows to enforce human oversight. The approach ensures compatibility with existing network management systems and protocols while improving automation and decision-making capabilities in network operations.
 
 
 --- middle
@@ -145,8 +146,8 @@ Traditional network automation systems often face challenges in handling unantic
 Network management faces significant challenges, including the complexity of multi-vendor configurations, the real-time correlation of heterogeneous telemetry data, and the need for rapid responses to dynamic security threats.
 LLMs offer a promising approach to addressing these challenges through their advanced multimodal data understanding and adaptive reasoning capabilities.
 However, the direct application of LLMs in network management introduces several technical considerations.
-These include the need for semantic enrichment of network telemetry to enhance LLM comprehension, a dual-channel decision execution mechanism with confidence-based escalation, and auditability of LLM-generated decisions through provenance tracking.
-Addressing these requirements is critical to integrating LLMs effectively into network management workflows while maintaining reliability, transparency, and interoperability.
+These include the need for semantic enrichment of network telemetry to enhance LLM comprehension, a decision execution mechanism with confidence-based escalation, and auditability of LLM-generated decisions through provenance tracking.
+Addressing these requirements is critical to integrating LLM agents effectively into network management workflows while maintaining reliability, transparency, and interoperability.
 
 
 # Terminology
@@ -163,9 +164,9 @@ Addressing these requirements is critical to integrating LLMs effectively into n
 # Framework Overview
 
     +-------------------------------------------------------------+
-    |             LLM-Assisted Network Management System          |
+    |         LLM-Agent Assisted Network Management System        |
     +-------------------------------------------------------------+
-    |+--------------------LLM Decision Module--------------------+|
+    |+---------------LLM Agent Decision Module-------------------+|
     ||                                                           ||
     ||               +----Task Agent Module---+  +-------------+ ||
     ||               | +---------------------+|  | Task Agent  <-----+
@@ -197,22 +198,21 @@ Addressing these requirements is critical to integrating LLMs effectively into n
 
     Figure 1: The LLM-Assisted Network Management Framework
 
-The proposed framework is shown in Figure 1, highlighting the key components of LLM-assisted network management.
-The human operator can generate a specific task agent, e.g., fault analysis or topology optimization, using the task agent management module.
-According to the task type, the task agent module can instantiate a task agent with specific foundation model, prompt, and adaptation fine-tuned parameters{{Hu22}}.
-The enahnced telemetry module improves the semantics of raw telemetry data from original network management system, providing supplementary information to the LLM decision module for more informed decision-making.
+The proposed framework is shown in Figure 1, highlighting the key components of LLM agent-assisted network management.
+The human operator can generate a specific task agent, e.g., fault analysis or topology optimization, using the task agent management module by specifying foundation model, prompt, and adaptation fine-tuned parameters{{Hu22}}.
+The enhanced telemetry module improves the semantics of raw telemetry data from original network management system, providing supplementary information to the LLM agent decision module for more informed decision-making.
 After the decision-making, the generated configuration parameters are validated against the YANG model and enforced with access control rules.
 The operator audit module provides a structured mechanism for human oversight of LLM-generated configurations, and the configuration can be issued to the original network management system for deployment once the operator approves.
 
 
 ## Enhanced Telemetry Module
-The Enhanced Telemetry Module improves the semantics of raw telemetry data, providing supplementary information to the LLM decision module for more informed decision-making.
+The Enhanced Telemetry Module improves the semantics of raw telemetry data, providing supplementary information to the LLM agent decision module for more informed decision-making.
 Telemetry data retrieved from network devices via NETCONF{{RFC6241}}, e.g., in XML format, often lacks field descriptions, structured metadata, and vendor-specific details. Since this information is not included in the pre-trained knowledge of LLMs, it can lead to misinterpretation and erroneous reasoning.
 To address this limitation, an external knowledge base should be introduced to store YANG model schema, device manuals, and other relevant documentation.
 The Enhanced Telemetry Module functions as middleware between the network management system and the external knowledge base. Through its southbound interface, it retrieves NETCONF data from the NETCONF client of existing network management system. Through its northbound interface, the module queries the external knowledge base for the corresponding YANG model or device manual.
 To enhance semantic richness, the Enhanced Telemetry Module processes the retrieved data by simplifying formatted content (e.g., removing redundant or closing XML tags) and appending XML path and description information from the YANG tree to the relevant fields. This approach ensures that the LLM has access to structured, contextually enriched data, improving its ability to analyze and reason about network telemetry.
 
-## LLM Decision Module
+## LLM Agent Decision Module
 
 ### RAG Module
 The pre-trained LLM may not encompass specific task requirements or vendor-specific knowledge. To address this kind of limitation, the Retrieve-Augmented Generation (RAG){{Lewis20}} approach is widely used. This module retrieves relevant information from operator-defined sources, such as device documentation and expert knowledge, and integrates it with the Enhanced Telemetry Module to obtain YANG model schema.
@@ -268,11 +268,11 @@ A task agent is instantiated in response to an operator request, an automated po
    - Intent Parsing: The module parses the high-level intent (e.g., “remediate BGP flapping on router R5”) to identify the required task type, target network scope, and performance constraints.
    - Agent Template Selection: Based on the parsed intent, the module selects a pre-registered agent template from the Prompt Library.
    - Resource Allocation: The module allocates necessary compute resources (CPU/GPU, memory) and instantiates the LLM runtime environment.
-   - Context Initialization: The agent is initialized with: Network context (e.g., device inventory, topology from Enhanced Telemetry), security credentials, and session ID and logging context for auditability
+   - Context Initialization: The agent is initialized with: Network context (e.g., device inventory, topology from Enhanced Telemetry), security credentials, and session ID and logging context for auditability.
    - Registration: The newly created agent is registered with its metadata, status (“initializing”), and heartbeat endpoint.
 
 2. Update of Task Agents.
-Task agents may require updates due to changing network conditions, model improvements, or revised operator policies. Updates SHOULD be performed in a ßnon-disruptive manner whenever possible:
+Task agents may require updates due to changing network conditions, model improvements, or revised operator policies. Updates SHOULD be performed in a non-disruptive manner whenever possible:
    - Configuration Update: Operators or automated controllers MAY modify agent parameters (e.g., optimization thresholds, output verbosity).
    - Model or Weight Swapping: If a newer fine-tuned weight version becomes available, the module can hot-swap the adapter weights while preserving the agent’s execution state, provided the base foundation model remains compatible.
    - State Preservation: During updates, the module snapshots the agent’s working memory (e.g., conversation history, intermediate plans) and restores it post-update to maintain task continuity.
@@ -308,7 +308,7 @@ This module must enforce explicit restrictions on the actions an LLM is permitte
 
 ### Feedback Module
 
-As the generated configuration might not be always aligned with YANG model schema, access control, or bussiness constrains, they need further modification to meet the multi-dimensional requirements. The Feedback Module is used to provide semantic-rich feedback (e.g., represented in structure text) and hints to LLM to improve the generated configuration.
+As the generated configuration might not be always aligned with YANG model schema, access control, or bussiness constrains, they need further modification to meet the multi-dimensional requirements. The Feedback Module is used to provide semantic-rich feedback (e.g., represented in structure text) and hints to LLM agent to improve the generated configuration.
 
 
 
@@ -342,7 +342,7 @@ To achieve Explainability, the module provides a structured breakdown of the dec
 
 Additionally, the audit process incorporates counterfactual analysis, allowing operators to assess alternative outcomes. For instance, the system may indicate that if no action is taken, packet loss is expected to increase by 20% in the next ten minutes. This capability enhances operational decision-making by providing a comparative assessment of different actions.
 
-To further ensure reliability, the module includes a mechanism to detect potential biases or hallucinations in LLM-generated outputs. If an LLM decision is based on incomplete or uncertain data, the system flags it accordingly, allowing operators to make informed judgments. For example, if real-time telemetry data is insufficient, the system may indicate that the confidence in a particular recommendation is low.
+To further ensure reliability, the module includes a mechanism to detect potential biases or hallucinations in LLM-generated outputs. If an LLM agent decision is based on incomplete or uncertain data, the system flags it accordingly, allowing operators to make informed judgments. For example, if real-time telemetry data is insufficient, the system may indicate that the confidence in a particular recommendation is low.
 
 By integrating these Explainability features, the Operator Audit Module strengthens human oversight, ensuring that LLM-generated configurations align with business policies, security requirements, and regulatory standards. This structured approach enhances accountability and mitigates risks associated with automated decision-making.
 
@@ -352,7 +352,7 @@ By integrating these Explainability features, the Operator Audit Module strength
 
 Distributed Denial of Service (DDoS) attacks remain a critical operational threat. While conventional systems use rate-limiting and signature matching, they often fail to adapt in real-time or generate fine-grained filtering rules based on multi-dimensional telemetry data.
 
-This use case demonstrates how the LLM-assisted framework enables intelligent filtering rule generation and secure deployment with human oversight.
+This use case demonstrates how the LLM agent-assisted framework enables intelligent filtering rule generation and secure deployment with human oversight.
 
 1. **Telemetry Collection and Semantic Enrichment**
    The Enhanced Telemetry Module retrieves real-time traffic statistics and interface metrics from network devices using NETCONF. These raw telemetry data are semantically enriched by referencing YANG models and device-specific documentation to generate a context-rich dataset suitable for LLM processing.
@@ -371,7 +371,7 @@ This use case demonstrates how the LLM-assisted framework enables intelligent fi
 
 
 3. **LLM-Generated Firewall Configuration Output**
-   The LLM reasons that a TCP SYN flood is underway and generates the following ACL-based filtering policy:
+   The LLM agent reasons that a TCP SYN flood is underway and generates the following ACL-based filtering policy:
 
 ~~~ shell
 ip access-list extended BLOCK-DDOS
@@ -409,13 +409,13 @@ The human operator performs the audit with the following steps:
 
 The configuration is deployed through the network management system, completing the defense workflow with human oversight and traceability.
 
-This simplified case shows how the LLM can assist in quickly generating actionable filtering rules in response to DDoS patterns, while adhering to operational safeguards.
+This simplified case shows how the LLM agent can assist in quickly generating actionable filtering rules in response to DDoS patterns, while adhering to operational safeguards.
 
 ## Traffic Scheduling and Optimization
 
 In large-scale networks, dynamic traffic scheduling is required to adapt to fluctuating loads, ensure QoS, and meet SLA requirements. Traditional methods may lack responsiveness or cross-domain visibility.
 
-The proposed framework enables intelligent, context-aware traffic scheduling through LLM-based reasoning. The following illustrates the process:
+The proposed framework enables intelligent, context-aware traffic scheduling through LLM agent-based reasoning. The following illustrates the process:
 
 1. **Telemetry Data Acquisition**
 The Enhanced Telemetry Module gathers link utilization, queue occupancy, and delay metrics from multiple routers. The semantic enrichment process tags each metric with human-readable labels from the YANG model, including path topology and policy tags (e.g., gold/silver/bronze service classes).
@@ -424,7 +424,7 @@ The Enhanced Telemetry Module gathers link utilization, queue occupancy, and del
 An operator initiates a traffic scheduling task. The Task Agent Module selects a foundation model fine-tuned on traffic engineering datasets and uses a structured prompt to describe current constraints: high utilization on core links `L1-L3`, SLA violations for gold-class VoIP traffic.
 
 3. **Sample Configuration Output**
-The LLM suggests adjusting RSVP-TE path metrics to reroute gold traffic via underutilized backup paths:
+The LLM agent suggests adjusting RSVP-TE path metrics to reroute gold traffic via underutilized backup paths:
 
 ~~~ shell
 policy-options {
@@ -469,7 +469,7 @@ The operator reviews:
 
 The revised configuration is stored and forwarded to the network management system for application.
 
-This use case illustrates how the framework enables LLMs to propose adaptive, policy-compliant traffic engineering strategies while maintaining operator control, traceability, and auditability.
+This use case illustrates how the framework enables LLM agents to propose adaptive, policy-compliant traffic engineering strategies while maintaining operator control, traceability, and auditability.
 
 
 # IANA Considerations {#IANA}
@@ -478,7 +478,7 @@ This document includes no request to IANA.
 
 # Security Considerations {#Security}
 
-- Model Hallucination: A key challenge is that, without proper constraints, the LLM may produce malformed or invalid configurations. This issue can be mitigated using techniques such as Constrained Decoding, which enforces syntactic correctness by modeling the configuration syntax and restricting the output to conform to predefined rules during the generation process.
+- Model Hallucination: A key challenge is that, without proper constraints, the LLM agent may produce malformed or invalid configurations. This issue can be mitigated using techniques such as Constrained Decoding, which enforces syntactic correctness by modeling the configuration syntax and restricting the output to conform to predefined rules during the generation process.
 
 - Training Data Poisoning: LLMs can be trained on malicious or biased data, potentially leading to unintended behavior or security vulnerabilities. To mitigate this risk, LLMs should be trained on curated, high-quality datasets with rigorous validation and filtering processes. Periodic retraining and adversarial testing should also be conducted to detect and correct anomalies before deployment.
 
@@ -496,11 +496,11 @@ We thanks Shailesh Prabhu from Nokia for his contributions to this document.
 ## Appendix A.1 Data Model
 {:numbered="false"}
 
-This section defines the essential data models for LLM-assisted network management, including the LLM decision response and human audit records.
+This section defines the essential data models for LLM agent-assisted network management, including the LLM agent decision response and human audit records.
 
 ### LLM Response Data Model
 {:numbered="false"}
-The LLM decision module should respond with the generated configuration parameters along with an associated confidence score. If the LLM is unable to generate a valid configuration, it should return an error message accompanied by an explanation of the issue.
+The LLM agent decision module should respond with the generated configuration parameters along with an associated confidence score. If the LLM is unable to generate a valid configuration, it should return an error message accompanied by an explanation of the issue.
 
 ~~~ yang
 module: llm-response-module
