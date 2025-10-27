@@ -1,8 +1,8 @@
 <!-- regenerate: on (set to off if you edit this file) -->
 
-# A Framework for LLM-Assisted Network Management with Human-in-the-Loop
+# A Framework for LLM Agent-Assisted Network Management with Human-in-the-Loop
 
-This is the working area for the individual Internet-Draft, "A Framework for LLM-Assisted Network Management with Human-in-the-Loop".
+This is the working area for the individual Internet-Draft, "A Framework for LLM Agent-Assisted Network Management with Human-in-the-Loop".
 
 * [Editor's Copy](https://xmzzyo.github.io/draft_llm_nm/#go.draft-cui-nmrg-llm-nm.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-cui-nmrg-llm-nm)

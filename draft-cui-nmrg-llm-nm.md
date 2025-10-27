@@ -246,7 +246,7 @@ MCP consists of two primary components:
   - Executes the requested operation and returns structured results in a deterministic format.
   - Supports streaming for long-running operations (e.g., iterative optimization or real-time telemetry polling).
 
-In many complex scenarios, multiple task agents MAY collaborate to achieve a shared network management objective.
+In many complex scenarios, multiple task agents may collaborate to achieve a shared network management objective.
 The Agent-to-Agent Protocol (A2A){{a2a}} is a coordination protocol that enables multiple task agents to exchange information, delegate subtasks, negotiate resource usage, and synchronize execution states in a distributed network management environment. A2A ensures semantic interoperability, temporal consistency, and conflict avoidance across heterogeneous agents.
 Key design principles of A2A include:
 
@@ -272,8 +272,8 @@ A task agent is instantiated in response to an operator request, an automated po
    - Registration: The newly created agent is registered with its metadata, status (“initializing”), and heartbeat endpoint.
 
 2. Update of Task Agents.
-Task agents may require updates due to changing network conditions, model improvements, or revised operator policies. Updates SHOULD be performed in a non-disruptive manner whenever possible:
-   - Configuration Update: Operators or automated controllers MAY modify agent parameters (e.g., optimization thresholds, output verbosity).
+Task agents may require updates due to changing network conditions, model improvements, or revised operator policies. Updates should be performed in a non-disruptive manner whenever possible:
+   - Configuration Update: Operators or automated controllers may modify agent parameters (e.g., optimization thresholds, output verbosity).
    - Model or Weight Swapping: If a newer fine-tuned weight version becomes available, the module can hot-swap the adapter weights while preserving the agent’s execution state, provided the base foundation model remains compatible.
    - State Preservation: During updates, the module snapshots the agent’s working memory (e.g., conversation history, intermediate plans) and restores it post-update to maintain task continuity.
 
@@ -291,7 +291,7 @@ By providing structured, auditable, and policy-governed lifecycle management, th
 
 ### Syntax Validation Module
 
-To ensure correctness and policy compliance, LLM-generated configurations MUST pass the YANG schema validation steps before being queued for human approval.
+To ensure correctness and policy compliance, LLM-generated configurations must pass the YANG schema validation steps before being queued for human approval.
 This module ensures that only syntactically correct configurations are presented for operator review, thereby reducing errors and enhancing network reliability.
 
 ### Access Control Module
