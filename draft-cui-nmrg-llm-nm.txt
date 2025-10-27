@@ -5,9 +5,9 @@
 Network Management                                                Y. Cui
 Internet-Draft                                       Tsinghua University
 Intended status: Informational                                   M. Xing
-Expires: 21 April 2026                                          L. Zhang
+Expires: 30 April 2026                                          L. Zhang
                                                  Zhongguancun Laboratory
-                                                         18 October 2025
+                                                         27 October 2025
 
 
 A Framework for LLM Agent-Assisted Network Management with Human-in-the-
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 April 2026.
+   This Internet-Draft will expire on 30 April 2026.
 
 Copyright Notice
 
@@ -323,7 +323,7 @@ Table of Contents
       -  Supports streaming for long-running operations (e.g., iterative
          optimization or real-time telemetry polling).
 
-   In many complex scenarios, multiple task agents MAY collaborate to
+   In many complex scenarios, multiple task agents may collaborate to
    achieve a shared network management objective.  The Agent-to-Agent
    Protocol (A2A)[a2a] is a coordination protocol that enables multiple
    task agents to exchange information, delegate subtasks, negotiate
@@ -385,10 +385,10 @@ Table of Contents
 
    2.  Update of Task Agents.  Task agents may require updates due to
        changing network conditions, model improvements, or revised
-       operator policies.  Updates SHOULD be performed in a non-
+       operator policies.  Updates should be performed in a non-
        disruptive manner whenever possible:
 
-       *  Configuration Update: Operators or automated controllers MAY
+       *  Configuration Update: Operators or automated controllers may
           modify agent parameters (e.g., optimization thresholds, output
           verbosity).
 
@@ -431,7 +431,7 @@ Table of Contents
 3.3.1.  Syntax Validation Module
 
    To ensure correctness and policy compliance, LLM-generated
-   configurations MUST pass the YANG schema validation steps before
+   configurations must pass the YANG schema validation steps before
    being queued for human approval.  This module ensures that only
    syntactically correct configurations are presented for operator
    review, thereby reducing errors and enhancing network reliability.
