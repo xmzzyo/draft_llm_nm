@@ -506,8 +506,6 @@ The framework introduces new trust boundaries:
 
 Each boundary represents a potential attack surface and MUST be explicitly protected.
 
----
-
 ## 2. Prompt Injection Attacks
 
 ### 2.1 Threat Description
@@ -557,7 +555,6 @@ The system SHOULD implement:
 
    * All generated configurations MUST pass syntax validation and access control enforcement prior to execution.
 
----
 
 ## 3. RAG Knowledge Poisoning
 
@@ -588,8 +585,6 @@ The system MUST:
 * Log all retrieved documents associated with a decision for audit replayability.
 
 The Operator Audit Module SHOULD expose the retrieved document identifiers and versions used in each decision.
-
----
 
 ## 4. Agent Identity Spoofing
 
@@ -622,8 +617,6 @@ The system MUST:
 
 Agent lifecycle operations (creation, update, deletion) MUST be logged and auditable.
 
----
-
 ## 5. Toolchain and MCP Abuse
 
 ### 5.1 Threat Description
@@ -649,8 +642,6 @@ Example threats include:
 * Tool execution MUST occur in sandboxed environments.
 * Outputs MUST be schema-validated before being injected into the LLM context.
 * High-risk tool invocations SHOULD require human confirmation.
-
----
 
 ## 6. DDoS Against the LLM Control Plane
 
@@ -679,8 +670,6 @@ Possible attack vectors:
 
 The Task Agent Management Module SHOULD enforce quotas and implement circuit breakers.
 
----
-
 ## 7. Hallucination-Induced Operational Risk
 
 ### 7.1 Threat Description
@@ -708,8 +697,6 @@ Examples include:
 
 Human approval MUST remain the final authority for high-impact changes.
 
----
-
 ## 8. Risk Classification Model
 
 To support structured oversight, each generated configuration SHOULD be assigned a risk level derived from:
@@ -728,8 +715,6 @@ A three-tier model MAY be used:
 
 Risk classification MUST be included in the audit record.
 
----
-
 
 The integration of LLM agents into network management introduces novel attack surfaces beyond traditional control-plane security.
 A secure deployment requires:
@@ -741,7 +726,6 @@ A secure deployment requires:
 * Risk-aware escalation policies
 
 Security MUST be treated as a first-class architectural constraint rather than an afterthought in LLM-assisted network automation.
-
 
 
 # IANA Considerations {#IANA}
