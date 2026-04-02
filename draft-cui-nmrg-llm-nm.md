@@ -479,9 +479,9 @@ The objective is to systematically identify threat vectors, analyze their potent
 
 The security analysis assumes that LLM agents are integrated into an operational network management environment where they can access telemetry, retrieve contextual knowledge, invoke external tools, and generate configuration changes subject to human oversight.
 
-## 1. Threat Model
+## Threat Model
 
-### 1.1 Assets
+### Assets
 
 The following assets are considered security-sensitive:
 
@@ -494,7 +494,7 @@ The following assets are considered security-sensitive:
 
 Compromise of any of these assets may lead to service disruption, policy violations, data leakage, or unauthorized configuration changes.
 
-### 1.2 Trust Boundaries
+### Trust Boundaries
 
 The framework introduces new trust boundaries:
 
@@ -506,9 +506,9 @@ The framework introduces new trust boundaries:
 
 Each boundary represents a potential attack surface and MUST be explicitly protected.
 
-## 2. Prompt Injection Attacks
+## Prompt Injection Attacks
 
-### 2.1 Threat Description
+### Threat Description
 
 Prompt Injection refers to adversarial manipulation of the LLM input context in order to override system instructions, escalate privileges, or induce unintended actions.
 
@@ -525,14 +525,14 @@ An example attack scenario includes embedding adversarial instructions within de
 
 If this text is incorporated into the LLM context without sanitization, it may alter the agent’s decision logic.
 
-### 2.2 Impact
+### Impact
 
 * Generation of unauthorized configuration
 * Policy bypass
 * Privilege escalation
 * Service disruption
 
-### 2.3 Mitigation Requirements
+### Mitigation Requirements
 
 The system SHOULD implement:
 
@@ -556,9 +556,9 @@ The system SHOULD implement:
    * All generated configurations MUST pass syntax validation and access control enforcement prior to execution.
 
 
-## 3. RAG Knowledge Poisoning
+## RAG Knowledge Poisoning
 
-### 3.1 Threat Description
+### Threat Description
 
 The Retrieve-Augmented Generation (RAG) module introduces risk if the retrieval corpus contains malicious or outdated content.
 
@@ -569,13 +569,13 @@ Attack vectors include:
 * Unauthorized modification of vendor manuals
 * Injection of fabricated configuration templates
 
-### 3.2 Impact
+### Impact
 
 * Systematic generation of insecure configuration patterns
 * Bias toward deprecated protocols
 * Hidden backdoor configurations
 
-### 3.3 Mitigation Requirements
+### Mitigation Requirements
 
 The system MUST:
 
@@ -586,9 +586,9 @@ The system MUST:
 
 The Operator Audit Module SHOULD expose the retrieved document identifiers and versions used in each decision.
 
-## 4. Agent Identity Spoofing
+## Agent Identity Spoofing
 
-### 4.1 Threat Description
+### Threat Description
 
 Each task agent is represented as a logical user within the access control framework. An attacker may attempt to impersonate an agent to perform unauthorized operations.
 
@@ -599,13 +599,13 @@ Possible attack vectors include:
 * MCP token misuse
 * Forged A2A messages
 
-### 4.2 Impact
+### Impact
 
 * Unauthorized configuration changes
 * Circumvention of human oversight
 * Cross-domain privilege abuse
 
-### 4.3 Mitigation Requirements
+### Mitigation Requirements
 
 The system MUST:
 
@@ -617,9 +617,9 @@ The system MUST:
 
 Agent lifecycle operations (creation, update, deletion) MUST be logged and auditable.
 
-## 5. Toolchain and MCP Abuse
+## Toolchain and MCP Abuse
 
-### 5.1 Threat Description
+### Threat Description
 
 The Model Context Protocol (MCP) allows task agents to invoke external tools. Compromise of the toolchain may result in arbitrary code execution or falsified outputs.
 
@@ -630,22 +630,22 @@ Example threats include:
 * Execution of unintended shell commands
 * Time-of-check/time-of-use inconsistencies
 
-### 5.2 Impact
+### Impact
 
 * Incorrect optimization decisions
 * Network misconfiguration
 * Data exfiltration
 
-### 5.3 Mitigation Requirements
+### Mitigation Requirements
 
 * MCP servers MUST validate all input schemas.
 * Tool execution MUST occur in sandboxed environments.
 * Outputs MUST be schema-validated before being injected into the LLM context.
 * High-risk tool invocations SHOULD require human confirmation.
 
-## 6. DDoS Against the LLM Control Plane
+## DDoS Against the LLM Control Plane
 
-### 6.1 Threat Description
+### Threat Description
 
 The LLM-assisted framework introduces a computationally intensive decision layer that may itself become a target of denial-of-service attacks.
 
@@ -655,13 +655,13 @@ Possible attack vectors:
 * High-frequency telemetry triggering repeated reasoning
 * Malicious multi-agent coordination loops
 
-### 6.2 Impact
+### Impact
 
 * Resource exhaustion (CPU/GPU)
 * Delayed incident response
 * Reduced availability of management plane
 
-### 6.3 Mitigation Requirements
+### Mitigation Requirements
 
 * Rate-limit task creation per operator or domain.
 * Apply admission control based on resource availability.
@@ -670,9 +670,9 @@ Possible attack vectors:
 
 The Task Agent Management Module SHOULD enforce quotas and implement circuit breakers.
 
-## 7. Hallucination-Induced Operational Risk
+## Hallucination-Induced Operational Risk
 
-### 7.1 Threat Description
+### Threat Description
 
 LLMs may generate syntactically correct but semantically invalid configurations.
 
@@ -682,13 +682,13 @@ Examples include:
 * Misinterpreting vendor-specific syntax
 * Incorrect parameter units
 
-### 7.2 Impact
+### Impact
 
 * Service instability
 * Silent policy violation
 * Increased rollback events
 
-### 7.3 Mitigation Requirements
+### Mitigation Requirements
 
 * Mandatory YANG schema validation.
 * Deterministic configuration simulation (e.g., pre-deployment validation tools).
@@ -697,7 +697,7 @@ Examples include:
 
 Human approval MUST remain the final authority for high-impact changes.
 
-## 8. Risk Classification Model
+## Risk Classification Model
 
 To support structured oversight, each generated configuration SHOULD be assigned a risk level derived from:
 
