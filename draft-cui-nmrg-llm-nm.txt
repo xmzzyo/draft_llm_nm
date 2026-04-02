@@ -5,9 +5,9 @@
 Network Management                                                Y. Cui
 Internet-Draft                                       Tsinghua University
 Intended status: Informational                                   M. Xing
-Expires: 31 August 2026                                         L. Zhang
+Expires: 4 October 2026                                         L. Zhang
                                                  Zhongguancun Laboratory
-                                                        27 February 2026
+                                                            2 April 2026
 
 
 A Framework for LLM Agent-Assisted Network Management with Human-in-the-
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 31 August 2026.
+   This Internet-Draft will expire on 4 October 2026.
 
 Copyright Notice
 
@@ -94,34 +94,34 @@ Table of Contents
      4.1.  DDoS Intelligent Defense
      4.2.  Traffic Scheduling and Optimization
    5.  Security Considerations
-     5.1.  1.  Threat Model
-       5.1.1.  1.1 Assets
-       5.1.2.  1.2 Trust Boundaries
-     5.2.  2.  Prompt Injection Attacks
-       5.2.1.  2.1 Threat Description
-       5.2.2.  2.2 Impact
-       5.2.3.  2.3 Mitigation Requirements
-     5.3.  3.  RAG Knowledge Poisoning
-       5.3.1.  3.1 Threat Description
-       5.3.2.  3.2 Impact
-       5.3.3.  3.3 Mitigation Requirements
-     5.4.  4.  Agent Identity Spoofing
-       5.4.1.  4.1 Threat Description
-       5.4.2.  4.2 Impact
-       5.4.3.  4.3 Mitigation Requirements
-     5.5.  5.  Toolchain and MCP Abuse
-       5.5.1.  5.1 Threat Description
-       5.5.2.  5.2 Impact
-       5.5.3.  5.3 Mitigation Requirements
-     5.6.  6.  DDoS Against the LLM Control Plane
-       5.6.1.  6.1 Threat Description
-       5.6.2.  6.2 Impact
-       5.6.3.  6.3 Mitigation Requirements
-     5.7.  7.  Hallucination-Induced Operational Risk
-       5.7.1.  7.1 Threat Description
-       5.7.2.  7.2 Impact
-       5.7.3.  7.3 Mitigation Requirements
-     5.8.  8.  Risk Classification Model
+     5.1.  Threat Model
+       5.1.1.  Assets
+       5.1.2.  Trust Boundaries
+     5.2.  Prompt Injection Attacks
+       5.2.1.  Threat Description
+       5.2.2.  Impact
+       5.2.3.  Mitigation Requirements
+     5.3.  RAG Knowledge Poisoning
+       5.3.1.  Threat Description
+       5.3.2.  Impact
+       5.3.3.  Mitigation Requirements
+     5.4.  Agent Identity Spoofing
+       5.4.1.  Threat Description
+       5.4.2.  Impact
+       5.4.3.  Mitigation Requirements
+     5.5.  Toolchain and MCP Abuse
+       5.5.1.  Threat Description
+       5.5.2.  Impact
+       5.5.3.  Mitigation Requirements
+     5.6.  DDoS Against the LLM Control Plane
+       5.6.1.  Threat Description
+       5.6.2.  Impact
+       5.6.3.  Mitigation Requirements
+     5.7.  Hallucination-Induced Operational Risk
+       5.7.1.  Threat Description
+       5.7.2.  Impact
+       5.7.3.  Mitigation Requirements
+     5.8.  Risk Classification Model
    6.  IANA Considerations
    7.  References
      7.1.  Normative References
@@ -794,9 +794,9 @@ Table of Contents
    telemetry, retrieve contextual knowledge, invoke external tools, and
    generate configuration changes subject to human oversight.
 
-5.1.  1.  Threat Model
+5.1.  Threat Model
 
-5.1.1.  1.1 Assets
+5.1.1.  Assets
 
    The following assets are considered security-sensitive:
 
@@ -816,7 +816,7 @@ Table of Contents
    policy violations, data leakage, or unauthorized configuration
    changes.
 
-5.1.2.  1.2 Trust Boundaries
+5.1.2.  Trust Boundaries
 
    The framework introduces new trust boundaries:
 
@@ -833,9 +833,9 @@ Table of Contents
    Each boundary represents a potential attack surface and MUST be
    explicitly protected.
 
-5.2.  2.  Prompt Injection Attacks
+5.2.  Prompt Injection Attacks
 
-5.2.1.  2.1 Threat Description
+5.2.1.  Threat Description
 
    Prompt Injection refers to adversarial manipulation of the LLM input
    context in order to override system instructions, escalate
@@ -861,7 +861,7 @@ Table of Contents
    If this text is incorporated into the LLM context without
    sanitization, it may alter the agent’s decision logic.
 
-5.2.2.  2.2 Impact
+5.2.2.  Impact
 
    *  Generation of unauthorized configuration
 
@@ -871,7 +871,7 @@ Table of Contents
 
    *  Service disruption
 
-5.2.3.  2.3 Mitigation Requirements
+5.2.3.  Mitigation Requirements
 
    The system SHOULD implement:
 
@@ -903,9 +903,9 @@ Table of Contents
        *  All generated configurations MUST pass syntax validation and
           access control enforcement prior to execution.
 
-5.3.  3.  RAG Knowledge Poisoning
+5.3.  RAG Knowledge Poisoning
 
-5.3.1.  3.1 Threat Description
+5.3.1.  Threat Description
 
    The Retrieve-Augmented Generation (RAG) module introduces risk if the
    retrieval corpus contains malicious or outdated content.
@@ -920,7 +920,7 @@ Table of Contents
 
    *  Injection of fabricated configuration templates
 
-5.3.2.  3.2 Impact
+5.3.2.  Impact
 
    *  Systematic generation of insecure configuration patterns
 
@@ -928,7 +928,7 @@ Table of Contents
 
    *  Hidden backdoor configurations
 
-5.3.3.  3.3 Mitigation Requirements
+5.3.3.  Mitigation Requirements
 
    The system MUST:
 
@@ -945,9 +945,9 @@ Table of Contents
    The Operator Audit Module SHOULD expose the retrieved document
    identifiers and versions used in each decision.
 
-5.4.  4.  Agent Identity Spoofing
+5.4.  Agent Identity Spoofing
 
-5.4.1.  4.1 Threat Description
+5.4.1.  Threat Description
 
    Each task agent is represented as a logical user within the access
    control framework.  An attacker may attempt to impersonate an agent
@@ -963,7 +963,7 @@ Table of Contents
 
    *  Forged A2A messages
 
-5.4.2.  4.2 Impact
+5.4.2.  Impact
 
    *  Unauthorized configuration changes
 
@@ -971,7 +971,7 @@ Table of Contents
 
    *  Cross-domain privilege abuse
 
-5.4.3.  4.3 Mitigation Requirements
+5.4.3.  Mitigation Requirements
 
    The system MUST:
 
@@ -988,9 +988,9 @@ Table of Contents
    Agent lifecycle operations (creation, update, deletion) MUST be
    logged and auditable.
 
-5.5.  5.  Toolchain and MCP Abuse
+5.5.  Toolchain and MCP Abuse
 
-5.5.1.  5.1 Threat Description
+5.5.1.  Threat Description
 
    The Model Context Protocol (MCP) allows task agents to invoke
    external tools.  Compromise of the toolchain may result in arbitrary
@@ -1006,7 +1006,7 @@ Table of Contents
 
    *  Time-of-check/time-of-use inconsistencies
 
-5.5.2.  5.2 Impact
+5.5.2.  Impact
 
    *  Incorrect optimization decisions
 
@@ -1014,7 +1014,7 @@ Table of Contents
 
    *  Data exfiltration
 
-5.5.3.  5.3 Mitigation Requirements
+5.5.3.  Mitigation Requirements
 
    *  MCP servers MUST validate all input schemas.
 
@@ -1025,9 +1025,9 @@ Table of Contents
 
    *  High-risk tool invocations SHOULD require human confirmation.
 
-5.6.  6.  DDoS Against the LLM Control Plane
+5.6.  DDoS Against the LLM Control Plane
 
-5.6.1.  6.1 Threat Description
+5.6.1.  Threat Description
 
    The LLM-assisted framework introduces a computationally intensive
    decision layer that may itself become a target of denial-of-service
@@ -1041,7 +1041,7 @@ Table of Contents
 
    *  Malicious multi-agent coordination loops
 
-5.6.2.  6.2 Impact
+5.6.2.  Impact
 
    *  Resource exhaustion (CPU/GPU)
 
@@ -1049,7 +1049,7 @@ Table of Contents
 
    *  Reduced availability of management plane
 
-5.6.3.  6.3 Mitigation Requirements
+5.6.3.  Mitigation Requirements
 
    *  Rate-limit task creation per operator or domain.
 
@@ -1062,9 +1062,9 @@ Table of Contents
    The Task Agent Management Module SHOULD enforce quotas and implement
    circuit breakers.
 
-5.7.  7.  Hallucination-Induced Operational Risk
+5.7.  Hallucination-Induced Operational Risk
 
-5.7.1.  7.1 Threat Description
+5.7.1.  Threat Description
 
    LLMs may generate syntactically correct but semantically invalid
    configurations.
@@ -1077,7 +1077,7 @@ Table of Contents
 
    *  Incorrect parameter units
 
-5.7.2.  7.2 Impact
+5.7.2.  Impact
 
    *  Service instability
 
@@ -1085,7 +1085,7 @@ Table of Contents
 
    *  Increased rollback events
 
-5.7.3.  7.3 Mitigation Requirements
+5.7.3.  Mitigation Requirements
 
    *  Mandatory YANG schema validation.
 
@@ -1099,7 +1099,7 @@ Table of Contents
    Human approval MUST remain the final authority for high-impact
    changes.
 
-5.8.  8.  Risk Classification Model
+5.8.  Risk Classification Model
 
    To support structured oversight, each generated configuration SHOULD
    be assigned a risk level derived from:
