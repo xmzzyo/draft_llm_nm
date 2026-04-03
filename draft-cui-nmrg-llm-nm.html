@@ -9,7 +9,7 @@
 <meta content="Mingzhe Xing" name="author">
 <meta content="Lei Zhang" name="author">
 <meta content="
-       This document defines an interoperable framework that facilitates collaborative network management between Large Language Models (LLMs) agents and human operators. The proposed framework introduces an enhanced telemetry module, an LLM agent decision module, and interaction data models between human operators and LLM agent-driven systems, and workflows to enforce human oversight. The approach ensures compatibility with existing network management systems and protocols while improving automation and decision-making capabilities in network operations. 
+       This document defines a framework for interoperable, collaborative network management between Large Language Model (LLM) agents and human operators. The framework specifies an Enhanced Telemetry Module, an LLM Agent Decision Module, interaction data models for human operator oversight, and workflows that enforce human-in-the-loop control. The design is intended to be compatible with existing network management systems and protocols while enabling automation and improved decision support in network operations. 
     " name="description">
 <meta content="xml2rfc 3.32.0" name="generator">
 <meta content="Large Language Model" name="keyword">
@@ -1054,7 +1054,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Cui, et al.</td>
-<td class="center">Expires 4 October 2026</td>
+<td class="center">Expires 5 October 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1067,12 +1067,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-cui-nmrg-llm-nm-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-04-02" class="published">2 April 2026</time>
+<time datetime="2026-04-03" class="published">3 April 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-10-04">4 October 2026</time></dd>
+<dd class="expires"><time datetime="2026-10-05">5 October 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1093,7 +1093,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">A Framework for LLM Agent-Assisted Network Management with Human-in-the-Loop</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document defines an interoperable framework that facilitates collaborative network management between Large Language Models (LLMs) agents and human operators. The proposed framework introduces an enhanced telemetry module, an LLM agent decision module, and interaction data models between human operators and LLM agent-driven systems, and workflows to enforce human oversight. The approach ensures compatibility with existing network management systems and protocols while improving automation and decision-making capabilities in network operations.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document defines a framework for interoperable, collaborative network management between Large Language Model (LLM) agents and human operators. The framework specifies an Enhanced Telemetry Module, an LLM Agent Decision Module, interaction data models for human operator oversight, and workflows that enforce human-in-the-loop control. The design is intended to be compatible with existing network management systems and protocols while enabling automation and improved decision support in network operations.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1130,7 +1130,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 4 October 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 5 October 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1381,7 +1381,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         <h3 id="name-motivation">
 <a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-motivation" class="section-name selfRef">Motivation</a>
         </h3>
-<p id="section-1.1-1">Traditional network automation systems often face challenges in handling unanticipated scenarios and managing complex multi-domain data dependencies. Large Language Models (LLMs) offer advanced multimodal data comprehension, adaptive reasoning, and generalization capabilities, making them a promising tool for network management and autonomous network<span>[<a href="#TM-IG1230" class="cite xref">TM-IG1230</a>]</span>. However, full automation remains impractical due to risks such as model hallucination, operational errors, and a lack of accountability in decision-making<span>[<a href="#Huang25" class="cite xref">Huang25</a>]</span>. This document proposes a structured framework that integrates LLMs into network management through human-in-the-loop collaboration, leveraging their strengths while ensuring oversight, reliability, and operational safety.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+<p id="section-1.1-1">Traditional network automation systems often fail to handle unanticipated scenarios or manage complex, multi-domain data dependencies. Large Language Models (LLMs), when deployed as autonomous agents, offer multimodal data comprehension, adaptive reasoning, and broad generalization, making them a candidate technology for network management assistance <span>[<a href="#TM-IG1230" class="cite xref">TM-IG1230</a>]</span>. However, full automation is not yet practical due to risks including model hallucination, operational errors, and insufficient accountability in automated decision-making <span>[<a href="#Huang25" class="cite xref">Huang25</a>]</span>. This document describes a framework that integrates LLM agents into network management through a structured human-in-the-loop model, preserving operator oversight while enabling LLM-assisted automation.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="problem-statement">
@@ -1389,11 +1389,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
         <h3 id="name-problem-statement">
 <a href="#section-1.2" class="section-number selfRef">1.2. </a><a href="#name-problem-statement" class="section-name selfRef">Problem Statement</a>
         </h3>
-<p id="section-1.2-1">Network management faces significant challenges, including the complexity of multi-vendor configurations, the real-time correlation of heterogeneous telemetry data, and the need for rapid responses to dynamic security threats.
-LLMs offer a promising approach to addressing these challenges through their advanced multimodal data understanding and adaptive reasoning capabilities.
-However, the direct application of LLMs in network management introduces several technical considerations.
-These include the need for semantic enrichment of network telemetry to enhance LLM comprehension, a decision execution mechanism with confidence-based escalation, and auditability of LLM-generated decisions through provenance tracking.
-Addressing these requirements is critical to integrating LLM agents effectively into network management workflows while maintaining reliability, transparency, and interoperability.<a href="#section-1.2-1" class="pilcrow">¶</a></p>
+<p id="section-1.2-1">Network management presents persistent operational challenges, including multi-vendor configuration complexity, correlation of heterogeneous telemetry data, and timely response to dynamic security threats. LLM agents offer a potential approach to address these challenges through their data comprehension and reasoning capabilities.<a href="#section-1.2-1" class="pilcrow">¶</a></p>
+<p id="section-1.2-2">However, applying LLM agents in network management raises several technical requirements. These include semantic enrichment of network telemetry to support accurate LLM reasoning, a decision-execution mechanism with confidence-based escalation, and auditability of LLM-generated decisions through provenance tracking. Addressing these requirements is necessary to integrate LLM agents into network management workflows while maintaining reliability, transparency, and interoperability with existing systems.<a href="#section-1.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1413,13 +1410,16 @@ Addressing these requirements is critical to integrating LLM agents effectively 
             <p id="section-2.1-1.1.1">LLM: Large Language Model<a href="#section-2.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-1.2">
-            <p id="section-2.1-1.2.1">RAG: Retrieve Augmented Generation<a href="#section-2.1-1.2.1" class="pilcrow">¶</a></p>
+            <p id="section-2.1-1.2.1">RAG: Retrieve-Augmented Generation<a href="#section-2.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-1.3">
             <p id="section-2.1-1.3.1">MCP: Model Context Protocol<a href="#section-2.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-1.4">
             <p id="section-2.1-1.4.1">A2A: Agent-to-Agent Protocol<a href="#section-2.1-1.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-2.1-1.5">
+            <p id="section-2.1-1.5.1">NACM: NETCONF Access Control Model<a href="#section-2.1-1.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -1466,24 +1466,19 @@ Addressing these requirements is critical to integrating LLM agents effectively 
 |                       Physical Network                       |
 +--------------------------------------------------------------+
 
-Figure 1: The LLM-Assisted Network Management Framework
+Figure 1: The LLM agent-Assisted Network Management Framework
 </pre><a href="#section-3-1" class="pilcrow">¶</a>
 </div>
-<p id="section-3-2">The proposed framework is shown in Figure 1, highlighting the key components of LLM agent-assisted network management.
-The human operator can generate a specific task agent, e.g., fault analysis or topology optimization, using the task agent management module by specifying foundation model, prompt, and adaptation fine-tuned parameters<span>[<a href="#Hu22" class="cite xref">Hu22</a>]</span>.
-The enhanced telemetry module improves the semantics of raw telemetry data from original network management system, providing supplementary information to the LLM agent decision module for more informed decision-making.
-After the decision-making, the generated configuration parameters are validated against the YANG model and enforced with access control rules.
-The operator audit module provides a structured mechanism for human oversight of LLM-generated configurations, and the configuration can be issued to the original network management system for deployment once the operator approves.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-2">Figure 1 illustrates the principal components of the LLM agent-assisted network management framework. A human operator instantiates a specific task agent (e.g., for fault analysis or topology optimization) via the Task Agent Management Module by specifying a foundation model, a prompt, and optional fine-tuned adapter parameters <span>[<a href="#Hu22" class="cite xref">Hu22</a>]</span>. The Enhanced Telemetry Module enriches raw telemetry data obtained from the underlying network management system and supplies it to the LLM Agent Decision Module. After decision-making, the generated configuration is validated for syntactic correctness and checked against access control rules. The Operator Audit Module provides a structured mechanism for human review of generated configurations; upon operator approval, configurations are issued to the network management system for deployment.<a href="#section-3-2" class="pilcrow">¶</a></p>
 <div id="enhanced-telemetry-module">
 <section id="section-3.1">
         <h3 id="name-enhanced-telemetry-module">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-enhanced-telemetry-module" class="section-name selfRef">Enhanced Telemetry Module</a>
         </h3>
-<p id="section-3.1-1">The Enhanced Telemetry Module improves the semantics of raw telemetry data, providing supplementary information to the LLM agent decision module for more informed decision-making.
-Telemetry data retrieved from network devices via NETCONF<span>[<a href="#RFC6241" class="cite xref">RFC6241</a>]</span>, e.g., in XML format, often lacks field descriptions, structured metadata, and vendor-specific details. Since this information is not included in the pre-trained knowledge of LLMs, it can lead to misinterpretation and erroneous reasoning.
-To address this limitation, an external knowledge base should be introduced to store YANG model schema, device manuals, and other relevant documentation.
-The Enhanced Telemetry Module functions as middleware between the network management system and the external knowledge base. Through its southbound interface, it retrieves NETCONF data from the NETCONF client of existing network management system. Through its northbound interface, the module queries the external knowledge base for the corresponding YANG model or device manual.
-To enhance semantic richness, the Enhanced Telemetry Module processes the retrieved data by simplifying formatted content (e.g., removing redundant or closing XML tags) and appending XML path and description information from the YANG tree to the relevant fields. This approach ensures that the LLM has access to structured, contextually enriched data, improving its ability to analyze and reason about network telemetry.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-1">The Enhanced Telemetry Module enriches raw telemetry data with semantic context, providing structured input to the LLM Agent Decision Module.
+Telemetry data retrieved from network devices via NETCONF <span>[<a href="#RFC6241" class="cite xref">RFC6241</a>]</span> (e.g., in XML format) typically lacks field descriptions, structured metadata, and vendor-specific context. Because this supplementary information is not present in the pre-trained knowledge of general-purpose LLMs, its absence can lead to misinterpretation and erroneous reasoning. To address this, an external knowledge base is used to store YANG model schemas, device manuals, and other relevant documentation.
+The Enhanced Telemetry Module operates as middleware between the network management system and the external knowledge base. Through its southbound interface, it retrieves NETCONF data from the NETCONF client of the existing network management system. Through its northbound interface, it queries the external knowledge base for the corresponding YANG model or device documentation.
+To improve semantic richness, the module processes retrieved data by simplifying formatted content (e.g., removing redundant or closing XML tags) and appending YANG tree path and field-description information to the relevant data elements. This produces structured, context-enriched input suitable for LLM analysis and reasoning.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="llm-agent-decision-module">
@@ -1496,8 +1491,8 @@ To enhance semantic richness, the Enhanced Telemetry Module processes the retrie
           <h4 id="name-rag-module">
 <a href="#section-3.2.1" class="section-number selfRef">3.2.1. </a><a href="#name-rag-module" class="section-name selfRef">RAG Module</a>
           </h4>
-<p id="section-3.2.1-1">The pre-trained LLM may not encompass specific task requirements or vendor-specific knowledge. To address this kind of limitation, the Retrieve-Augmented Generation (RAG)<span>[<a href="#Lewis20" class="cite xref">Lewis20</a>]</span> approach is widely used. This module retrieves relevant information from operator-defined sources, such as device documentation and expert knowledge, and integrates it with the Enhanced Telemetry Module to obtain YANG model schema.
-The retrieved textual data is stored in a database, either as raw text or in a vectorized format for efficient search and retrieval. For a given task context, the module retrieves relevant knowledge from the database and incorporates it into the input context, improving the understanding and response accuracy of LLM.<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-1">A pre-trained LLM may lack knowledge of operator-specific configurations, vendor-specific syntax, or domain-specific operational procedures. To address this limitation, the Retrieval-Augmented Generation (RAG) approach <span>[<a href="#Lewis20" class="cite xref">Lewis20</a>]</span> is used. The RAG Module retrieves relevant information from operator-defined sources, such as device documentation and operational knowledge bases, and integrates it with the semantically enriched telemetry obtained from the Enhanced Telemetry Module.
+Retrieved textual data is stored in a database, either as raw text or in vectorized form for efficient retrieval. For a given task context, the module retrieves relevant knowledge from the database and incorporates it into the LLM input context, improving response accuracy and reducing reliance on general pre-training knowledge.<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="task-agent-module">
@@ -1505,17 +1500,16 @@ The retrieved textual data is stored in a database, either as raw text or in a v
           <h4 id="name-task-agent-module">
 <a href="#section-3.2.2" class="section-number selfRef">3.2.2. </a><a href="#name-task-agent-module" class="section-name selfRef">Task Agent Module</a>
           </h4>
-<p id="section-3.2.2-1">To execute a specific task, such as traffic analysis, traffic optimization, or fault remediation, a corresponding task agent must be created. A task agent consists of a selected LLM foundation model, an associated prompt, and fine-tuned weights.<a href="#section-3.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.2-1">A task agent is created to execute a specific network management task, such as traffic analysis, traffic optimization, or fault remediation. A task agent consists of a selected foundation model, an associated prompt, and optionally, fine-tuned adapter weights.<a href="#section-3.2.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.2.2-2.1">
-              <p id="section-3.2.2-2.1.1">Foundation Model Library. Operators must select an appropriate foundation model based on the specific task requirements. Examples include general-purpose models such as GPT-4, LLaMA, and DeepSeek, as well as domain-specific models fine-tuned on private datasets. Since foundation models are trained on different datasets using varying methodologies, their performance may differ across tasks.<a href="#section-3.2.2-2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-3.2.2-2.1.1">Foundation Model Library. Operators select an appropriate foundation model based on task requirements. Examples include general-purpose models (e.g., LLaMA, DeepSeek) and domain-specific models fine-tuned on private operational datasets. Because foundation models are trained on different datasets using different methodologies, their performance characteristics vary across tasks.<a href="#section-3.2.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-3.2.2-2.2">
-              <p id="section-3.2.2-2.2.1">Fine-Tuned Weight Library. For domain-specific applications, fine-tuned weights can be applied on top of a foundation model to efficiently adapt it to private datasets. One commonly used approach is to store the fine-tuned weights as the difference between the original foundation model and the adapted model, which can largely reduce storage requirements.
-The Fine-Tuned Weights Module supports the selection and loading of an appropriate foundation model along with the corresponding fine-tuned weights, based on the selection of operators. This ensures flexibility in leveraging both general-purpose and domain-specific knowledge while maintaining computational efficiency.<a href="#section-3.2.2-2.2.1" class="pilcrow">¶</a></p>
+              <p id="section-3.2.2-2.2.1">Fine-Tuned Weight Library. For domain-specific applications, fine-tuned adapter weights can be applied on top of a foundation model to specialize it for private datasets. One established approach is to store fine-tuned weights as a low-rank difference (delta) between the original and adapted model parameters <span>[<a href="#Hu22" class="cite xref">Hu22</a>]</span>, which reduces storage requirements relative to storing complete fine-tuned model copies. The Fine-Tuned Weight Library supports selection and loading of the appropriate foundation model and adapter weights based on operator configuration.<a href="#section-3.2.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-3.2.2-2.3">
-              <p id="section-3.2.2-2.3.1">Prompt Library. For each task, it is essential to accurately define the task description, the format of its inputs and outputs. These definitions are stored in a structured prompt library. When an operator instantiates a task, the corresponding prompt, including placeholders for contextual information, is automatically retrieved. operator inputs and device data are then incorporated into the prompt at the designated placeholders, ensuring a structured and consistent interaction with the language model.<a href="#section-3.2.2-2.3.1" class="pilcrow">¶</a></p>
+              <p id="section-3.2.2-2.3.1">Prompt Library. Each task requires a defined task description and specification of input and output formats. These definitions are stored in a structured prompt library. When an operator instantiates a task, the corresponding prompt template, including placeholders for contextual data, is retrieved automatically. Operator inputs and device data are then substituted into the designated placeholders, producing a structured and consistent input to the language model.<a href="#section-3.2.2-2.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -1525,10 +1519,8 @@ The Fine-Tuned Weights Module supports the selection and loading of an appropria
           <h4 id="name-task-agent-communication-mo">
 <a href="#section-3.2.3" class="section-number selfRef">3.2.3. </a><a href="#name-task-agent-communication-mo" class="section-name selfRef">Task Agent Communication Module</a>
           </h4>
-<p id="section-3.2.3-1">Task agent can interact with external tools (e.g., Python scripts, Batfish or ILP solver) to acquire additional knowledge and perform specific actions.
-The Model Context Prtocol (MCP)<span>[<a href="#mcp" class="cite xref">mcp</a>]</span> enables task agents to securely and efficiently interact with external tools and services.
-MCP defines a standardized interface for tool invocation, data exchange, and state synchronization between the agent and external systems.
-MCP consists of two primary components:<a href="#section-3.2.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.3-1">A task agent may interact with external tools (e.g., Python scripts, network verification tools such as Batfish, or optimization solvers) to acquire additional information or perform specific operations.
+The Model Context Protocol (MCP) <span>[<a href="#mcp" class="cite xref">mcp</a>]</span> provides a standardized interface for task agents to invoke external tools and services. MCP defines a protocol for tool invocation, data exchange, and state synchronization between an agent and external systems. MCP consists of two primary components:<a href="#section-3.2.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.2.3-2.1">
               <p id="section-3.2.3-2.1.1">MCP Client: Embedded within the task agent, the MCP client is responsible for:<a href="#section-3.2.3-2.1.1" class="pilcrow">¶</a></p>
@@ -1551,13 +1543,13 @@ MCP consists of two primary components:<a href="#section-3.2.3-1" class="pilcrow
               <p id="section-3.2.3-2.2.1">MCP Server: Hosted alongside or within external tools, the MCP server:<a href="#section-3.2.3-2.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.2.3-2.2.2.1">
-                  <p id="section-3.2.3-2.2.2.1.1">Exposes a well-defined set of capabilities via a manifest (e.g., <code>tool_name</code>, <code>tool_description</code>, <code>input_schema</code>, <code>output_schema</code>, <code>authentication_method</code>).<a href="#section-3.2.3-2.2.2.1.1" class="pilcrow">¶</a></p>
+                  <p id="section-3.2.3-2.2.2.1.1">Exposes a defined set of capabilities via a manifest (e.g., tool_name, tool_description, input_schema, output_schema, authentication_method).<a href="#section-3.2.3-2.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-3.2.3-2.2.2.2">
-                  <p id="section-3.2.3-2.2.2.2.1">Validates incoming MCP requests against the tool’s schema and permissions.<a href="#section-3.2.3-2.2.2.2.1" class="pilcrow">¶</a></p>
+                  <p id="section-3.2.3-2.2.2.2.1">Validates incoming MCP requests against the tool's schema and configured permissions.<a href="#section-3.2.3-2.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-3.2.3-2.2.2.3">
-                  <p id="section-3.2.3-2.2.2.3.1">Executes the requested operation and returns structured results in a deterministic format.<a href="#section-3.2.3-2.2.2.3.1" class="pilcrow">¶</a></p>
+                  <p id="section-3.2.3-2.2.2.3.1">Executes the requested operation and returns structured results.<a href="#section-3.2.3-2.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-3.2.3-2.2.2.4">
                   <p id="section-3.2.3-2.2.2.4.1">Supports streaming for long-running operations (e.g., iterative optimization or real-time telemetry polling).<a href="#section-3.2.3-2.2.2.4.1" class="pilcrow">¶</a></p>
@@ -1565,21 +1557,20 @@ MCP consists of two primary components:<a href="#section-3.2.3-1" class="pilcrow
               </ul>
 </li>
           </ul>
-<p id="section-3.2.3-3">In many complex scenarios, multiple task agents may collaborate to achieve a shared network management objective.
-The Agent-to-Agent Protocol (A2A)<span>[<a href="#a2a" class="cite xref">a2a</a>]</span> is a coordination protocol that enables multiple task agents to exchange information, delegate subtasks, negotiate resource usage, and synchronize execution states in a distributed network management environment. A2A ensures semantic interoperability, temporal consistency, and conflict avoidance across heterogeneous agents.
+<p id="section-3.2.3-3">In multi-domain or complex scenarios, multiple task agents may collaborate to achieve a shared network management objective. The Agent-to-Agent Protocol (A2A) <span>[<a href="#a2a" class="cite xref">a2a</a>]</span> provides a coordination mechanism that enables task agents to exchange information, delegate subtasks, and synchronize execution state in a distributed environment.
 Key design principles of A2A include:<a href="#section-3.2.3-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.2.3-4.1">
-              <p id="section-3.2.3-4.1.1">Decentralized orchestration: No central controller is required; agents coordinate peer-to-peer using shared intents and commitments.<a href="#section-3.2.3-4.1.1" class="pilcrow">¶</a></p>
+              <p id="section-3.2.3-4.1.1">Decentralized coordination: Agents coordinate peer-to-peer using shared intents and commitments without requiring a central controller.<a href="#section-3.2.3-4.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-3.2.3-4.2">
-              <p id="section-3.2.3-4.2.1">Intent-based messaging: Communication is driven by high-level intents (e.g., “optimize latency for flow X”) rather than low-level commands, allowing flexibility in implementation.<a href="#section-3.2.3-4.2.1" class="pilcrow">¶</a></p>
+              <p id="section-3.2.3-4.2.1">Intent-based messaging: Communication is expressed as high-level intents (e.g., "optimize latency for flow X") rather than low-level commands, allowing agents to select appropriate implementation strategies.<a href="#section-3.2.3-4.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-3.2.3-4.3">
-              <p id="section-3.2.3-4.3.1">State-aware handoffs: Agents share partial execution states (e.g., intermediate results, constraints, confidence scores) to enable context-preserving collaboration.<a href="#section-3.2.3-4.3.1" class="pilcrow">¶</a></p>
+              <p id="section-3.2.3-4.3.1">State-aware handoffs: Agents share partial execution states (e.g., intermediate results, constraints, confidence scores) to support context-preserving collaboration.<a href="#section-3.2.3-4.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-3.2.3-5">Additionally, A2A integrates with the Task Agent Management Module to dynamically spawn or terminate agents based on collaboration needs, ensuring scalability and resource efficiency.<a href="#section-3.2.3-5" class="pilcrow">¶</a></p>
+<p id="section-3.2.3-5">A2A integrates with the Task Agent Management Module to dynamically create or terminate agents based on collaboration requirements.<a href="#section-3.2.3-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="task-agent-management-module">
@@ -1588,59 +1579,59 @@ Key design principles of A2A include:<a href="#section-3.2.3-3" class="pilcrow">
 <a href="#section-3.2.4" class="section-number selfRef">3.2.4. </a><a href="#name-task-agent-management-modul" class="section-name selfRef">Task Agent Management Module</a>
           </h4>
 <p id="section-3.2.4-1">The Task Agent Management Module is responsible for the creation, update, and deletion of task agents. This module ensures that each agent is appropriately configured to align with the intended network management objective.<a href="#section-3.2.4-1" class="pilcrow">¶</a></p>
-<p id="section-3.2.4-2">The agent lifecycle operations are defined as follows:<a href="#section-3.2.4-2" class="pilcrow">¶</a></p>
+<p id="section-3.2.4-2">Agent lifecycle operations are defined as follows:<a href="#section-3.2.4-2" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-3.2.4-3">
 <li id="section-3.2.4-3.1">
               <p id="section-3.2.4-3.1.1">Creation of Task Agents.
-A task agent is instantiated in response to an operator request, an automated policy trigger, or a higher-level orchestration workflow. The creation process involves the following steps:<a href="#section-3.2.4-3.1.1" class="pilcrow">¶</a></p>
+A task agent is instantiated in response to an operator request, an automated policy trigger, or a higher-level orchestration workflow. The creation process includes the following steps:<a href="#section-3.2.4-3.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.2.4-3.1.2.1">
-                  <p id="section-3.2.4-3.1.2.1.1">Intent Parsing: The module parses the high-level intent (e.g., “remediate BGP flapping on router R5”) to identify the required task type, target network scope, and performance constraints.<a href="#section-3.2.4-3.1.2.1.1" class="pilcrow">¶</a></p>
+                  <p id="section-3.2.4-3.1.2.1.1">Intent Parsing: The module parses the high-level intent (e.g., "remediate BGP flapping on router R5") to identify the required task type, target network scope, and performance constraints.<a href="#section-3.2.4-3.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-3.2.4-3.1.2.2">
                   <p id="section-3.2.4-3.1.2.2.1">Agent Template Selection: Based on the parsed intent, the module selects a pre-registered agent template from the Prompt Library.<a href="#section-3.2.4-3.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-3.2.4-3.1.2.3">
-                  <p id="section-3.2.4-3.1.2.3.1">Resource Allocation: The module allocates necessary compute resources (CPU/GPU, memory) and instantiates the LLM runtime environment.<a href="#section-3.2.4-3.1.2.3.1" class="pilcrow">¶</a></p>
+                  <p id="section-3.2.4-3.1.2.3.1">Resource Allocation: The module allocates necessary compute resources (CPU, GPU, memory) and instantiates the LLM runtime environment.<a href="#section-3.2.4-3.1.2.3.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-3.2.4-3.1.2.4">
-                  <p id="section-3.2.4-3.1.2.4.1">Context Initialization: The agent is initialized with: Network context (e.g., device inventory, topology from Enhanced Telemetry), security credentials, and session ID and logging context for auditability.<a href="#section-3.2.4-3.1.2.4.1" class="pilcrow">¶</a></p>
+                  <p id="section-3.2.4-3.1.2.4.1">Context Initialization: The agent is initialized with network context (e.g., device inventory and topology from the Enhanced Telemetry Module), security credentials, and a session identifier and logging context for auditability.<a href="#section-3.2.4-3.1.2.4.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-3.2.4-3.1.2.5">
-                  <p id="section-3.2.4-3.1.2.5.1">Registration: The newly created agent is registered with its metadata, status (“initializing”), and heartbeat endpoint.<a href="#section-3.2.4-3.1.2.5.1" class="pilcrow">¶</a></p>
+                  <p id="section-3.2.4-3.1.2.5.1">Registration: The newly created agent is registered with its metadata, initial status, and a heartbeat endpoint.<a href="#section-3.2.4-3.1.2.5.1" class="pilcrow">¶</a></p>
 </li>
               </ul>
 </li>
             <li id="section-3.2.4-3.2">
               <p id="section-3.2.4-3.2.1">Update of Task Agents.
-Task agents may require updates due to changing network conditions, model improvements, or revised operator policies. Updates should be performed in a non-disruptive manner whenever possible:<a href="#section-3.2.4-3.2.1" class="pilcrow">¶</a></p>
+Task agents may require updates due to changing network conditions, model improvements, or revised operator policies. Updates are performed in a non-disruptive manner where possible:<a href="#section-3.2.4-3.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.2.4-3.2.2.1">
-                  <p id="section-3.2.4-3.2.2.1.1">Configuration Update: Operators or automated controllers may modify agent parameters (e.g., optimization thresholds, output verbosity).<a href="#section-3.2.4-3.2.2.1.1" class="pilcrow">¶</a></p>
+                  <p id="section-3.2.4-3.2.2.1.1">Configuration Update: Operators or automated controllers may modify agent parameters (e.g., optimization thresholds, output format).<a href="#section-3.2.4-3.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-3.2.4-3.2.2.2">
-                  <p id="section-3.2.4-3.2.2.2.1">Model or Weight Swapping: If a newer fine-tuned weight version becomes available, the module can hot-swap the adapter weights while preserving the agent’s execution state, provided the base foundation model remains compatible.<a href="#section-3.2.4-3.2.2.2.1" class="pilcrow">¶</a></p>
+                  <p id="section-3.2.4-3.2.2.2.1">Adapter Weight Replacement: When a newer version of fine-tuned adapter weights becomes available, the module can replace the adapter weights while preserving the agent's execution state, provided the base foundation model remains compatible.<a href="#section-3.2.4-3.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-3.2.4-3.2.2.3">
-                  <p id="section-3.2.4-3.2.2.3.1">State Preservation: During updates, the module snapshots the agent’s working memory (e.g., conversation history, intermediate plans) and restores it post-update to maintain task continuity.<a href="#section-3.2.4-3.2.2.3.1" class="pilcrow">¶</a></p>
+                  <p id="section-3.2.4-3.2.2.3.1">State Preservation: During updates, the module snapshots the agent's working state (e.g., conversation history, intermediate plans) and restores it after the update to maintain task continuity.<a href="#section-3.2.4-3.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
               </ul>
 </li>
             <li id="section-3.2.4-3.3">
               <p id="section-3.2.4-3.3.1">Deletion of Task Agents.
-Task agents are terminated when their assigned task completes, when an unrecoverable error occurs, or upon an explicit teardown request. The deletion process ensures proper resource reclamation and audit compliance:<a href="#section-3.2.4-3.3.1" class="pilcrow">¶</a></p>
+Task agents are terminated when their assigned task completes, when an unrecoverable error occurs, or upon an explicit teardown request. The deletion process ensures proper resource release and audit compliance:<a href="#section-3.2.4-3.3.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.2.4-3.3.2.1">
-                  <p id="section-3.2.4-3.3.2.1.1">Graceful Shutdown: The module issues a termination signal, allowing the agent to complete any pending operations (e.g., commit configuration changes, MCP calls, A2A communications).<a href="#section-3.2.4-3.3.2.1.1" class="pilcrow">¶</a></p>
+                  <p id="section-3.2.4-3.3.2.1.1">Graceful Shutdown: The module issues a termination signal, allowing the agent to complete pending operations (e.g., committing configuration changes, finalizing MCP calls, completing A2A communications).<a href="#section-3.2.4-3.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-3.2.4-3.3.2.2">
-                  <p id="section-3.2.4-3.3.2.2.1">State Archival: The final agent state, including input context, generated actions, and performance metrics, is serialized and stored in the Audit Log for replayability and compliance.<a href="#section-3.2.4-3.3.2.2.1" class="pilcrow">¶</a></p>
+                  <p id="section-3.2.4-3.3.2.2.1">State Archival: The final agent state, including input context, generated actions, and performance metrics, is serialized and stored in the audit log for traceability and compliance purposes.<a href="#section-3.2.4-3.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-3.2.4-3.3.2.3">
-                  <p id="section-3.2.4-3.3.2.3.1">Resource Deallocation: Compute resources (GPU memory, threads) are released, and MCP sessions are invalidated.<a href="#section-3.2.4-3.3.2.3.1" class="pilcrow">¶</a></p>
+                  <p id="section-3.2.4-3.3.2.3.1">Resource Release: Compute resources (GPU memory, threads) are released, and MCP sessions are invalidated.<a href="#section-3.2.4-3.3.2.3.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-3.2.4-3.3.2.4">
-                  <p id="section-3.2.4-3.3.2.4.1">Deregistration: The agent entry is removed, and its lifecycle event is logged.<a href="#section-3.2.4-3.3.2.4.1" class="pilcrow">¶</a></p>
+                  <p id="section-3.2.4-3.3.2.4.1">Deregistration: The agent entry is removed, and the lifecycle event is logged.<a href="#section-3.2.4-3.3.2.4.1" class="pilcrow">¶</a></p>
 </li>
               </ul>
 </li>
@@ -1660,8 +1651,7 @@ Task agents are terminated when their assigned task completes, when an unrecover
           <h4 id="name-syntax-validation-module">
 <a href="#section-3.3.1" class="section-number selfRef">3.3.1. </a><a href="#name-syntax-validation-module" class="section-name selfRef">Syntax Validation Module</a>
           </h4>
-<p id="section-3.3.1-1">To ensure correctness and policy compliance, LLM-generated configurations must pass the YANG schema validation steps before being queued for human approval.
-This module ensures that only syntactically correct configurations are presented for operator review, thereby reducing errors and enhancing network reliability.<a href="#section-3.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.1-1">LLM-generated configurations MUST pass YANG schema validation before being queued for human approval. This module ensures that only syntactically correct configurations are presented for operator review, reducing the likelihood of invalid configurations reaching the deployment stage.<a href="#section-3.3.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="access-control-module">
@@ -1669,23 +1659,23 @@ This module ensures that only syntactically correct configurations are presented
           <h4 id="name-access-control-module">
 <a href="#section-3.3.2" class="section-number selfRef">3.3.2. </a><a href="#name-access-control-module" class="section-name selfRef">Access Control Module</a>
           </h4>
-<p id="section-3.3.2-1">Although the Configuration Verify Module can guarantee the syntactic correction, LLMs may generate unintended or potentially harmful operations on critical network devices, it is essential for operators to enforce clear permission boundaries for LLM task agent to ensure security and operational integrity.
-The Network Configuration Access Control Model defined in <span>[<a href="#RFC8341" class="cite xref">RFC8341</a>]</span> provides a framework for specifying access permissions, which can be used to grant access to LLM task agents. This data model includes the concepts of users, groups, access operation types, and action types, which can be applied as follows:<a href="#section-3.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.2-1">Syntactic correctness alone does not prevent an LLM from generating configurations that would perform unintended or harmful operations on critical network devices. It is therefore necessary to enforce explicit permission boundaries for LLM task agents.<a href="#section-3.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.2-2">The NETCONF Access Control Model (NACM) defined in <span>[<a href="#RFC8341" class="cite xref">RFC8341</a>]</span> provides a framework for specifying access permissions that can be applied to LLM task agents. NACM defines the concepts of users, groups, access operation types, and action types, which are applied as follows:<a href="#section-3.3.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.3.2-2.1">
-              <p id="section-3.3.2-2.1.1">User and Group: Each task agent should be registered as a specific user, representing an entity with defined access permissions for particular devices. These permissions control the types of operations the LLM is authorized to perform. A task agent (i.e., user) is identified by a unique string within the system. Access control can also be applied at the group level, where a group consists of zero or more members, and a task agent can belong to multiple groups.<a href="#section-3.3.2-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.3.2-3.1">
+              <p id="section-3.3.2-3.1.1">User and Group: Each task agent is registered as a distinct user, representing an entity with defined access permissions for specific devices. A task agent (user) is identified by a unique string within the system. Access control may also be applied at the group level, where a group consists of zero or more members and a task agent may belong to multiple groups.<a href="#section-3.3.2-3.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-3.3.2-2.2">
-              <p id="section-3.3.2-2.2.1">Access Operation Types: These define the types of operations permitted, including create, read, update, delete, and execute. Each task agent may support different sets of operations depending on its assigned permissions.<a href="#section-3.3.2-2.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-3.3.2-3.2">
+              <p id="section-3.3.2-3.2.1">Access Operation Types: These define the types of operations permitted, including create, read, update, delete, and execute. Each task agent is assigned a set of permitted operation types based on its role.<a href="#section-3.3.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-3.3.2-2.3">
-              <p id="section-3.3.2-2.3.1">Action Types: These specify whether a given operation is permitted or denied. This mechanism determines whether an LLM request to perform an operation is allowed based on predefined access control rules.<a href="#section-3.3.2-2.3.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-3.3.2-3.3">
+              <p id="section-3.3.2-3.3.1">Action Types: These specify whether a given operation is permitted or denied, determining whether an LLM-generated operation request is allowed under the configured access control rules.<a href="#section-3.3.2-3.3.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-3.3.2-2.4">
-              <p id="section-3.3.2-2.4.1">Rule List: A rule governs access control by specifying the content and operations a task agent is authorized to handle within the system.<a href="#section-3.3.2-2.4.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-3.3.2-3.4">
+              <p id="section-3.3.2-3.4.1">Rule List: Each rule governs access control by specifying the content and operations a task agent is authorized to handle within the system.<a href="#section-3.3.2-3.4.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-3.3.2-3">This module must enforce explicit restrictions on the actions an LLM is permitted to perform, ensuring that network configurations remain secure and compliant with operational policies.<a href="#section-3.3.2-3" class="pilcrow">¶</a></p>
+<p id="section-3.3.2-4">This module MUST enforce explicit restrictions on the operations an LLM agent is permitted to perform, ensuring that network configurations remain compliant with operational security policies.<a href="#section-3.3.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="feedback-module">
@@ -1693,7 +1683,7 @@ The Network Configuration Access Control Model defined in <span>[<a href="#RFC83
           <h4 id="name-feedback-module">
 <a href="#section-3.3.3" class="section-number selfRef">3.3.3. </a><a href="#name-feedback-module" class="section-name selfRef">Feedback Module</a>
           </h4>
-<p id="section-3.3.3-1">As the generated configuration might not be always aligned with YANG model schema, access control, or bussiness constrains, they need further modification to meet the multi-dimensional requirements. The Feedback Module is used to provide semantic-rich feedback (e.g., represented in structure text) and hints to LLM agent to improve the generated configuration.<a href="#section-3.3.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.3-1">LLM-generated configurations may not always satisfy YANG schema constraints, access control rules, or operational requirements. The Feedback Module supplies structured feedback (e.g., in structured text format) and corrective hints to the LLM agent, enabling iterative refinement of generated configurations to meet these constraints.<a href="#section-3.3.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1703,49 +1693,43 @@ The Network Configuration Access Control Model defined in <span>[<a href="#RFC83
         <h3 id="name-operator-audit-module">
 <a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-operator-audit-module" class="section-name selfRef">Operator Audit Module</a>
         </h3>
-<p id="section-3.4-1">The Operator Audit Module provides a structured mechanism for human oversight of LLM-generated configurations before deployment.
-The output from the LLM Decision Module should include both the generated configuration parameters and an associated confidence score.
-The configuration parameters are validated for compliance with the YANG model and are subject to Access Control Rules enforcement.
-The confidence score, e.g., ranging from 0 to 100, serves as a reference for operators to assess the reliability of the generated configuration.
-Each audit process must track the input context (e.g., input data, RAG query content, model selection, configuration files) and the corresponding output results. The auditing steps are as follows:<a href="#section-3.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.4-1">The Operator Audit Module provides a structured mechanism for human review of LLM-generated configurations prior to deployment. The output of the LLM Decision Module includes both the generated configuration and an associated confidence score. The configuration is validated against the YANG model and subject to access control enforcement. The confidence score (e.g., on a scale of 0 to 100) provides operators with a quantitative reference for assessing the reliability of the recommendation.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.4-2">Each audit instance MUST record the input context (e.g., input data, RAG query content, model selection, relevant configuration files) and the corresponding decision output. The audit steps include the following:<a href="#section-3.4-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.4-2.1">
-            <p id="section-3.4-2.1.1">Result Verification: The operator verifies the LLM-generated output to ensure alignment with business objectives and policy requirements.<a href="#section-3.4-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.4-3.1">
+            <p id="section-3.4-3.1.1">Result Verification: The operator verifies that the LLM-generated output is consistent with operational objectives and policy requirements.<a href="#section-3.4-3.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.4-2.2">
-            <p id="section-3.4-2.2.1">Compliance Check: The operator ensures that the LLM output adheres to regulatory standards and legal requirements.<a href="#section-3.4-2.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.4-3.2">
+            <p id="section-3.4-3.2.1">Compliance Check: The operator confirms that the output adheres to applicable regulatory standards and operational policies.<a href="#section-3.4-3.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.4-2.3">
-            <p id="section-3.4-2.3.1">Security Verification: The operator examines the output for potential security risks, such as misconfigurations or vulnerabilities.<a href="#section-3.4-2.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.4-3.3">
+            <p id="section-3.4-3.3.1">Security Verification: The operator checks the output for potential security issues, such as misconfigurations or unintended access changes.<a href="#section-3.4-3.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.4-2.4">
-            <p id="section-3.4-2.4.1">Suggestions and Corrections: If issues are identified, the operator documents the findings and proposes corrective actions.<a href="#section-3.4-2.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.4-3.4">
+            <p id="section-3.4-3.4.1">Correction: If issues are identified, the operator documents the findings and applies corrective modifications.<a href="#section-3.4-3.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-3.4-3">Upon completing the audit, the system maintains an audit decision record to ensure traceability of operator actions. The audit record includes the following information:<a href="#section-3.4-3" class="pilcrow">¶</a></p>
+<p id="section-3.4-4">Upon completion of the audit, the system records an audit decision entry to ensure traceability of operator actions. The audit record includes:<a href="#section-3.4-4" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.4-4.1">
-            <p id="section-3.4-4.1.1">Timestamp of the audit action<a href="#section-3.4-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.4-5.1">
+            <p id="section-3.4-5.1.1">Timestamp of the audit action<a href="#section-3.4-5.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.4-4.2">
-            <p id="section-3.4-4.2.1">LLM Task Agent ID associated with the action<a href="#section-3.4-4.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.4-5.2">
+            <p id="section-3.4-5.2.1">LLM Task Agent ID<a href="#section-3.4-5.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.4-4.3">
-            <p id="section-3.4-4.3.1">Operator decisions, including approval, rejection, modification, or pending status<a href="#section-3.4-4.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.4-5.3">
+            <p id="section-3.4-5.3.1">Operator decision (approve, reject, modify, or defer)<a href="#section-3.4-5.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.4-4.4">
-            <p id="section-3.4-4.4.1">Executed command reflecting the final action taken<a href="#section-3.4-4.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.4-5.4">
+            <p id="section-3.4-5.4.1">Final executed command<a href="#section-3.4-5.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.4-4.5">
-            <p id="section-3.4-4.5.1">Operation type (e.g., configuration update, deletion, or execution)<a href="#section-3.4-4.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.4-5.5">
+            <p id="section-3.4-5.5.1">Operation type (e.g., configuration update, deletion, or execution)<a href="#section-3.4-5.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-3.4-5">This structured approach ensures that all LLM-generated configurations undergo rigorous human review, maintaining operational accountability, and security.<a href="#section-3.4-5" class="pilcrow">¶</a></p>
-<p id="section-3.4-6">The Operator Audit Module is enhanced with Explainability functionality to improve transparency and trust in LLM-assisted decision-making. This enhancement ensures that operators can understand the reasoning behind LLM-generated configurations, verify their reliability, and take corrective actions when necessary.<a href="#section-3.4-6" class="pilcrow">¶</a></p>
-<p id="section-3.4-7">To achieve Explainability, the module provides a structured breakdown of the decision-making process by capturing key influencing factors, justification logs, and confidence scores. Each LLM-generated configuration must include a detailed rationale explaining why a particular decision was made. For example, if the system recommends increasing bandwidth allocation, the decision log should indicate whether this was due to high latency detected in telemetry, SLA thresholds being exceeded, or other contributing factors.<a href="#section-3.4-7" class="pilcrow">¶</a></p>
-<p id="section-3.4-8">Additionally, the audit process incorporates counterfactual analysis, allowing operators to assess alternative outcomes. For instance, the system may indicate that if no action is taken, packet loss is expected to increase by 20% in the next ten minutes. This capability enhances operational decision-making by providing a comparative assessment of different actions.<a href="#section-3.4-8" class="pilcrow">¶</a></p>
-<p id="section-3.4-9">To further ensure reliability, the module includes a mechanism to detect potential biases or hallucinations in LLM-generated outputs. If an LLM agent decision is based on incomplete or uncertain data, the system flags it accordingly, allowing operators to make informed judgments. For example, if real-time telemetry data is insufficient, the system may indicate that the confidence in a particular recommendation is low.<a href="#section-3.4-9" class="pilcrow">¶</a></p>
-<p id="section-3.4-10">By integrating these Explainability features, the Operator Audit Module strengthens human oversight, ensuring that LLM-generated configurations align with business policies, security requirements, and regulatory standards. This structured approach enhances accountability and mitigates risks associated with automated decision-making.<a href="#section-3.4-10" class="pilcrow">¶</a></p>
+<p id="section-3.4-6">The Operator Audit Module also provides explainability support to improve transparency in LLM-assisted decision-making. Each LLM-generated configuration includes a structured rationale indicating the key factors that influenced the decision. For example, if the system recommends increasing bandwidth allocation, the decision log indicates whether this was driven by high latency observed in telemetry, an SLA threshold breach, or another contributing factor.<a href="#section-3.4-6" class="pilcrow">¶</a></p>
+<p id="section-3.4-7">The audit process additionally supports counterfactual reasoning, enabling operators to assess the projected outcome if no action is taken. For example, the system may indicate that without intervention, packet loss is expected to increase by a specified percentage within a defined time window. This provides operators with a comparative basis for evaluating proposed actions.<a href="#section-3.4-7" class="pilcrow">¶</a></p>
+<p id="section-3.4-8">If an LLM agent decision is based on incomplete or uncertain data, the system flags it accordingly. For example, if real-time telemetry data is insufficient, the confidence score is lowered and the condition is noted in the audit record, allowing operators to exercise appropriate judgment.<a href="#section-3.4-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1760,32 +1744,33 @@ Each audit process must track the input context (e.g., input data, RAG query con
         <h3 id="name-ddos-intelligent-defense">
 <a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-ddos-intelligent-defense" class="section-name selfRef">DDoS Intelligent Defense</a>
         </h3>
-<p id="section-4.1-1">Distributed Denial of Service (DDoS) attacks remain a critical operational threat. While conventional systems use rate-limiting and signature matching, they often fail to adapt in real-time or generate fine-grained filtering rules based on multi-dimensional telemetry data.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
-<p id="section-4.1-2">This use case demonstrates how the LLM agent-assisted framework enables intelligent filtering rule generation and secure deployment with human oversight.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1-1">Distributed Denial of Service (DDoS) attacks represent a persistent operational threat. Conventional mitigation systems based on rate-limiting and signature matching may not adapt rapidly enough to generate fine-grained filtering rules in response to multi-dimensional telemetry patterns.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-2">This use case illustrates how the LLM agent-assisted framework supports filtering rule generation and deployment with human oversight.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-4.1-3">
 <li id="section-4.1-3.1">
             <p id="section-4.1-3.1.1"><strong>Telemetry Collection and Semantic Enrichment</strong>
-The Enhanced Telemetry Module retrieves real-time traffic statistics and interface metrics from network devices using NETCONF. These raw telemetry data are semantically enriched by referencing YANG models and device-specific documentation to generate a context-rich dataset suitable for LLM processing.<a href="#section-4.1-3.1.1" class="pilcrow">¶</a></p>
+The Enhanced Telemetry Module retrieves real-time traffic statistics and interface metrics from network devices via NETCONF. The raw telemetry is semantically enriched by referencing YANG models and device-specific documentation to produce a context-annotated dataset suitable for LLM processing.<a href="#section-4.1-3.1.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-4.1-3.2">
             <p id="section-4.1-3.2.1"><strong>DDoS Filtering Task Instantiation</strong>
-The operator initiates a <code>ddos-mitigation</code> task. The Task Agent Module selects a security-specialized foundation model and task-specific prompt.<a href="#section-4.1-3.2.1" class="pilcrow">¶</a></p>
+The operator initiates a <code>ddos-mitigation</code> task. The Task Agent Module selects a security-specialized foundation model and a task-specific prompt. The agent analyzes the following telemetry observations:<a href="#section-4.1-3.2.1" class="pilcrow">¶</a></p>
 <p id="section-4.1-3.2.2">
 It first analyzes the following conclusions:
-- Interface <code>GigabitEthernet0/1</code> receiving sustained traffic &gt; 100,000 pps
+- Interface <code>GigabitEthernet0/1</code> receiving sustained traffic exceeding 100,000 pps
 - 95% of incoming packets are TCP SYN
-- Top source prefixes identified as: <code>IP1/24</code>, <code>IP2/24</code><a href="#section-4.1-3.2.2" class="pilcrow">¶</a></p>
-<p id="section-4.1-3.2.3">
-The RAG Module supplements the analysis with:
-- Cisco ACL syntax documentation
-- Prior incident response templates<a href="#section-4.1-3.2.3" class="pilcrow">¶</a></p>
-</li>
-          <li id="section-4.1-3.3">
-            <p id="section-4.1-3.3.1"><strong>LLM-Generated Firewall Configuration Output</strong>
-The LLM agent reasons that a TCP SYN flood is underway and generates the following ACL-based filtering policy:<a href="#section-4.1-3.3.1" class="pilcrow">¶</a></p>
+- Top source prefixes identified as <code>IP1/24</code> and <code>IP2/24</code><a href="#section-4.1-3.2.2" class="pilcrow">¶</a></p>
 </li>
         </ol>
-<div class="lang-shell sourcecode" id="section-4.1-4">
+<p id="section-4.1-4">The RAG Module provides the following supplementary context:
+   - Cisco ACL syntax documentation
+   - Prior incident response templates<a href="#section-4.1-4" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-4.1-5">
+<li id="section-4.1-5.1">
+            <p id="section-4.1-5.1.1"><strong>LLM-Generated Firewall Configuration Output</strong>
+The LLM agent determines that a TCP SYN flood is occurring and generates the following ACL-based filtering policy:<a href="#section-4.1-5.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ol>
+<div class="lang-shell sourcecode" id="section-4.1-6">
 <pre>
 ip access-list extended BLOCK-DDOS
 deny tcp IP1 0.0.0.255 any
@@ -1794,68 +1779,59 @@ permit ip any any
 
 interface GigabitEthernet0/1
 ip access-group BLOCK-DDOS in
-</pre><a href="#section-4.1-4" class="pilcrow">¶</a>
+</pre><a href="#section-4.1-6" class="pilcrow">¶</a>
 </div>
-<p id="section-4.1-5">This configuration includes both source-based filtering and a global SYN rate-limiter. It is passed to the Config Verify Module for syntax validation and to the Access Control Module for permission checks.<a href="#section-4.1-5" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-4.1-6">
-<li id="section-4.1-6.1">
-            <p id="section-4.1-6.1.1"><strong>Operator Audit and Decision</strong>
-The Operator Audit Module provides the following metadata:<a href="#section-4.1-6.1.1" class="pilcrow">¶</a></p>
+<p id="section-4.1-7">The configuration is passed to the Config Verification Module for syntax validation and to the Access Control Module for permission enforcement.<a href="#section-4.1-7" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-4.1-8">
+<li id="section-4.1-8.1">
+            <p id="section-4.1-8.1.1"><strong>Operator Audit and Decision</strong>
+The Operator Audit Module presents the following metadata:<a href="#section-4.1-8.1.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 <ul class="normal">
-<li class="normal" id="section-4.1-7.1">
-            <p id="section-4.1-7.1.1"><strong>Task Agent ID</strong>: <code>ddos-mitigation-task-01</code><a href="#section-4.1-7.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-4.1-7.2">
-            <p id="section-4.1-7.2.1"><strong>Confidence Score</strong>: 85/100<a href="#section-4.1-7.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-4.1-7.3">
-            <p id="section-4.1-7.3.1"><strong>RAG Context</strong>: <code>Cisco IOS ACL Syntax</code>, <code>Internal Threat List v5</code><a href="#section-4.1-7.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-4.1-7.4">
-            <p id="section-4.1-7.4.1"><strong>Input Summary</strong>:<a href="#section-4.1-7.4.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-4.1-7.4.2.1">
-                <p id="section-4.1-7.4.2.1.1">Affected Interface: <code>GigabitEthernet0/1</code><a href="#section-4.1-7.4.2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-4.1-7.4.2.2">
-                <p id="section-4.1-7.4.2.2.1">Malicious Sources: <code>IP1/24</code>, <code>IP2/24</code><a href="#section-4.1-7.4.2.2.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
-</li>
-        </ul>
-<p id="section-4.1-8">The human operator performs the audit with the following steps:<a href="#section-4.1-8" class="pilcrow">¶</a></p>
-<ul class="normal">
 <li class="normal" id="section-4.1-9.1">
-            <p id="section-4.1-9.1.1"><strong>Result Verification</strong>: ACL syntax matches Cisco IOS 15.6 standards.<a href="#section-4.1-9.1.1" class="pilcrow">¶</a></p>
+            <p id="section-4.1-9.1.1"><strong>Task Agent ID</strong>: <code>ddos-mitigation-task-01</code><a href="#section-4.1-9.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-4.1-9.2">
-            <p id="section-4.1-9.2.1"><strong>Compliance Check</strong>: Confirmed that both prefixes appear in the enterprise blacklist.<a href="#section-4.1-9.2.1" class="pilcrow">¶</a></p>
+            <p id="section-4.1-9.2.1"><strong>Confidence Score</strong>: 85/100<a href="#section-4.1-9.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-4.1-9.3">
-            <p id="section-4.1-9.3.1"><strong>Security Review</strong>: Low false-positive risk for blanket deny of SYN traffic from identified prefixes.<a href="#section-4.1-9.3.1" class="pilcrow">¶</a></p>
+            <p id="section-4.1-9.3.1"><strong>RAG Context</strong>: Cisco IOS ACL Syntax documentation, Internal Threat List v5<a href="#section-4.1-9.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-4.1-9.4">
-            <p id="section-4.1-9.4.1"><strong>Audit Record</strong>:<a href="#section-4.1-9.4.1" class="pilcrow">¶</a></p>
+            <p id="section-4.1-9.4.1"><strong>Input Summary</strong>: Affected Interface <code>GigabitEthernet0/1</code>; Identified sources<code>IP1/24</code>, <code>IP2/24</code><a href="#section-4.1-9.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-4.1-10">The operator performs the following audit steps:<a href="#section-4.1-10" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-4.1-9.4.2.1">
-                <p id="section-4.1-9.4.2.1.1">Timestamp: <code>2025-07-16T17:03:00Z</code><a href="#section-4.1-9.4.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-4.1-11.1">
+            <p id="section-4.1-11.1.1"><strong>Result Verification</strong>: ACL syntax is confirmed as consistent with the targetdevice's IOS version.<a href="#section-4.1-11.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-4.1-9.4.2.2">
-                <p id="section-4.1-9.4.2.2.1">Decision: <em>Approved</em><a href="#section-4.1-9.4.2.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-4.1-11.2">
+            <p id="section-4.1-11.2.1"><strong>Compliance Check</strong>: Both source prefixes are confirmed present in the enterprisedeny list.<a href="#section-4.1-11.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-4.1-9.4.2.3">
-                <p id="section-4.1-9.4.2.3.1">Action: <code>Apply via NMS interface</code><a href="#section-4.1-9.4.2.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-4.1-11.3">
+            <p id="section-4.1-11.3.1"><strong>Security Review</strong>: Assessed low false-positive risk for a source-prefix deny ofSYN traffic from the identified prefixes.<a href="#section-4.1-11.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-4.1-9.4.2.4">
-                <p id="section-4.1-9.4.2.4.1">Operator Note: “Confirmed match with active threat list. Monitor for collateral traffic drops.”<a href="#section-4.1-9.4.2.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-4.1-11.4">
+            <p id="section-4.1-11.4.1"><strong>Audit Record</strong>:<a href="#section-4.1-11.4.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.1-11.4.2.1">
+                <p id="section-4.1-11.4.2.1.1">Timestamp: <code>2025-07-16T17:03:00Z</code><a href="#section-4.1-11.4.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-4.1-11.4.2.2">
+                <p id="section-4.1-11.4.2.2.1">Decision: <em>Approved</em><a href="#section-4.1-11.4.2.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-4.1-11.4.2.3">
+                <p id="section-4.1-11.4.2.3.1">Action: <code>Apply via NMS interface</code><a href="#section-4.1-11.4.2.3.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-4.1-11.4.2.4">
+                <p id="section-4.1-11.4.2.4.1">Operator Note: “Confirmed match with active threat list. Monitor for collateral traffic drops.”<a href="#section-4.1-11.4.2.4.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
         </ul>
-<p id="section-4.1-10">The configuration is deployed through the network management system, completing the defense workflow with human oversight and traceability.<a href="#section-4.1-10" class="pilcrow">¶</a></p>
-<p id="section-4.1-11">This simplified case shows how the LLM agent can assist in quickly generating actionable filtering rules in response to DDoS patterns, while adhering to operational safeguards.<a href="#section-4.1-11" class="pilcrow">¶</a></p>
+<p id="section-4.1-12">The configuration is deployed through the network management system, completing the mitigation workflow with human oversight and full traceability.<a href="#section-4.1-12" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="traffic-scheduling-and-optimization">
@@ -1863,20 +1839,20 @@ The Operator Audit Module provides the following metadata:<a href="#section-4.1-
         <h3 id="name-traffic-scheduling-and-opti">
 <a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-traffic-scheduling-and-opti" class="section-name selfRef">Traffic Scheduling and Optimization</a>
         </h3>
-<p id="section-4.2-1">In large-scale networks, dynamic traffic scheduling is required to adapt to fluctuating loads, ensure QoS, and meet SLA requirements. Traditional methods may lack responsiveness or cross-domain visibility.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
-<p id="section-4.2-2">The proposed framework enables intelligent, context-aware traffic scheduling through LLM agent-based reasoning. The following illustrates the process:<a href="#section-4.2-2" class="pilcrow">¶</a></p>
+<p id="section-4.2-1">In large-scale networks, dynamic traffic scheduling is required to respond to fluctuating load, maintain QoS, and satisfy SLA requirements. Static or rule-based methods may not provide sufficient responsiveness or cross-domain visibility.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-2">This use case illustrates how the framework supports LLM agent-assisted traffic scheduling with operator control.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-4.2-3">
 <li id="section-4.2-3.1">
             <p id="section-4.2-3.1.1"><strong>Telemetry Data Acquisition</strong>
-The Enhanced Telemetry Module gathers link utilization, queue occupancy, and delay metrics from multiple routers. The semantic enrichment process tags each metric with human-readable labels from the YANG model, including path topology and policy tags (e.g., gold/silver/bronze service classes).<a href="#section-4.2-3.1.1" class="pilcrow">¶</a></p>
+The Enhanced Telemetry Module collects link utilization, queue occupancy, and delay metrics from multiple routers. The semantic enrichment process annotates each metric with human-readable labels from the YANG model, including path topology information and policy classifications (e.g., gold, silver, bronze service classes).<a href="#section-4.2-3.1.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-4.2-3.2">
             <p id="section-4.2-3.2.1"><strong>Optimization Task Execution</strong>
-An operator initiates a traffic scheduling task. The Task Agent Module selects a foundation model fine-tuned on traffic engineering datasets and uses a structured prompt to describe current constraints: high utilization on core links <code>L1-L3</code>, SLA violations for gold-class VoIP traffic.<a href="#section-4.2-3.2.1" class="pilcrow">¶</a></p>
+An operator initiates a traffic scheduling task. The Task Agent Module selects a foundation model fine-tuned on traffic engineering datasets and uses a structured prompt to describe the current constraints: high utilization on core links L1 through L3 and SLA violations for gold-class VoIP traffic.<a href="#section-4.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-4.2-3.3">
-            <p id="section-4.2-3.3.1"><strong>Sample Configuration Output</strong>
-The LLM agent suggests adjusting RSVP-TE path metrics to reroute gold traffic via underutilized backup paths:<a href="#section-4.2-3.3.1" class="pilcrow">¶</a></p>
+            <p id="section-4.2-3.3.1"><strong>LLM-Generated Configuration</strong>
+The LLM agent proposes adjusting RSVP-TE path metrics to reroute gold-class traffic via underutilized backup paths:<a href="#section-4.2-3.3.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 <div class="lang-shell sourcecode" id="section-4.2-4">
@@ -1903,7 +1879,7 @@ protocols {
 }
 </pre><a href="#section-4.2-4" class="pilcrow">¶</a>
 </div>
-<p id="section-4.2-5">This configuration is syntax-validated and checked against the Access Control Module to ensure that traffic engineering policy updates are permitted for this task agent.<a href="#section-4.2-5" class="pilcrow">¶</a></p>
+<p id="section-4.2-5">The configuration is validated for syntactic correctness and checked against the Access Control Module to confirm that traffic engineering policy updates are permitted for this task agent.<a href="#section-4.2-5" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-4.2-6">
 <li id="section-4.2-6.1">
             <p id="section-4.2-6.1.1"><strong>Operator Audit and Decision</strong>
@@ -1945,7 +1921,6 @@ The Operator Audit Module presents:<a href="#section-4.2-6.1.1" class="pilcrow">
 </li>
         </ul>
 <p id="section-4.2-10">The revised configuration is stored and forwarded to the network management system for application.<a href="#section-4.2-10" class="pilcrow">¶</a></p>
-<p id="section-4.2-11">This use case illustrates how the framework enables LLM agents to propose adaptive, policy-compliant traffic engineering strategies while maintaining operator control, traceability, and auditability.<a href="#section-4.2-11" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1955,9 +1930,8 @@ The Operator Audit Module presents:<a href="#section-4.2-6.1.1" class="pilcrow">
       <h2 id="name-security-considerations">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-5-1">This section defines a structured security and risk model for the LLM agent-assisted network management framework.
-The objective is to systematically identify threat vectors, analyze their potential impact on network operations, and describe mitigation principles consistent with IETF security practices.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<p id="section-5-2">The security analysis assumes that LLM agents are integrated into an operational network management environment where they can access telemetry, retrieve contextual knowledge, invoke external tools, and generate configuration changes subject to human oversight.<a href="#section-5-2" class="pilcrow">¶</a></p>
+<p id="section-5-1">This section describes a structured security and threat model for the LLM agent-assisted network management framework. The objective is to identify threat vectors, analyze their potential operational impact, and specify mitigation requirements consistent with IETF security practices.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">The security analysis assumes that LLM agents are deployed within an operational network management environment where they can access telemetry, retrieve contextual knowledge, invoke external tools, and generate configuration changes subject to human oversight.<a href="#section-5-2" class="pilcrow">¶</a></p>
 <div id="threat-model">
 <section id="section-5.1">
         <h3 id="name-threat-model">
@@ -2583,11 +2557,11 @@ A secure deployment requires:<a href="#section-5.8-6" class="pilcrow">¶</a></p>
 <dd class="break"></dd>
 <dt id="Huang25">[Huang25]</dt>
         <dd>
-<span class="refAuthor">Huang,, L.</span>, <span class="refAuthor">Yu, W.</span>, <span class="refAuthor">Ma, W.</span>, <span class="refAuthor">Zhong, W.</span>, <span class="refAuthor">Feng, Z.</span>, <span class="refAuthor">Wang, H.</span>, <span class="refAuthor">Chen, Q.</span>, <span class="refAuthor">Peng, W.</span>, <span class="refAuthor">Feng, X.</span>, <span class="refAuthor">Qin, B.</span>, and <span class="refAuthor">T. Liu</span>, <span class="refTitle">"A Survey on Hallucination in Large Language Models Principles, Taxonomy, Challenges, and Open Questions"</span>, <span>n.d.</span>. </dd>
+<span class="refAuthor">Huang, L.</span>, <span class="refAuthor">Yu, W.</span>, <span class="refAuthor">Ma, W.</span>, <span class="refAuthor">Zhong, W.</span>, <span class="refAuthor">Feng, Z.</span>, <span class="refAuthor">Wang, H.</span>, <span class="refAuthor">Chen, Q.</span>, <span class="refAuthor">Peng, W.</span>, <span class="refAuthor">Feng, X.</span>, <span class="refAuthor">Qin, B.</span>, and <span class="refAuthor">T. Liu</span>, <span class="refTitle">"A Survey on Hallucination in Large Language Models Principles, Taxonomy, Challenges, and Open Questions"</span>, <span>n.d.</span>. </dd>
 <dd class="break"></dd>
 <dt id="Lewis20">[Lewis20]</dt>
         <dd>
-<span class="refAuthor">Lewis, P.</span>, <span class="refAuthor">Perez, E.</span>, <span class="refAuthor">Piktus, A.</span>, <span class="refAuthor">Petroni, F.</span>, <span class="refAuthor">Karpukhin, V.</span>, <span class="refAuthor">Goyal, N.</span>, <span class="refAuthor">Küttler, H.</span>, <span class="refAuthor">Lewis, M.</span>, <span class="refAuthor">Yih, W.-t.</span>, <span class="refAuthor">Rocktäschel, T.</span>, and <span class="refAuthor">S. Riede</span>, <span class="refTitle">"Retrieval-augmented generation for knowledge-intensive NLP tasks"</span>, <span>n.d.</span>. </dd>
+<span class="refAuthor">Lewis, P.</span>, <span class="refAuthor">Perez, E.</span>, <span class="refAuthor">Piktus, A.</span>, <span class="refAuthor">Petroni, F.</span>, <span class="refAuthor">Karpukhin, V.</span>, <span class="refAuthor">Goyal, N.</span>, <span class="refAuthor">Küttler, H.</span>, <span class="refAuthor">Lewis, M.</span>, <span class="refAuthor">Yih, W.-t.</span>, <span class="refAuthor">Rocktäschel, T.</span>, and <span class="refAuthor">S. Riede</span>, <span class="refTitle">"Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks"</span>, <span>n.d.</span>. </dd>
 <dd class="break"></dd>
 <dt id="mcp">[mcp]</dt>
         <dd>
@@ -2626,13 +2600,13 @@ A secure deployment requires:<a href="#section-5.8-6" class="pilcrow">¶</a></p>
           <h4 id="name-llm-response-data-model">
 <a href="#name-llm-response-data-model" class="section-name selfRef">LLM Response Data Model</a>
           </h4>
-<p id="appendix-B.1.1-1">The LLM agent decision module should respond with the generated configuration parameters along with an associated confidence score. If the LLM is unable to generate a valid configuration, it should return an error message accompanied by an explanation of the issue.<a href="#appendix-B.1.1-1" class="pilcrow">¶</a></p>
+<p id="appendix-B.1.1-1">The LLM Agent Decision Module returns generated configuration parameters and an associated confidence score. If the LLM cannot produce a valid configuration, it returns an error reason.<a href="#appendix-B.1.1-1" class="pilcrow">¶</a></p>
 <div class="lang-yang sourcecode" id="appendix-B.1.1-2">
 <pre>
 module: llm-response-module
   +--rw llm-response
      +--rw config?         string
-     +--rw confidence?     uint64
+     +--rw confidence?     uint8
      +--rw error-reason?   enumeration
 </pre><a href="#appendix-B.1.1-2" class="pilcrow">¶</a>
 </div>
@@ -2647,7 +2621,7 @@ module llm-response-module {
       type string;
     }
     leaf confidence {
-      type uint64;
+      type uint8;
     }
     leaf error-reason {
       type enumeration {
@@ -2666,14 +2640,14 @@ module llm-response-module {
           <h4 id="name-human-audit-data-model">
 <a href="#name-human-audit-data-model" class="section-name selfRef">Human Audit Data Model</a>
           </h4>
-<p id="appendix-B.1.2-1">This data model defines the structure for human audit operations and record-keeping. It facilitates collaborative decision-making by allowing LLMs to generate actionable insights while ensuring that human operators retain final operational authority.<a href="#appendix-B.1.2-1" class="pilcrow">¶</a></p>
+<p id="appendix-B.1.2-1">This data model defines the structure for human audit operations and records. It supports collaborative decision-making by recording LLM-generated actions alongside the operator's final decision.<a href="#appendix-B.1.2-1" class="pilcrow">¶</a></p>
 <div class="lang-yang sourcecode" id="appendix-B.1.2-2">
 <pre>
 module: human-audit-module
   +--rw human-audit
      +--rw task-id?      string
      +--rw generated-config?   string
-     +--rw confidence?         int64
+     +--rw confidence?         uint8
      +--rw human-actions
         +--rw operator?          string
         +--rw action?            enumeration
@@ -2697,7 +2671,7 @@ module human-audit-module {
       type string;
       }
     leaf confidence {
-      type int64;
+      type uint8;
       }
     container human-actions {
       leaf operator {
