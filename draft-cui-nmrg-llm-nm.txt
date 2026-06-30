@@ -5,9 +5,9 @@
 Network Management                                                Y. Cui
 Internet-Draft                                       Tsinghua University
 Intended status: Informational                                   M. Xing
-Expires: 19 December 2026                                       L. Zhang
+Expires: 1 January 2027                                         L. Zhang
                                                  Zhongguancun Laboratory
-                                                            17 June 2026
+                                                            30 June 2026
 
 
 A Framework for LLM Agent-Assisted Network Management with Human-in-the-
@@ -24,7 +24,9 @@ Abstract
    loop control.  The design is intended to be compatible with existing
    network management systems and protocols while identifying research
    issues for safe, auditable, and operator-supervised use of LLM-
-   assisted decision support in network operations.
+   assisted decision support in network operations.  The focus of this
+   document is the human-supervised decision loop rather than a complete
+   specification of all LLM agent implementation mechanisms.
 
 About This Document
 
@@ -58,7 +60,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 December 2026.
+   This Internet-Draft will expire on 1 January 2027.
 
 Copyright Notice
 
@@ -75,11 +77,12 @@ Table of Contents
 
    1.  Introduction
      1.1.  Motivation
-     1.2.  Problem Statement
-     1.3.  Research Questions
+     1.2.  Why Human-in-the-Loop is Necessary
+     1.3.  Problem Statement
+     1.4.  Research Questions
    2.  Terminology
      2.1.  Acronyms and Abbreviations
-   3.  Framework Overview
+   3.  Reference Framework
      3.1.  Enhanced Telemetry Module
      3.2.  LLM Agent Decision Module
        3.2.1.  RAG Module
@@ -91,23 +94,19 @@ Table of Contents
        3.3.2.  Access Control Module
        3.3.3.  Feedback Module
      3.4.  Operator Audit Module
-   4.  Use Cases
-     4.1.  DDoS Intelligent Defense
-     4.2.  Traffic Scheduling and Optimization
-   5.  Security Considerations
-     5.1.  Security-Sensitive Assets
-     5.2.  Trust Boundaries
-     5.3.  Prompt Injection Attacks
-     5.4.  RAG Knowledge Poisoning
-     5.5.  Agent Identity Spoofing
-     5.6.  Toolchain Abuse
-     5.7.  LLM Control Plane Availability
-     5.8.  Hallucination-Induced Operational Risk
-     5.9.  Risk Classification Model
-   6.  IANA Considerations
-   7.  References
-     7.1.  Normative References
-     7.2.  Informative References
+   4.  Research Challenges and Considerations
+     4.1.  Semantic Context and Provenance
+     4.2.  Uncertainty and Risk Representation
+     4.3.  Human Review Workflow
+     4.4.  Accountability and Auditability
+   5.  Use Cases
+     5.1.  DDoS Intelligent Defense
+     5.2.  Traffic Scheduling and Optimization
+   6.  Security Considerations
+   7.  IANA Considerations
+   8.  References
+     8.1.  Normative References
+     8.2.  Informative References
    Acknowledgments
    Appendix
      Appendix A.1 Data Model
@@ -132,7 +131,27 @@ Table of Contents
    through a structured human-in-the-loop model, preserving operator
    oversight while enabling decision support and controlled automation.
 
-1.2.  Problem Statement
+1.2.  Why Human-in-the-Loop is Necessary
+
+   Human-in-the-loop operation is necessary in this context because
+   network management actions can affect service availability, security
+   posture, customer traffic, and compliance obligations.  An LLM-
+   generated recommendation may be syntactically valid but still
+   operationally unsafe if it relies on stale telemetry, misinterprets
+   local policy, affects the wrong service scope, or ignores maintenance
+   windows and business constraints.
+
+   In addition, many network-management decisions depend on operational
+   knowledge that may not be fully represented in telemetry or retrieved
+   documents, such as planned maintenance, customer exceptions,
+   escalation procedures, and local risk tolerance.  Human review
+   therefore provides the point at which evidence, uncertainty,
+   operational impact, and authorization are assessed before a
+   recommendation is applied to the network.  This document treats
+   human-in-the-loop control as a necessary part of the safety and
+   accountability model for LLM agent-assisted network management.
+
+1.3.  Problem Statement
 
    Network management presents persistent operational challenges,
    including multi-vendor configuration complexity, correlation of
@@ -153,9 +172,13 @@ Table of Contents
    This document is intended as input for NMRG discussion on AI in
    network management.  It focuses on research challenges and reference
    components rather than specifying a new network management protocol,
-   a new LLM interface, or fully autonomous network control.
+   a new LLM interface, or fully autonomous network control.  Although
+   the framework shows several supporting components, their purpose is
+   to illustrate the human-supervised decision path from context
+   collection to recommendation, validation, operator audit, and
+   controlled execution.
 
-1.3.  Research Questions
+1.4.  Research Questions
 
    This document motivates discussion of the following research
    questions:
@@ -169,6 +192,9 @@ Table of Contents
    *  Which validation and access-control mechanisms are needed before
       LLM-generated recommendations can be considered for deployment?
 
+   *  How can human review be made meaningful rather than a procedural
+      approval step?
+
    *  What information must be recorded so that operator decisions and
       LLM-assisted recommendations can be audited and reproduced?
 
@@ -178,7 +204,7 @@ Table of Contents
 
    *  LLM: Large Language Model
 
-   *  RAG: Retrieve-Augmented Generation
+   *  RAG: Retrieval-Augmented Generation
 
    *  MCP: Model Context Protocol
 
@@ -186,7 +212,7 @@ Table of Contents
 
    *  NACM: NETCONF Access Control Model
 
-3.  Framework Overview
+3.  Reference Framework
 
    +-------------------------------------------------------------+
    |         LLM-Agent Assisted Network Management System        |
@@ -478,6 +504,13 @@ Table of Contents
    provides operators with a quantitative reference for assessing the
    reliability of the recommendation.
 
+   The purpose of this module is not only to collect an approval action.
+   It is intended to give operators enough context to judge whether the
+   recommendation is consistent with the operational objective, whether
+   the supporting data is complete and fresh, whether the affected
+   network scope is acceptable, and whether additional verification or
+   escalation is needed.
+
    Each audit instance MUST record the input context (e.g., input data,
    RAG query content, model selection, relevant configuration files) and
    the corresponding decision output.  The audit steps include the
@@ -533,9 +566,52 @@ Table of Contents
    condition is noted in the audit record, allowing operators to
    exercise appropriate judgment.
 
-4.  Use Cases
+4.  Research Challenges and Considerations
 
-4.1.  DDoS Intelligent Defense
+   This section summarizes research challenges raised by the reference
+   framework.  The intent is to identify issues for further NMRG
+   discussion rather than to prescribe a single implementation.
+
+4.1.  Semantic Context and Provenance
+
+   LLM-assisted systems need context that is both machine-processable
+   and meaningful to operators.  Telemetry values, topology information,
+   configuration state, and retrieved documents need scope, timestamp,
+   source, collection method, and provenance metadata.  Without such
+   metadata, an LLM agent may produce overconfident recommendations from
+   stale, incomplete, or out-of-scope information.
+
+4.2.  Uncertainty and Risk Representation
+
+   Confidence scores alone are insufficient for network-management
+   decisions.  A recommendation with high model confidence may still be
+   operationally risky if it affects a large service scope, changes
+   security policy, relies on approximate data, or has not been
+   validated against local policy.  Research is needed on how to combine
+   model uncertainty, input-data uncertainty, validation status, and
+   operational impact into a representation that operators can use.
+
+4.3.  Human Review Workflow
+
+   Human review needs to be designed so that operators can make informed
+   decisions under time pressure.  Operator-facing information should
+   expose the recommendation, supporting evidence, assumptions,
+   validation result, risk level, and possible impact without
+   overwhelming the operator with raw model output.  Open questions
+   include when to require secondary approval, how to avoid automation
+   bias, and how to support operator requests for more evidence.
+
+4.4.  Accountability and Auditability
+
+   LLM-assisted decisions need audit records that connect input
+   evidence, model output, tool results, validation outcomes, operator
+   decisions, and final actions.  Such records are needed for incident
+   analysis, rollback, compliance, and research reproducibility, while
+   still protecting sensitive operational data and credentials.
+
+5.  Use Cases
+
+5.1.  DDoS Intelligent Defense
 
    Distributed Denial of Service (DDoS) attacks represent a persistent
    operational threat.  Conventional mitigation systems based on rate-
@@ -545,39 +621,25 @@ Table of Contents
 
    This use case illustrates how the LLM agent-assisted framework
    supports filtering recommendation generation with human oversight.
+   The Enhanced Telemetry Module retrieves traffic statistics and
+   interface metrics from network devices, enriches the raw telemetry
+   with YANG model and device-specific context, and provides a context-
+   annotated dataset to the LLM Agent Decision Module.
 
-   1.  *Telemetry Collection and Semantic Enrichment* The Enhanced
-       Telemetry Module retrieves real-time traffic statistics and
-       interface metrics from network devices via NETCONF.  The raw
-       telemetry is semantically enriched by referencing YANG models and
-       device-specific documentation to produce a context-annotated
-       dataset suitable for LLM processing.
+   The operator initiates a ddos-mitigation task.  The LLM-assisted
+   agent generates a filtering recommendation and a rationale indicating
+   which telemetry observations and retrieved documents were used.  The
+   recommendation is passed through syntax validation and access-control
+   enforcement before being shown to the operator.
 
-   2.  *DDoS Filtering Task Instantiation* The operator initiates a
-       ddos-mitigation task.  The Task Agent Module selects a security-
-       oriented prompt and relevant contextual sources.  Example input
-       observations include high packet rate on an ingress interface, a
-       large fraction of TCP SYN packets, and a small set of dominant
-       source prefixes.
+   The Operator Audit Module presents the task identifier, confidence
+   score, input summary, retrieved document identifiers, validation
+   results, and recommended action.  Human review is needed because the
+   operator may need to judge collateral impact, customer exceptions,
+   threat-intelligence context, and escalation policy.  The final
+   decision and any executed command are recorded in the audit log.
 
-   3.  *Recommendation and Validation* The LLM-assisted agent generates
-       a filtering recommendation and a rationale indicating which
-       telemetry observations and retrieved documents were used.  The
-       recommendation is passed to the Config Verification Module for
-       syntax validation and to the Access Control Module for permission
-       enforcement.  If validation fails, structured feedback is
-       returned to the task agent.
-
-   4.  *Operator Audit and Decision* The Operator Audit Module presents
-       the task identifier, confidence score, input summary, retrieved
-       document identifiers, validation results, and recommended action.
-       The operator verifies the recommendation against threat
-       intelligence, policy, and potential collateral impact before
-       approving, modifying, rejecting, or deferring the action.  The
-       final decision and any executed command are recorded in the audit
-       log.
-
-4.2.  Traffic Scheduling and Optimization
+5.2.  Traffic Scheduling and Optimization
 
    In large-scale networks, dynamic traffic scheduling is required to
    respond to fluctuating load, maintain QoS, and satisfy SLA
@@ -587,59 +649,32 @@ Table of Contents
    This use case illustrates how the framework supports LLM agent-
    assisted traffic scheduling with operator control.
 
-   1.  *Telemetry Data Acquisition* The Enhanced Telemetry Module
-       collects link utilization, queue occupancy, and delay metrics
-       from multiple routers.  The semantic enrichment process annotates
-       each metric with human-readable labels from the YANG model,
-       including path topology information and policy classifications
-       (e.g., gold, silver, bronze service classes).
+   The Enhanced Telemetry Module collects link utilization, queue
+   occupancy, and delay metrics from multiple routers.  The semantic
+   enrichment process annotates each metric with human-readable labels
+   from the YANG model, including path topology information and policy
+   classifications.  An operator then initiates a traffic scheduling
+   task with constraints such as high utilization on core links and SLA
+   violations for gold-class VoIP traffic.
 
-   2.  *Optimization Task Execution* An operator initiates a traffic
-       scheduling task.  The Task Agent Module selects a foundation
-       model fine-tuned on traffic engineering datasets and uses a
-       structured prompt to describe the current constraints: high
-       utilization on core links L1 through L3 and SLA violations for
-       gold-class VoIP traffic.
+   The LLM-assisted agent proposes a traffic-engineering adjustment,
+   such as rerouting selected traffic classes through underutilized
+   paths or adjusting policy parameters.  The recommendation is
+   accompanied by a rationale, expected impact, confidence score, and
+   assumptions about topology and SLA constraints.  The configuration
+   candidate is validated for syntax and checked against access-control
+   policy before operator review.
 
-   3.  *LLM-Generated Recommendation* The LLM-assisted agent proposes a
-       traffic engineering adjustment, such as rerouting selected
-       traffic classes through underutilized paths or adjusting policy
-       parameters.  The recommendation is accompanied by a rationale,
-       expected impact, confidence score, and any assumptions about
-       topology and SLA constraints.  The configuration candidate is
-       validated for syntax and checked against access-control policy
-       before operator review.
+   The operator reviews the recommendation, validation result, expected
+   path shift, policy constraints, and possible impact on other traffic
+   classes.  The operator may approve, modify, reject, or defer the
+   recommendation.  For example, the operator may approve the proposed
+   reroute but add a bandwidth cap on the backup path to avoid overuse.
+   The revised configuration and final operator decision are stored in
+   the audit log and forwarded to the network management system for
+   application.
 
-   4.  *Operator Audit and Decision* The Operator Audit Module presents:
-
-   *  *Confidence Score*: 91/100
-
-   *  *Audit Metadata*:
-
-      -  Task Agent: traffic-opt-te-v2
-
-      -  Input Context: “Link L1 (95% utilization), gold-voip SLA
-         latency breach”
-
-      -  Recommendation: “Increase TE path metric to reroute VoIP via L2
-         backup path”
-
-   The operator reviews:
-
-   *  *Result Verification*: Simulates expected path shift via NMS.
-
-   *  *Compliance Check*: Confirms SLA routing rules permit TE
-      adjustment.
-
-   *  *Security Review*: Confirms backup link L2 is secure and isolated.
-
-   *  *Final Action*: _Approved with modification_: “Set bandwidth cap
-      to 400m on backup to avoid overuse.”
-
-   The revised configuration is stored and forwarded to the network
-   management system for application.
-
-5.  Security Considerations
+6.  Security Considerations
 
    This section summarizes the main security issues introduced by LLM-
    assisted network management.  The analysis assumes that LLM-assisted
@@ -647,180 +682,66 @@ Table of Contents
    external tools, and generate recommendations or candidate
    configuration changes subject to human oversight.
 
-5.1.  Security-Sensitive Assets
-
-   The following assets are considered security-sensitive:
-
-   *  Network configuration state and device control plane integrity
-
-   *  Telemetry data and operational metadata
-
-   *  External knowledge bases used for retrieval
-
-   *  LLM prompts, system instructions, and fine-tuned weights
-
-   *  Agent identity, credentials, and access tokens
-
-   *  Human audit records and decision logs
-
-   Compromise of any of these assets may lead to service disruption,
+   Security-sensitive assets include network configuration state,
+   telemetry data, external knowledge bases, prompts and system
+   instructions, fine-tuned weights, agent credentials, and human audit
+   records.  Compromise of these assets may lead to service disruption,
    policy violations, data leakage, or unauthorized configuration
    changes.
 
-5.2.  Trust Boundaries
+   The framework introduces trust boundaries between the LLM agent and
+   the network management system, between the agent and external
+   toolchains, between cooperating task agents, between retrieval
+   databases and the LLM context, and between automated decision modules
+   and human operators.  Each boundary needs explicit protection through
+   authentication, authorization, input validation, integrity
+   protection, and audit logging.
 
-   The framework introduces new trust boundaries:
+   Prompt injection and RAG knowledge poisoning are important risks.
+   Malicious telemetry fields, compromised documentation, poisoned
+   retrieval databases, or cross-agent messages may influence model
+   output.  Mitigations include context separation, structured role
+   tagging, input sanitization, integrity verification of retrieval
+   documents, versioning of knowledge sources, logging of retrieved
+   document identifiers, and deterministic validation of generated
+   configurations.
 
-   *  Between the LLM agent and the underlying network management system
-
-   *  Between the LLM agent and external toolchains
-
-   *  Between cooperating task agents
-
-   *  Between the retrieval database and the LLM context
-
-   *  Between human operators and automated decision modules
-
-   Each boundary represents a potential attack surface and needs
-   explicit protection.
-
-5.3.  Prompt Injection Attacks
-
-   Prompt injection refers to adversarial manipulation of the LLM input
-   context in order to override system instructions, escalate
-   privileges, or induce unintended actions.  In the network management
-   context, prompt injection may originate from:
-
-   *  Malicious telemetry fields (e.g., crafted device hostname or
-      description)
-
-   *  Compromised external documentation included in RAG retrieval
-
-   *  Cross-agent message contamination
-
-   *  Operator-supplied free-form instructions
-
-   Mitigations include context separation, structured role tagging,
-   input sanitization, prompt hardening, and deterministic validation of
-   all generated configurations before execution.  Telemetry-derived
-   text and retrieved documents need to be treated as untrusted input.
-
-5.4.  RAG Knowledge Poisoning
-
-   The Retrieve-Augmented Generation (RAG) module introduces risk if the
-   retrieval corpus contains malicious or outdated content.
-
-   Attack vectors include:
-
-   *  Poisoned internal documentation
-
-   *  Compromised vector databases
-
-   *  Unauthorized modification of vendor manuals
-
-   *  Injection of fabricated configuration templates
-
-   Mitigations include integrity verification of retrieval documents,
-   versioning and timestamping of knowledge sources, restricted write
-   access to retrieval databases, and logging of retrieved document
-   identifiers for audit replayability.
-
-5.5.  Agent Identity Spoofing
-
-   Each task agent is represented as a logical user within the access
-   control framework.  An attacker may attempt to impersonate an agent
-   to perform unauthorized operations.
-
-   Possible attack vectors include:
-
-   *  Credential theft
-
-   *  Session hijacking
-
-   *  Token misuse
-
-   *  Forged inter-agent messages
-
-   Mitigations include unique cryptographic identity for each task
-   agent, binding of agent identity to NACM-based permissions, mutual
-   authentication for tool access, signing or integrity protection for
-   inter-agent messages, session-token rotation, and auditable logging
-   of agent lifecycle operations.
-
-5.6.  Toolchain Abuse
-
-   Task agents may invoke external tools such as validators, simulators,
-   scripts, or optimization solvers.  Compromise of the toolchain may
-   result in arbitrary code execution or falsified outputs.
-
-   Example threats include:
-
-   *  Malicious tool manifest modification
-
-   *  Tool output tampering
-
-   *  Execution of unintended shell commands
-
-   *  Time-of-check/time-of-use inconsistencies
-
-   Mitigations include schema validation of tool inputs and outputs,
-   sandboxed tool execution, integrity checks for tool manifests, and
-   human confirmation for high-risk tool invocations.
-
-5.7.  LLM Control Plane Availability
+   Agent identity and tool access also need protection.  Each task agent
+   should be bound to a distinct identity and to explicit permissions,
+   for example through NACM-based access control.  Tool invocation
+   should use authenticated access, schema validation for tool inputs
+   and outputs, sandboxing where appropriate, and human confirmation for
+   high-risk tool invocations.
 
    The LLM-assisted decision layer can itself become a denial-of-service
    target.  Excessive task instantiation requests, high-frequency
-   telemetry triggers, or malicious multi-agent loops may cause resource
-   exhaustion and delayed incident response.
-
-   Mitigations include rate limiting, admission control, quotas, maximum
-   reasoning-depth or token limits, and circuit breakers in the Task
-   Agent Management Module.
-
-5.8.  Hallucination-Induced Operational Risk
+   telemetry triggers, or multi-agent loops may cause resource
+   exhaustion or delayed incident response.  Mitigations include rate
+   limiting, admission control, quotas, maximum reasoning-depth or token
+   limits, and circuit breakers in the Task Agent Management Module.
 
    LLMs may generate syntactically correct but semantically invalid
    configurations, such as referencing non-existent interfaces,
    misinterpreting vendor-specific syntax, or using incorrect parameter
    units.  Mitigations include YANG schema validation, deterministic
-   configuration simulation, confidence-based escalation thresholds,
-   explicit reasoning logs, and operator review.
-
+   configuration simulation, access-control checks, confidence-based
+   escalation thresholds, explicit reasoning logs, and operator review.
    Human approval MUST remain the final authority for high-impact
    changes.
-
-5.9.  Risk Classification Model
 
    To support structured oversight, each generated configuration SHOULD
    be assigned a risk level derived from factors such as scope of
    impact, operation type, policy sensitivity, confidence score, and
-   historical rollback frequency.
+   historical rollback frequency.  Risk classification MUST be included
+   in the audit record.
 
-   A three-tier model MAY be used:
-
-   *  Low Risk: automatic approval permitted under policy.
-
-   *  Medium Risk: operator review required.
-
-   *  High Risk: mandatory human approval with secondary verification.
-
-   Risk classification MUST be included in the audit record.
-
-   The integration of LLM agents into network management introduces
-   novel attack surfaces beyond traditional control-plane security.
-   Secure deployment requires strict trust-boundary enforcement,
-   deterministic validation layers, cryptographically bound agent
-   identities, structured human oversight, and risk-aware escalation
-   policies.
-
-6.  IANA Considerations
+7.  IANA Considerations
 
    This document includes no request to IANA.
 
-7.  References
+8.  References
 
-7.1.  Normative References
+8.1.  Normative References
 
    [RFC6241]  Enns, R., Ed., Bjorklund, M., Ed., Schoenwaelder, J., Ed.,
               and A. Bierman, Ed., "Network Configuration Protocol
@@ -832,7 +753,7 @@ Table of Contents
               DOI 10.17487/RFC8341, March 2018,
               <https://www.rfc-editor.org/rfc/rfc8341>.
 
-7.2.  Informative References
+8.2.  Informative References
 
    [a2a]      "Announcing the Agent2Agent Protocol (A2A)", July 2025,
               <https://developers.googleblog.com/en/a2a-a-new-era-of-

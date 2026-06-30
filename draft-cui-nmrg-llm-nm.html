@@ -9,27 +9,28 @@
 <meta content="Mingzhe Xing" name="author">
 <meta content="Lei Zhang" name="author">
 <meta content="
-       This document describes a reference framework for collaborative network management between Large Language Model (LLM)-assisted agents and human operators. The framework includes an Enhanced Telemetry Module, an LLM Agent Decision Module, interaction data models for human operator oversight, and workflows that support human-in-the-loop control. The design is intended to be compatible with existing network management systems and protocols while identifying research issues for safe, auditable, and operator-supervised use of LLM-assisted decision support in network operations. 
+       This document describes a reference framework for collaborative network management between Large Language Model (LLM)-assisted agents and human operators. The framework includes an Enhanced Telemetry Module, an LLM Agent Decision Module, interaction data models for human operator oversight, and workflows that support human-in-the-loop control. The design is intended to be compatible with existing network management systems and protocols while identifying research issues for safe, auditable, and operator-supervised use of LLM-assisted decision support in network operations. The focus of this document is the human-supervised decision loop rather than a complete specification of all LLM agent implementation mechanisms. 
     " name="description">
-<meta content="xml2rfc 3.33.0" name="generator">
+<meta content="xml2rfc 3.34.0" name="generator">
 <meta content="Large Language Model" name="keyword">
 <meta content="Autonomous Agent" name="keyword">
 <meta content="Network Management" name="keyword">
 <meta content="Human in The Loop" name="keyword">
 <meta content="draft-cui-nmrg-llm-nm-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.33.0
-    Python 3.12.13
-    ConfigArgParse 1.7
+  xml2rfc 3.34.0
+    Python 3.14.5
+    ConfigArgParse 1.7.5
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
-    lxml 6.0.2
-    platformdirs 4.9.6
+    lxml 6.1.1
+    natsort 8.4.0
+    platformdirs 4.10.0
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.33.1
-    wcwidth 0.7.0
+    wcwidth 0.8.1
 -->
 <link href="draft-cui-nmrg-llm-nm.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1052,7 +1053,7 @@ svg {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Cui, et al.</td>
-<td class="center">Expires 19 December 2026</td>
+<td class="center">Expires 1 January 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,12 +1066,12 @@ svg {
 <dd class="internet-draft">draft-cui-nmrg-llm-nm-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-06-17" class="published">17 June 2026</time>
+<time datetime="2026-06-30" class="published">30 June 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-12-19">19 December 2026</time></dd>
+<dd class="expires"><time datetime="2027-01-01">1 January 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1091,7 +1092,7 @@ svg {
 <h1 id="title">A Framework for LLM Agent-Assisted Network Management with Human-in-the-Loop</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document describes a reference framework for collaborative network management between Large Language Model (LLM)-assisted agents and human operators. The framework includes an Enhanced Telemetry Module, an LLM Agent Decision Module, interaction data models for human operator oversight, and workflows that support human-in-the-loop control. The design is intended to be compatible with existing network management systems and protocols while identifying research issues for safe, auditable, and operator-supervised use of LLM-assisted decision support in network operations.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document describes a reference framework for collaborative network management between Large Language Model (LLM)-assisted agents and human operators. The framework includes an Enhanced Telemetry Module, an LLM Agent Decision Module, interaction data models for human operator oversight, and workflows that support human-in-the-loop control. The design is intended to be compatible with existing network management systems and protocols while identifying research issues for safe, auditable, and operator-supervised use of LLM-assisted decision support in network operations. The focus of this document is the human-supervised decision loop rather than a complete specification of all LLM agent implementation mechanisms.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1128,7 +1129,7 @@ svg {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 19 December 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 1 January 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1161,10 +1162,13 @@ svg {
                 <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="auto internal xref">1.1</a>.  <a href="#name-motivation" class="internal xref">Motivation</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.2">
-                <p id="section-toc.1-1.1.2.2.1" class="keepWithNext"><a href="#section-1.2" class="auto internal xref">1.2</a>.  <a href="#name-problem-statement" class="internal xref">Problem Statement</a></p>
+                <p id="section-toc.1-1.1.2.2.1" class="keepWithNext"><a href="#section-1.2" class="auto internal xref">1.2</a>.  <a href="#name-why-human-in-the-loop-is-ne" class="internal xref">Why Human-in-the-Loop is Necessary</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.3">
-                <p id="section-toc.1-1.1.2.3.1" class="keepWithNext"><a href="#section-1.3" class="auto internal xref">1.3</a>.  <a href="#name-research-questions" class="internal xref">Research Questions</a></p>
+                <p id="section-toc.1-1.1.2.3.1" class="keepWithNext"><a href="#section-1.3" class="auto internal xref">1.3</a>.  <a href="#name-problem-statement" class="internal xref">Problem Statement</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.4">
+                <p id="section-toc.1-1.1.2.4.1"><a href="#section-1.4" class="auto internal xref">1.4</a>.  <a href="#name-research-questions" class="internal xref">Research Questions</a></p>
 </li>
             </ul>
 </li>
@@ -1177,7 +1181,7 @@ svg {
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-framework-overview" class="internal xref">Framework Overview</a></p>
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-reference-framework" class="internal xref">Reference Framework</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
                 <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-enhanced-telemetry-module" class="internal xref">Enhanced Telemetry Module</a></p>
@@ -1219,83 +1223,71 @@ svg {
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-use-cases" class="internal xref">Use Cases</a></p>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-research-challenges-and-con" class="internal xref">Research Challenges and Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
-                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-ddos-intelligent-defense" class="internal xref">DDoS Intelligent Defense</a></p>
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-semantic-context-and-proven" class="internal xref">Semantic Context and Provenance</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
-                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-traffic-scheduling-and-opti" class="internal xref">Traffic Scheduling and Optimization</a></p>
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-uncertainty-and-risk-repres" class="internal xref">Uncertainty and Risk Representation</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-human-review-workflow" class="internal xref">Human Review Workflow</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.4">
+                <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="auto internal xref">4.4</a>.  <a href="#name-accountability-and-auditabi" class="internal xref">Accountability and Auditability</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-use-cases" class="internal xref">Use Cases</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
-                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-security-sensitive-assets" class="internal xref">Security-Sensitive Assets</a></p>
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-ddos-intelligent-defense" class="internal xref">DDoS Intelligent Defense</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
-                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-trust-boundaries" class="internal xref">Trust Boundaries</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
-                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-prompt-injection-attacks" class="internal xref">Prompt Injection Attacks</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4">
-                <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="auto internal xref">5.4</a>.  <a href="#name-rag-knowledge-poisoning" class="internal xref">RAG Knowledge Poisoning</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.5">
-                <p id="section-toc.1-1.5.2.5.1"><a href="#section-5.5" class="auto internal xref">5.5</a>.  <a href="#name-agent-identity-spoofing" class="internal xref">Agent Identity Spoofing</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.6">
-                <p id="section-toc.1-1.5.2.6.1"><a href="#section-5.6" class="auto internal xref">5.6</a>.  <a href="#name-toolchain-abuse" class="internal xref">Toolchain Abuse</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.7">
-                <p id="section-toc.1-1.5.2.7.1"><a href="#section-5.7" class="auto internal xref">5.7</a>.  <a href="#name-llm-control-plane-availabil" class="internal xref">LLM Control Plane Availability</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.8">
-                <p id="section-toc.1-1.5.2.8.1"><a href="#section-5.8" class="auto internal xref">5.8</a>.  <a href="#name-hallucination-induced-opera" class="internal xref">Hallucination-Induced Operational Risk</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.9">
-                <p id="section-toc.1-1.5.2.9.1"><a href="#section-5.9" class="auto internal xref">5.9</a>.  <a href="#name-risk-classification-model" class="internal xref">Risk Classification Model</a></p>
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-traffic-scheduling-and-opti" class="internal xref">Traffic Scheduling and Optimization</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-references" class="internal xref">References</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
-                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
-                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
-</li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-appendix" class="internal xref">Appendix</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
-                <p id="section-toc.1-1.9.2.1.1"><a href="#appendix-B.1" class="auto internal xref"></a><a href="#name-appendix-a1-data-model" class="internal xref">Appendix A.1 Data Model</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1.2.1">
-                    <p id="section-toc.1-1.9.2.1.2.1.1"><a href="#appendix-B.1.1" class="auto internal xref"></a><a href="#name-llm-response-data-model" class="internal xref">LLM Response Data Model</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
 </li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1.2.2">
-                    <p id="section-toc.1-1.9.2.1.2.2.1"><a href="#appendix-B.1.2" class="auto internal xref"></a><a href="#name-human-audit-data-model" class="internal xref">Human Audit Data Model</a></p>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-appendix" class="internal xref">Appendix</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
+                <p id="section-toc.1-1.10.2.1.1"><a href="#appendix-B.1" class="auto internal xref"></a><a href="#name-appendix-a1-data-model" class="internal xref">Appendix A.1 Data Model</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1.2.1">
+                    <p id="section-toc.1-1.10.2.1.2.1.1"><a href="#appendix-B.1.1" class="auto internal xref"></a><a href="#name-llm-response-data-model" class="internal xref">LLM Response Data Model</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1.2.2">
+                    <p id="section-toc.1-1.10.2.1.2.2.1"><a href="#appendix-B.1.2" class="auto internal xref"></a><a href="#name-human-audit-data-model" class="internal xref">Human Audit Data Model</a></p>
 </li>
                 </ul>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1314,34 +1306,46 @@ svg {
 <p id="section-1.1-1">Traditional network automation systems often fail to handle unanticipated scenarios or manage complex, multi-domain data dependencies. Large Language Models (LLMs), when used as agent-assisted components, offer multimodal data comprehension, adaptive reasoning, and broad generalization, making them a candidate technology for network management assistance <span>[<a href="#TM-IG1230" class="cite xref">TM-IG1230</a>]</span>. However, full automation is not yet practical due to risks including model hallucination, operational errors, and insufficient accountability in automated decision-making <span>[<a href="#Huang25" class="cite xref">Huang25</a>]</span>. This document describes a framework that integrates LLM-assisted agents into network management through a structured human-in-the-loop model, preserving operator oversight while enabling decision support and controlled automation.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="problem-statement">
+<div id="why-human-in-the-loop-is-necessary">
 <section id="section-1.2">
-        <h3 id="name-problem-statement">
-<a href="#section-1.2" class="section-number selfRef">1.2. </a><a href="#name-problem-statement" class="section-name selfRef">Problem Statement</a>
+        <h3 id="name-why-human-in-the-loop-is-ne">
+<a href="#section-1.2" class="section-number selfRef">1.2. </a><a href="#name-why-human-in-the-loop-is-ne" class="section-name selfRef">Why Human-in-the-Loop is Necessary</a>
         </h3>
-<p id="section-1.2-1">Network management presents persistent operational challenges, including multi-vendor configuration complexity, correlation of heterogeneous telemetry data, and timely response to dynamic security threats. LLM agents offer a potential approach to address these challenges through their data comprehension and reasoning capabilities.<a href="#section-1.2-1" class="pilcrow">¶</a></p>
-<p id="section-1.2-2">However, applying LLM agents in network management raises several technical requirements. These include semantic enrichment of network telemetry to support accurate LLM reasoning, a decision-execution mechanism with confidence-based escalation, and auditability of LLM-generated decisions through provenance tracking. Addressing these requirements is necessary to integrate LLM agents into network management workflows while maintaining reliability, transparency, and interoperability with existing systems.<a href="#section-1.2-2" class="pilcrow">¶</a></p>
-<p id="section-1.2-3">This document is intended as input for NMRG discussion on AI in network management. It focuses on research challenges and reference components rather than specifying a new network management protocol, a new LLM interface, or fully autonomous network control.<a href="#section-1.2-3" class="pilcrow">¶</a></p>
+<p id="section-1.2-1">Human-in-the-loop operation is necessary in this context because network management actions can affect service availability, security posture, customer traffic, and compliance obligations. An LLM-generated recommendation may be syntactically valid but still operationally unsafe if it relies on stale telemetry, misinterprets local policy, affects the wrong service scope, or ignores maintenance windows and business constraints.<a href="#section-1.2-1" class="pilcrow">¶</a></p>
+<p id="section-1.2-2">In addition, many network-management decisions depend on operational knowledge that may not be fully represented in telemetry or retrieved documents, such as planned maintenance, customer exceptions, escalation procedures, and local risk tolerance. Human review therefore provides the point at which evidence, uncertainty, operational impact, and authorization are assessed before a recommendation is applied to the network. This document treats human-in-the-loop control as a necessary part of the safety and accountability model for LLM agent-assisted network management.<a href="#section-1.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="problem-statement">
+<section id="section-1.3">
+        <h3 id="name-problem-statement">
+<a href="#section-1.3" class="section-number selfRef">1.3. </a><a href="#name-problem-statement" class="section-name selfRef">Problem Statement</a>
+        </h3>
+<p id="section-1.3-1">Network management presents persistent operational challenges, including multi-vendor configuration complexity, correlation of heterogeneous telemetry data, and timely response to dynamic security threats. LLM agents offer a potential approach to address these challenges through their data comprehension and reasoning capabilities.<a href="#section-1.3-1" class="pilcrow">¶</a></p>
+<p id="section-1.3-2">However, applying LLM agents in network management raises several technical requirements. These include semantic enrichment of network telemetry to support accurate LLM reasoning, a decision-execution mechanism with confidence-based escalation, and auditability of LLM-generated decisions through provenance tracking. Addressing these requirements is necessary to integrate LLM agents into network management workflows while maintaining reliability, transparency, and interoperability with existing systems.<a href="#section-1.3-2" class="pilcrow">¶</a></p>
+<p id="section-1.3-3">This document is intended as input for NMRG discussion on AI in network management. It focuses on research challenges and reference components rather than specifying a new network management protocol, a new LLM interface, or fully autonomous network control. Although the framework shows several supporting components, their purpose is to illustrate the human-supervised decision path from context collection to recommendation, validation, operator audit, and controlled execution.<a href="#section-1.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="research-questions">
-<section id="section-1.3">
+<section id="section-1.4">
         <h3 id="name-research-questions">
-<a href="#section-1.3" class="section-number selfRef">1.3. </a><a href="#name-research-questions" class="section-name selfRef">Research Questions</a>
+<a href="#section-1.4" class="section-number selfRef">1.4. </a><a href="#name-research-questions" class="section-name selfRef">Research Questions</a>
         </h3>
-<p id="section-1.3-1">This document motivates discussion of the following research questions:<a href="#section-1.3-1" class="pilcrow">¶</a></p>
+<p id="section-1.4-1">This document motivates discussion of the following research questions:<a href="#section-1.4-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-1.3-2.1">
-            <p id="section-1.3-2.1.1">What semantic context is needed for LLM-assisted systems to reason correctly over network telemetry and configuration state?<a href="#section-1.3-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-1.4-2.1">
+            <p id="section-1.4-2.1.1">What semantic context is needed for LLM-assisted systems to reason correctly over network telemetry and configuration state?<a href="#section-1.4-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-1.3-2.2">
-            <p id="section-1.3-2.2.1">How can confidence, uncertainty, and operational risk be represented to support human decision-making?<a href="#section-1.3-2.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-1.4-2.2">
+            <p id="section-1.4-2.2.1">How can confidence, uncertainty, and operational risk be represented to support human decision-making?<a href="#section-1.4-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-1.3-2.3">
-            <p id="section-1.3-2.3.1">Which validation and access-control mechanisms are needed before LLM-generated recommendations can be considered for deployment?<a href="#section-1.3-2.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-1.4-2.3">
+            <p id="section-1.4-2.3.1">Which validation and access-control mechanisms are needed before LLM-generated recommendations can be considered for deployment?<a href="#section-1.4-2.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-1.3-2.4">
-            <p id="section-1.3-2.4.1">What information must be recorded so that operator decisions and LLM-assisted recommendations can be audited and reproduced?<a href="#section-1.3-2.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-1.4-2.4">
+            <p id="section-1.4-2.4.1">How can human review be made meaningful rather than a procedural approval step?<a href="#section-1.4-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-1.4-2.5">
+            <p id="section-1.4-2.5.1">What information must be recorded so that operator decisions and LLM-assisted recommendations can be audited and reproduced?<a href="#section-1.4-2.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -1363,7 +1367,7 @@ svg {
             <p id="section-2.1-1.1.1">LLM: Large Language Model<a href="#section-2.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-1.2">
-            <p id="section-2.1-1.2.1">RAG: Retrieve-Augmented Generation<a href="#section-2.1-1.2.1" class="pilcrow">¶</a></p>
+            <p id="section-2.1-1.2.1">RAG: Retrieval-Augmented Generation<a href="#section-2.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-1.3">
             <p id="section-2.1-1.3.1">MCP: Model Context Protocol<a href="#section-2.1-1.3.1" class="pilcrow">¶</a></p>
@@ -1379,10 +1383,10 @@ svg {
 </div>
 </section>
 </div>
-<div id="framework-overview">
+<div id="reference-framework">
 <section id="section-3">
-      <h2 id="name-framework-overview">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-framework-overview" class="section-name selfRef">Framework Overview</a>
+      <h2 id="name-reference-framework">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-reference-framework" class="section-name selfRef">Reference Framework</a>
       </h2>
 <div class="alignLeft art-text artwork" id="section-3-1">
 <pre>
@@ -1598,357 +1602,149 @@ Task agents are terminated when their assigned task completes, when an unrecover
 <a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-operator-audit-module" class="section-name selfRef">Operator Audit Module</a>
         </h3>
 <p id="section-3.4-1">The Operator Audit Module provides a structured mechanism for human review of LLM-generated configurations prior to deployment. The output of the LLM Decision Module includes both the generated configuration and an associated confidence score. The configuration is validated against the YANG model and subject to access control enforcement. The confidence score (e.g., on a scale of 0 to 100) provides operators with a quantitative reference for assessing the reliability of the recommendation.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
-<p id="section-3.4-2">Each audit instance MUST record the input context (e.g., input data, RAG query content, model selection, relevant configuration files) and the corresponding decision output. The audit steps include the following:<a href="#section-3.4-2" class="pilcrow">¶</a></p>
+<p id="section-3.4-2">The purpose of this module is not only to collect an approval action. It is intended to give operators enough context to judge whether the recommendation is consistent with the operational objective, whether the supporting data is complete and fresh, whether the affected network scope is acceptable, and whether additional verification or escalation is needed.<a href="#section-3.4-2" class="pilcrow">¶</a></p>
+<p id="section-3.4-3">Each audit instance MUST record the input context (e.g., input data, RAG query content, model selection, relevant configuration files) and the corresponding decision output. The audit steps include the following:<a href="#section-3.4-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.4-3.1">
-            <p id="section-3.4-3.1.1">Result Verification: The operator verifies that the LLM-generated output is consistent with operational objectives and policy requirements.<a href="#section-3.4-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.4-4.1">
+            <p id="section-3.4-4.1.1">Result Verification: The operator verifies that the LLM-generated output is consistent with operational objectives and policy requirements.<a href="#section-3.4-4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.4-3.2">
-            <p id="section-3.4-3.2.1">Compliance Check: The operator confirms that the output adheres to applicable regulatory standards and operational policies.<a href="#section-3.4-3.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.4-4.2">
+            <p id="section-3.4-4.2.1">Compliance Check: The operator confirms that the output adheres to applicable regulatory standards and operational policies.<a href="#section-3.4-4.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.4-3.3">
-            <p id="section-3.4-3.3.1">Security Verification: The operator checks the output for potential security issues, such as misconfigurations or unintended access changes.<a href="#section-3.4-3.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.4-4.3">
+            <p id="section-3.4-4.3.1">Security Verification: The operator checks the output for potential security issues, such as misconfigurations or unintended access changes.<a href="#section-3.4-4.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.4-3.4">
-            <p id="section-3.4-3.4.1">Correction: If issues are identified, the operator documents the findings and applies corrective modifications.<a href="#section-3.4-3.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.4-4.4">
+            <p id="section-3.4-4.4.1">Correction: If issues are identified, the operator documents the findings and applies corrective modifications.<a href="#section-3.4-4.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-3.4-4">Upon completion of the audit, the system records an audit decision entry to ensure traceability of operator actions. The audit record includes:<a href="#section-3.4-4" class="pilcrow">¶</a></p>
+<p id="section-3.4-5">Upon completion of the audit, the system records an audit decision entry to ensure traceability of operator actions. The audit record includes:<a href="#section-3.4-5" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.4-5.1">
-            <p id="section-3.4-5.1.1">Timestamp of the audit action<a href="#section-3.4-5.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.4-6.1">
+            <p id="section-3.4-6.1.1">Timestamp of the audit action<a href="#section-3.4-6.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.4-5.2">
-            <p id="section-3.4-5.2.1">LLM Task Agent ID<a href="#section-3.4-5.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.4-6.2">
+            <p id="section-3.4-6.2.1">LLM Task Agent ID<a href="#section-3.4-6.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.4-5.3">
-            <p id="section-3.4-5.3.1">Operator decision (approve, reject, modify, or defer)<a href="#section-3.4-5.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.4-6.3">
+            <p id="section-3.4-6.3.1">Operator decision (approve, reject, modify, or defer)<a href="#section-3.4-6.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.4-5.4">
-            <p id="section-3.4-5.4.1">Final executed command<a href="#section-3.4-5.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.4-6.4">
+            <p id="section-3.4-6.4.1">Final executed command<a href="#section-3.4-6.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.4-5.5">
-            <p id="section-3.4-5.5.1">Operation type (e.g., configuration update, deletion, or execution)<a href="#section-3.4-5.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.4-6.5">
+            <p id="section-3.4-6.5.1">Operation type (e.g., configuration update, deletion, or execution)<a href="#section-3.4-6.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-3.4-6">The Operator Audit Module also provides explainability support to improve transparency in LLM-assisted decision-making. Each LLM-generated configuration includes a structured rationale indicating the key factors that influenced the decision. For example, if the system recommends increasing bandwidth allocation, the decision log indicates whether this was driven by high latency observed in telemetry, an SLA threshold breach, or another contributing factor.<a href="#section-3.4-6" class="pilcrow">¶</a></p>
-<p id="section-3.4-7">The audit process additionally supports counterfactual reasoning, enabling operators to assess the projected outcome if no action is taken. For example, the system may indicate that without intervention, packet loss is expected to increase by a specified percentage within a defined time window. This provides operators with a comparative basis for evaluating proposed actions.<a href="#section-3.4-7" class="pilcrow">¶</a></p>
-<p id="section-3.4-8">If an LLM agent decision is based on incomplete or uncertain data, the system flags it accordingly. For example, if real-time telemetry data is insufficient, the confidence score is lowered and the condition is noted in the audit record, allowing operators to exercise appropriate judgment.<a href="#section-3.4-8" class="pilcrow">¶</a></p>
+<p id="section-3.4-7">The Operator Audit Module also provides explainability support to improve transparency in LLM-assisted decision-making. Each LLM-generated configuration includes a structured rationale indicating the key factors that influenced the decision. For example, if the system recommends increasing bandwidth allocation, the decision log indicates whether this was driven by high latency observed in telemetry, an SLA threshold breach, or another contributing factor.<a href="#section-3.4-7" class="pilcrow">¶</a></p>
+<p id="section-3.4-8">The audit process additionally supports counterfactual reasoning, enabling operators to assess the projected outcome if no action is taken. For example, the system may indicate that without intervention, packet loss is expected to increase by a specified percentage within a defined time window. This provides operators with a comparative basis for evaluating proposed actions.<a href="#section-3.4-8" class="pilcrow">¶</a></p>
+<p id="section-3.4-9">If an LLM agent decision is based on incomplete or uncertain data, the system flags it accordingly. For example, if real-time telemetry data is insufficient, the confidence score is lowered and the condition is noted in the audit record, allowing operators to exercise appropriate judgment.<a href="#section-3.4-9" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="research-challenges-and-considerations">
+<section id="section-4">
+      <h2 id="name-research-challenges-and-con">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-research-challenges-and-con" class="section-name selfRef">Research Challenges and Considerations</a>
+      </h2>
+<p id="section-4-1">This section summarizes research challenges raised by the reference framework. The intent is to identify issues for further NMRG discussion rather than to prescribe a single implementation.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<div id="semantic-context-and-provenance">
+<section id="section-4.1">
+        <h3 id="name-semantic-context-and-proven">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-semantic-context-and-proven" class="section-name selfRef">Semantic Context and Provenance</a>
+        </h3>
+<p id="section-4.1-1">LLM-assisted systems need context that is both machine-processable and meaningful to operators. Telemetry values, topology information, configuration state, and retrieved documents need scope, timestamp, source, collection method, and provenance metadata. Without such metadata, an LLM agent may produce overconfident recommendations from stale, incomplete, or out-of-scope information.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="uncertainty-and-risk-representation">
+<section id="section-4.2">
+        <h3 id="name-uncertainty-and-risk-repres">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-uncertainty-and-risk-repres" class="section-name selfRef">Uncertainty and Risk Representation</a>
+        </h3>
+<p id="section-4.2-1">Confidence scores alone are insufficient for network-management decisions. A recommendation with high model confidence may still be operationally risky if it affects a large service scope, changes security policy, relies on approximate data, or has not been validated against local policy. Research is needed on how to combine model uncertainty, input-data uncertainty, validation status, and operational impact into a representation that operators can use.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="human-review-workflow">
+<section id="section-4.3">
+        <h3 id="name-human-review-workflow">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-human-review-workflow" class="section-name selfRef">Human Review Workflow</a>
+        </h3>
+<p id="section-4.3-1">Human review needs to be designed so that operators can make informed decisions under time pressure. Operator-facing information should expose the recommendation, supporting evidence, assumptions, validation result, risk level, and possible impact without overwhelming the operator with raw model output. Open questions include when to require secondary approval, how to avoid automation bias, and how to support operator requests for more evidence.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="accountability-and-auditability">
+<section id="section-4.4">
+        <h3 id="name-accountability-and-auditabi">
+<a href="#section-4.4" class="section-number selfRef">4.4. </a><a href="#name-accountability-and-auditabi" class="section-name selfRef">Accountability and Auditability</a>
+        </h3>
+<p id="section-4.4-1">LLM-assisted decisions need audit records that connect input evidence, model output, tool results, validation outcomes, operator decisions, and final actions. Such records are needed for incident analysis, rollback, compliance, and research reproducibility, while still protecting sensitive operational data and credentials.<a href="#section-4.4-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="use-cases">
-<section id="section-4">
+<section id="section-5">
       <h2 id="name-use-cases">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-use-cases" class="section-name selfRef">Use Cases</a>
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-use-cases" class="section-name selfRef">Use Cases</a>
       </h2>
 <div id="ddos-intelligent-defense">
-<section id="section-4.1">
+<section id="section-5.1">
         <h3 id="name-ddos-intelligent-defense">
-<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-ddos-intelligent-defense" class="section-name selfRef">DDoS Intelligent Defense</a>
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-ddos-intelligent-defense" class="section-name selfRef">DDoS Intelligent Defense</a>
         </h3>
-<p id="section-4.1-1">Distributed Denial of Service (DDoS) attacks represent a persistent operational threat. Conventional mitigation systems based on rate-limiting and signature matching may not adapt rapidly enough to generate fine-grained filtering rules in response to multi-dimensional telemetry patterns.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
-<p id="section-4.1-2">This use case illustrates how the LLM agent-assisted framework supports filtering recommendation generation with human oversight.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-4.1-3">
-<li id="section-4.1-3.1">
-            <p id="section-4.1-3.1.1"><strong>Telemetry Collection and Semantic Enrichment</strong>
-The Enhanced Telemetry Module retrieves real-time traffic statistics and interface metrics from network devices via NETCONF. The raw telemetry is semantically enriched by referencing YANG models and device-specific documentation to produce a context-annotated dataset suitable for LLM processing.<a href="#section-4.1-3.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li id="section-4.1-3.2">
-            <p id="section-4.1-3.2.1"><strong>DDoS Filtering Task Instantiation</strong>
-The operator initiates a <code>ddos-mitigation</code> task. The Task Agent Module selects a security-oriented prompt and relevant contextual sources. Example input observations include high packet rate on an ingress interface, a large fraction of TCP SYN packets, and a small set of dominant source prefixes.<a href="#section-4.1-3.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li id="section-4.1-3.3">
-            <p id="section-4.1-3.3.1"><strong>Recommendation and Validation</strong>
-The LLM-assisted agent generates a filtering recommendation and a rationale indicating which telemetry observations and retrieved documents were used. The recommendation is passed to the Config Verification Module for syntax validation and to the Access Control Module for permission enforcement. If validation fails, structured feedback is returned to the task agent.<a href="#section-4.1-3.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li id="section-4.1-3.4">
-            <p id="section-4.1-3.4.1"><strong>Operator Audit and Decision</strong>
-The Operator Audit Module presents the task identifier, confidence score, input summary, retrieved document identifiers, validation results, and recommended action. The operator verifies the recommendation against threat intelligence, policy, and potential collateral impact before approving, modifying, rejecting, or deferring the action. The final decision and any executed command are recorded in the audit log.<a href="#section-4.1-3.4.1" class="pilcrow">¶</a></p>
-</li>
-        </ol>
+<p id="section-5.1-1">Distributed Denial of Service (DDoS) attacks represent a persistent operational threat. Conventional mitigation systems based on rate-limiting and signature matching may not adapt rapidly enough to generate fine-grained filtering rules in response to multi-dimensional telemetry patterns.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-2">This use case illustrates how the LLM agent-assisted framework supports filtering recommendation generation with human oversight. The Enhanced Telemetry Module retrieves traffic statistics and interface metrics from network devices, enriches the raw telemetry with YANG model and device-specific context, and provides a context-annotated dataset to the LLM Agent Decision Module.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
+<p id="section-5.1-3">The operator initiates a <code>ddos-mitigation</code> task. The LLM-assisted agent generates a filtering recommendation and a rationale indicating which telemetry observations and retrieved documents were used. The recommendation is passed through syntax validation and access-control enforcement before being shown to the operator.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
+<p id="section-5.1-4">The Operator Audit Module presents the task identifier, confidence score, input summary, retrieved document identifiers, validation results, and recommended action. Human review is needed because the operator may need to judge collateral impact, customer exceptions, threat-intelligence context, and escalation policy. The final decision and any executed command are recorded in the audit log.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="traffic-scheduling-and-optimization">
-<section id="section-4.2">
+<section id="section-5.2">
         <h3 id="name-traffic-scheduling-and-opti">
-<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-traffic-scheduling-and-opti" class="section-name selfRef">Traffic Scheduling and Optimization</a>
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-traffic-scheduling-and-opti" class="section-name selfRef">Traffic Scheduling and Optimization</a>
         </h3>
-<p id="section-4.2-1">In large-scale networks, dynamic traffic scheduling is required to respond to fluctuating load, maintain QoS, and satisfy SLA requirements. Static or rule-based methods may not provide sufficient responsiveness or cross-domain visibility.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
-<p id="section-4.2-2">This use case illustrates how the framework supports LLM agent-assisted traffic scheduling with operator control.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-4.2-3">
-<li id="section-4.2-3.1">
-            <p id="section-4.2-3.1.1"><strong>Telemetry Data Acquisition</strong>
-The Enhanced Telemetry Module collects link utilization, queue occupancy, and delay metrics from multiple routers. The semantic enrichment process annotates each metric with human-readable labels from the YANG model, including path topology information and policy classifications (e.g., gold, silver, bronze service classes).<a href="#section-4.2-3.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li id="section-4.2-3.2">
-            <p id="section-4.2-3.2.1"><strong>Optimization Task Execution</strong>
-An operator initiates a traffic scheduling task. The Task Agent Module selects a foundation model fine-tuned on traffic engineering datasets and uses a structured prompt to describe the current constraints: high utilization on core links L1 through L3 and SLA violations for gold-class VoIP traffic.<a href="#section-4.2-3.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li id="section-4.2-3.3">
-            <p id="section-4.2-3.3.1"><strong>LLM-Generated Recommendation</strong>
-The LLM-assisted agent proposes a traffic engineering adjustment, such as rerouting selected traffic classes through underutilized paths or adjusting policy parameters. The recommendation is accompanied by a rationale, expected impact, confidence score, and any assumptions about topology and SLA constraints. The configuration candidate is validated for syntax and checked against access-control policy before operator review.<a href="#section-4.2-3.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li id="section-4.2-3.4">
-            <p id="section-4.2-3.4.1"><strong>Operator Audit and Decision</strong>
-The Operator Audit Module presents:<a href="#section-4.2-3.4.1" class="pilcrow">¶</a></p>
-</li>
-        </ol>
-<ul class="normal">
-<li class="normal" id="section-4.2-4.1">
-            <p id="section-4.2-4.1.1"><strong>Confidence Score</strong>: 91/100<a href="#section-4.2-4.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-4.2-4.2">
-            <p id="section-4.2-4.2.1"><strong>Audit Metadata</strong>:<a href="#section-4.2-4.2.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-4.2-4.2.2.1">
-                <p id="section-4.2-4.2.2.1.1">Task Agent: <code>traffic-opt-te-v2</code><a href="#section-4.2-4.2.2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-4.2-4.2.2.2">
-                <p id="section-4.2-4.2.2.2.1">Input Context: “Link L1 (95% utilization), gold-voip SLA latency breach”<a href="#section-4.2-4.2.2.2.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-4.2-4.2.2.3">
-                <p id="section-4.2-4.2.2.3.1">Recommendation: “Increase TE path metric to reroute VoIP via L2 backup path”<a href="#section-4.2-4.2.2.3.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
-</li>
-        </ul>
-<p id="section-4.2-5">The operator reviews:<a href="#section-4.2-5" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-4.2-6.1">
-            <p id="section-4.2-6.1.1"><strong>Result Verification</strong>: Simulates expected path shift via NMS.<a href="#section-4.2-6.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-4.2-6.2">
-            <p id="section-4.2-6.2.1"><strong>Compliance Check</strong>: Confirms SLA routing rules permit TE adjustment.<a href="#section-4.2-6.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-4.2-6.3">
-            <p id="section-4.2-6.3.1"><strong>Security Review</strong>: Confirms backup link L2 is secure and isolated.<a href="#section-4.2-6.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-4.2-6.4">
-            <p id="section-4.2-6.4.1"><strong>Final Action</strong>: <em>Approved with modification</em>: “Set bandwidth cap to 400m on backup to avoid overuse.”<a href="#section-4.2-6.4.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<p id="section-4.2-7">The revised configuration is stored and forwarded to the network management system for application.<a href="#section-4.2-7" class="pilcrow">¶</a></p>
+<p id="section-5.2-1">In large-scale networks, dynamic traffic scheduling is required to respond to fluctuating load, maintain QoS, and satisfy SLA requirements. Static or rule-based methods may not provide sufficient responsiveness or cross-domain visibility.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-2">This use case illustrates how the framework supports LLM agent-assisted traffic scheduling with operator control.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.2-3">The Enhanced Telemetry Module collects link utilization, queue occupancy, and delay metrics from multiple routers. The semantic enrichment process annotates each metric with human-readable labels from the YANG model, including path topology information and policy classifications. An operator then initiates a traffic scheduling task with constraints such as high utilization on core links and SLA violations for gold-class VoIP traffic.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.2-4">The LLM-assisted agent proposes a traffic-engineering adjustment, such as rerouting selected traffic classes through underutilized paths or adjusting policy parameters. The recommendation is accompanied by a rationale, expected impact, confidence score, and assumptions about topology and SLA constraints. The configuration candidate is validated for syntax and checked against access-control policy before operator review.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
+<p id="section-5.2-5">The operator reviews the recommendation, validation result, expected path shift, policy constraints, and possible impact on other traffic classes. The operator may approve, modify, reject, or defer the recommendation. For example, the operator may approve the proposed reroute but add a bandwidth cap on the backup path to avoid overuse. The revised configuration and final operator decision are stored in the audit log and forwarded to the network management system for application.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="Security">
-<section id="section-5">
+<section id="section-6">
       <h2 id="name-security-considerations">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-5-1">This section summarizes the main security issues introduced by LLM-assisted network management. The analysis assumes that LLM-assisted agents can access telemetry, retrieve contextual knowledge, invoke external tools, and generate recommendations or candidate configuration changes subject to human oversight.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<div id="security-sensitive-assets">
-<section id="section-5.1">
-        <h3 id="name-security-sensitive-assets">
-<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-security-sensitive-assets" class="section-name selfRef">Security-Sensitive Assets</a>
-        </h3>
-<p id="section-5.1-1">The following assets are considered security-sensitive:<a href="#section-5.1-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-5.1-2.1">
-            <p id="section-5.1-2.1.1">Network configuration state and device control plane integrity<a href="#section-5.1-2.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.1-2.2">
-            <p id="section-5.1-2.2.1">Telemetry data and operational metadata<a href="#section-5.1-2.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.1-2.3">
-            <p id="section-5.1-2.3.1">External knowledge bases used for retrieval<a href="#section-5.1-2.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.1-2.4">
-            <p id="section-5.1-2.4.1">LLM prompts, system instructions, and fine-tuned weights<a href="#section-5.1-2.4.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.1-2.5">
-            <p id="section-5.1-2.5.1">Agent identity, credentials, and access tokens<a href="#section-5.1-2.5.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.1-2.6">
-            <p id="section-5.1-2.6.1">Human audit records and decision logs<a href="#section-5.1-2.6.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<p id="section-5.1-3">Compromise of any of these assets may lead to service disruption, policy violations, data leakage, or unauthorized configuration changes.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="trust-boundaries">
-<section id="section-5.2">
-        <h3 id="name-trust-boundaries">
-<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-trust-boundaries" class="section-name selfRef">Trust Boundaries</a>
-        </h3>
-<p id="section-5.2-1">The framework introduces new trust boundaries:<a href="#section-5.2-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-5.2-2.1">
-            <p id="section-5.2-2.1.1">Between the LLM agent and the underlying network management system<a href="#section-5.2-2.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.2-2.2">
-            <p id="section-5.2-2.2.1">Between the LLM agent and external toolchains<a href="#section-5.2-2.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.2-2.3">
-            <p id="section-5.2-2.3.1">Between cooperating task agents<a href="#section-5.2-2.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.2-2.4">
-            <p id="section-5.2-2.4.1">Between the retrieval database and the LLM context<a href="#section-5.2-2.4.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.2-2.5">
-            <p id="section-5.2-2.5.1">Between human operators and automated decision modules<a href="#section-5.2-2.5.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<p id="section-5.2-3">Each boundary represents a potential attack surface and needs explicit protection.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="prompt-injection-attacks">
-<section id="section-5.3">
-        <h3 id="name-prompt-injection-attacks">
-<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-prompt-injection-attacks" class="section-name selfRef">Prompt Injection Attacks</a>
-        </h3>
-<p id="section-5.3-1">Prompt injection refers to adversarial manipulation of the LLM input context in order to override system instructions, escalate privileges, or induce unintended actions. In the network management context, prompt injection may originate from:<a href="#section-5.3-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-5.3-2.1">
-            <p id="section-5.3-2.1.1">Malicious telemetry fields (e.g., crafted device hostname or description)<a href="#section-5.3-2.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.3-2.2">
-            <p id="section-5.3-2.2.1">Compromised external documentation included in RAG retrieval<a href="#section-5.3-2.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.3-2.3">
-            <p id="section-5.3-2.3.1">Cross-agent message contamination<a href="#section-5.3-2.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.3-2.4">
-            <p id="section-5.3-2.4.1">Operator-supplied free-form instructions<a href="#section-5.3-2.4.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<p id="section-5.3-3">Mitigations include context separation, structured role tagging, input sanitization, prompt hardening, and deterministic validation of all generated configurations before execution. Telemetry-derived text and retrieved documents need to be treated as untrusted input.<a href="#section-5.3-3" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="rag-knowledge-poisoning">
-<section id="section-5.4">
-        <h3 id="name-rag-knowledge-poisoning">
-<a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-rag-knowledge-poisoning" class="section-name selfRef">RAG Knowledge Poisoning</a>
-        </h3>
-<p id="section-5.4-1">The Retrieve-Augmented Generation (RAG) module introduces risk if the retrieval corpus contains malicious or outdated content.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
-<p id="section-5.4-2">Attack vectors include:<a href="#section-5.4-2" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-5.4-3.1">
-            <p id="section-5.4-3.1.1">Poisoned internal documentation<a href="#section-5.4-3.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.4-3.2">
-            <p id="section-5.4-3.2.1">Compromised vector databases<a href="#section-5.4-3.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.4-3.3">
-            <p id="section-5.4-3.3.1">Unauthorized modification of vendor manuals<a href="#section-5.4-3.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.4-3.4">
-            <p id="section-5.4-3.4.1">Injection of fabricated configuration templates<a href="#section-5.4-3.4.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<p id="section-5.4-4">Mitigations include integrity verification of retrieval documents, versioning and timestamping of knowledge sources, restricted write access to retrieval databases, and logging of retrieved document identifiers for audit replayability.<a href="#section-5.4-4" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="agent-identity-spoofing">
-<section id="section-5.5">
-        <h3 id="name-agent-identity-spoofing">
-<a href="#section-5.5" class="section-number selfRef">5.5. </a><a href="#name-agent-identity-spoofing" class="section-name selfRef">Agent Identity Spoofing</a>
-        </h3>
-<p id="section-5.5-1">Each task agent is represented as a logical user within the access control framework. An attacker may attempt to impersonate an agent to perform unauthorized operations.<a href="#section-5.5-1" class="pilcrow">¶</a></p>
-<p id="section-5.5-2">Possible attack vectors include:<a href="#section-5.5-2" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-5.5-3.1">
-            <p id="section-5.5-3.1.1">Credential theft<a href="#section-5.5-3.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.5-3.2">
-            <p id="section-5.5-3.2.1">Session hijacking<a href="#section-5.5-3.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.5-3.3">
-            <p id="section-5.5-3.3.1">Token misuse<a href="#section-5.5-3.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.5-3.4">
-            <p id="section-5.5-3.4.1">Forged inter-agent messages<a href="#section-5.5-3.4.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<p id="section-5.5-4">Mitigations include unique cryptographic identity for each task agent, binding of agent identity to NACM-based permissions, mutual authentication for tool access, signing or integrity protection for inter-agent messages, session-token rotation, and auditable logging of agent lifecycle operations.<a href="#section-5.5-4" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="toolchain-abuse">
-<section id="section-5.6">
-        <h3 id="name-toolchain-abuse">
-<a href="#section-5.6" class="section-number selfRef">5.6. </a><a href="#name-toolchain-abuse" class="section-name selfRef">Toolchain Abuse</a>
-        </h3>
-<p id="section-5.6-1">Task agents may invoke external tools such as validators, simulators, scripts, or optimization solvers. Compromise of the toolchain may result in arbitrary code execution or falsified outputs.<a href="#section-5.6-1" class="pilcrow">¶</a></p>
-<p id="section-5.6-2">Example threats include:<a href="#section-5.6-2" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-5.6-3.1">
-            <p id="section-5.6-3.1.1">Malicious tool manifest modification<a href="#section-5.6-3.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.6-3.2">
-            <p id="section-5.6-3.2.1">Tool output tampering<a href="#section-5.6-3.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.6-3.3">
-            <p id="section-5.6-3.3.1">Execution of unintended shell commands<a href="#section-5.6-3.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.6-3.4">
-            <p id="section-5.6-3.4.1">Time-of-check/time-of-use inconsistencies<a href="#section-5.6-3.4.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<p id="section-5.6-4">Mitigations include schema validation of tool inputs and outputs, sandboxed tool execution, integrity checks for tool manifests, and human confirmation for high-risk tool invocations.<a href="#section-5.6-4" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="llm-control-plane-availability">
-<section id="section-5.7">
-        <h3 id="name-llm-control-plane-availabil">
-<a href="#section-5.7" class="section-number selfRef">5.7. </a><a href="#name-llm-control-plane-availabil" class="section-name selfRef">LLM Control Plane Availability</a>
-        </h3>
-<p id="section-5.7-1">The LLM-assisted decision layer can itself become a denial-of-service target. Excessive task instantiation requests, high-frequency telemetry triggers, or malicious multi-agent loops may cause resource exhaustion and delayed incident response.<a href="#section-5.7-1" class="pilcrow">¶</a></p>
-<p id="section-5.7-2">Mitigations include rate limiting, admission control, quotas, maximum reasoning-depth or token limits, and circuit breakers in the Task Agent Management Module.<a href="#section-5.7-2" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="hallucination-induced-operational-risk">
-<section id="section-5.8">
-        <h3 id="name-hallucination-induced-opera">
-<a href="#section-5.8" class="section-number selfRef">5.8. </a><a href="#name-hallucination-induced-opera" class="section-name selfRef">Hallucination-Induced Operational Risk</a>
-        </h3>
-<p id="section-5.8-1">LLMs may generate syntactically correct but semantically invalid configurations, such as referencing non-existent interfaces, misinterpreting vendor-specific syntax, or using incorrect parameter units. Mitigations include YANG schema validation, deterministic configuration simulation, confidence-based escalation thresholds, explicit reasoning logs, and operator review.<a href="#section-5.8-1" class="pilcrow">¶</a></p>
-<p id="section-5.8-2">Human approval MUST remain the final authority for high-impact changes.<a href="#section-5.8-2" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="risk-classification-model">
-<section id="section-5.9">
-        <h3 id="name-risk-classification-model">
-<a href="#section-5.9" class="section-number selfRef">5.9. </a><a href="#name-risk-classification-model" class="section-name selfRef">Risk Classification Model</a>
-        </h3>
-<p id="section-5.9-1">To support structured oversight, each generated configuration SHOULD be assigned a risk level derived from factors such as scope of impact, operation type, policy sensitivity, confidence score, and historical rollback frequency.<a href="#section-5.9-1" class="pilcrow">¶</a></p>
-<p id="section-5.9-2">A three-tier model MAY be used:<a href="#section-5.9-2" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-5.9-3.1">
-            <p id="section-5.9-3.1.1">Low Risk: automatic approval permitted under policy.<a href="#section-5.9-3.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.9-3.2">
-            <p id="section-5.9-3.2.1">Medium Risk: operator review required.<a href="#section-5.9-3.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.9-3.3">
-            <p id="section-5.9-3.3.1">High Risk: mandatory human approval with secondary verification.<a href="#section-5.9-3.3.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<p id="section-5.9-4">Risk classification MUST be included in the audit record.<a href="#section-5.9-4" class="pilcrow">¶</a></p>
-<p id="section-5.9-5">The integration of LLM agents into network management introduces novel attack surfaces beyond traditional control-plane security. Secure deployment requires strict trust-boundary enforcement, deterministic validation layers, cryptographically bound agent identities, structured human oversight, and risk-aware escalation policies.<a href="#section-5.9-5" class="pilcrow">¶</a></p>
-</section>
-</div>
+<p id="section-6-1">This section summarizes the main security issues introduced by LLM-assisted network management. The analysis assumes that LLM-assisted agents can access telemetry, retrieve contextual knowledge, invoke external tools, and generate recommendations or candidate configuration changes subject to human oversight.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">Security-sensitive assets include network configuration state, telemetry data, external knowledge bases, prompts and system instructions, fine-tuned weights, agent credentials, and human audit records. Compromise of these assets may lead to service disruption, policy violations, data leakage, or unauthorized configuration changes.<a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-3">The framework introduces trust boundaries between the LLM agent and the network management system, between the agent and external toolchains, between cooperating task agents, between retrieval databases and the LLM context, and between automated decision modules and human operators. Each boundary needs explicit protection through authentication, authorization, input validation, integrity protection, and audit logging.<a href="#section-6-3" class="pilcrow">¶</a></p>
+<p id="section-6-4">Prompt injection and RAG knowledge poisoning are important risks. Malicious telemetry fields, compromised documentation, poisoned retrieval databases, or cross-agent messages may influence model output. Mitigations include context separation, structured role tagging, input sanitization, integrity verification of retrieval documents, versioning of knowledge sources, logging of retrieved document identifiers, and deterministic validation of generated configurations.<a href="#section-6-4" class="pilcrow">¶</a></p>
+<p id="section-6-5">Agent identity and tool access also need protection. Each task agent should be bound to a distinct identity and to explicit permissions, for example through NACM-based access control. Tool invocation should use authenticated access, schema validation for tool inputs and outputs, sandboxing where appropriate, and human confirmation for high-risk tool invocations.<a href="#section-6-5" class="pilcrow">¶</a></p>
+<p id="section-6-6">The LLM-assisted decision layer can itself become a denial-of-service target. Excessive task instantiation requests, high-frequency telemetry triggers, or multi-agent loops may cause resource exhaustion or delayed incident response. Mitigations include rate limiting, admission control, quotas, maximum reasoning-depth or token limits, and circuit breakers in the Task Agent Management Module.<a href="#section-6-6" class="pilcrow">¶</a></p>
+<p id="section-6-7">LLMs may generate syntactically correct but semantically invalid configurations, such as referencing non-existent interfaces, misinterpreting vendor-specific syntax, or using incorrect parameter units. Mitigations include YANG schema validation, deterministic configuration simulation, access-control checks, confidence-based escalation thresholds, explicit reasoning logs, and operator review. Human approval MUST remain the final authority for high-impact changes.<a href="#section-6-7" class="pilcrow">¶</a></p>
+<p id="section-6-8">To support structured oversight, each generated configuration SHOULD be assigned a risk level derived from factors such as scope of impact, operation type, policy sensitivity, confidence score, and historical rollback frequency. Risk classification MUST be included in the audit record.<a href="#section-6-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="IANA">
-<section id="section-6">
+<section id="section-7">
       <h2 id="name-iana-considerations">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-6-1">This document includes no request to IANA.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-7-1">This document includes no request to IANA.<a href="#section-7-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
-<section id="section-7">
+<section id="section-8">
       <h2 id="name-references">
-<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-references" class="section-name selfRef">References</a>
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
 <div id="sec-normative-references">
-<section id="section-7.1">
+<section id="section-8.1">
         <h3 id="name-normative-references">
-<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
 <dt id="RFC6241">[RFC6241]</dt>
@@ -1963,9 +1759,9 @@ The Operator Audit Module presents:<a href="#section-4.2-3.4.1" class="pilcrow">
 </section>
 </div>
 <div id="sec-informative-references">
-<section id="section-7.2">
+<section id="section-8.2">
         <h3 id="name-informative-references">
-<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
 <dt id="a2a">[a2a]</dt>
