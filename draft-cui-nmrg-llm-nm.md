@@ -131,7 +131,7 @@ informative:
 --- abstract
 
 
-This document describes a reference framework for collaborative network management between Large Language Model (LLM)-assisted agents and human operators. The framework includes an Enhanced Telemetry Module, an LLM Agent Decision Module, interaction data models for human operator oversight, and workflows that support human-in-the-loop control. The design is intended to be compatible with existing network management systems and protocols while identifying research issues for safe, auditable, and operator-supervised use of LLM-assisted decision support in network operations. The focus of this document is the human-supervised decision loop rather than a complete specification of all LLM agent implementation mechanisms.
+This document describes a reference framework for collaborative network management between Large Language Model (LLM)-assisted agents and human operators. Because network management actions can affect service availability, security posture, customer traffic, and compliance obligations, LLM-generated recommendations need to be validated, reviewed, and audited before they are applied to operational networks. The framework therefore focuses on human-in-the-loop control for safe, auditable, and operator-supervised use of LLM-assisted decision support in network operations. The document is intended to be compatible with existing network management systems and protocols while identifying research issues, rather than specifying a complete implementation of all LLM agent mechanisms.
 
 
 --- middle
