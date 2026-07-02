@@ -5,9 +5,9 @@
 Network Management                                                Y. Cui
 Internet-Draft                                       Tsinghua University
 Intended status: Informational                                   M. Xing
-Expires: 2 January 2027                                         L. Zhang
+Expires: 3 January 2027                                         L. Zhang
                                                  Zhongguancun Laboratory
-                                                             1 July 2026
+                                                             2 July 2026
 
 
 A Framework for LLM Agent-Assisted Network Management with Human-in-the-
@@ -61,7 +61,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 January 2027.
+   This Internet-Draft will expire on 3 January 2027.
 
 Copyright Notice
 
@@ -181,17 +181,16 @@ Table of Contents
    *  What semantic context is needed for LLM-assisted systems to reason
       correctly over network telemetry and configuration state?
 
-   *  How can confidence, uncertainty, and operational risk be
-      represented to support human decision-making?
+   *  How can confidence, uncertainty, validation results, and
+      operational risk be represented so that operators can make
+      informed decisions?
 
-   *  Which validation and access-control mechanisms are needed before
-      LLM-generated recommendations can be considered for deployment?
+   *  How can human review, approval, modification, and rejection be
+      designed as a meaningful control step rather than a procedural
+      confirmation?
 
-   *  How can human review be made meaningful rather than a procedural
-      approval step?
-
-   *  What information must be recorded so that operator decisions and
-      LLM-assisted recommendations can be audited and reproduced?
+   *  What evidence and decision records are needed to make LLM-assisted
+      recommendations and operator actions auditable and reproducible?
 
 2.  Terminology
 
@@ -245,8 +244,10 @@ Table of Contents
    Figure 1: The LLM agent-Assisted Network Management Framework
 
    Figure 1 illustrates the principal components of the LLM agent-
-   assisted network management framework.  A human operator instantiates
-   a specific task agent (e.g., for fault analysis or topology
+   assisted network management framework.  The figure is a functional
+   decomposition used to discuss human-supervised decision support, not
+   a complete product architecture.  A human operator instantiates a
+   specific task agent (e.g., for fault analysis or topology
    optimization) via the Task Agent Management Module by specifying a
    foundation model, a prompt, and optional fine-tuned adapter
    parameters [Hu22].  The Enhanced Telemetry Module enriches raw
@@ -288,51 +289,32 @@ Table of Contents
 
    A pre-trained LLM may lack knowledge of operator-specific
    configurations, vendor-specific syntax, or domain-specific
-   operational procedures.  To address this limitation, the Retrieval-
-   Augmented Generation (RAG) approach [Lewis20] is used.  The RAG
-   Module retrieves relevant information from operator-defined sources,
-   such as device documentation and operational knowledge bases, and
-   integrates it with the semantically enriched telemetry obtained from
-   the Enhanced Telemetry Module.  Retrieved textual data is stored in a
-   database, either as raw text or in vectorized form for efficient
-   retrieval.  For a given task context, the module retrieves relevant
-   knowledge from the database and incorporates it into the LLM input
-   context, improving response accuracy and reducing reliance on general
-   pre-training knowledge.
+   operational procedures.  Retrieval-Augmented Generation (RAG)
+   [Lewis20] can retrieve relevant information from operator-defined
+   sources, such as device documentation and operational knowledge
+   bases, and combine it with semantically enriched telemetry.  For
+   human-in-the-loop review, retrieved evidence needs to be traceable.
+   The identifiers, versions, timestamps, and scope of retrieved
+   documents SHOULD be recorded so that the operator and later audit
+   processes can understand which evidence influenced the
+   recommendation.
 
 3.2.2.  Task Agent Module
 
-   A task agent is created to execute a specific network management
+   A task agent is created to support a specific network management
    task, such as traffic analysis, traffic optimization, or fault
-   remediation.  A task agent consists of a selected foundation model,
-   an associated prompt, and optionally, fine-tuned adapter weights.
+   remediation.  A task agent can include a selected foundation model,
+   an associated prompt, and optionally fine-tuned adapter weights.
+   These are deployment choices rather than the primary focus of this
+   document.
 
-   *  Foundation Model Library.  Operators select an appropriate
-      foundation model based on task requirements.  Examples include
-      general-purpose models (e.g., LLaMA, DeepSeek) and domain-specific
-      models fine-tuned on private operational datasets.  Because
-      foundation models are trained on different datasets using
-      different methodologies, their performance characteristics vary
-      across tasks.
-
-   *  Fine-Tuned Weight Library.  For domain-specific applications,
-      fine-tuned adapter weights can be applied on top of a foundation
-      model to specialize it for private datasets.  One established
-      approach is to store fine-tuned weights as a low-rank difference
-      (delta) between the original and adapted model parameters [Hu22],
-      which reduces storage requirements relative to storing complete
-      fine-tuned model copies.  The Fine-Tuned Weight Library supports
-      selection and loading of the appropriate foundation model and
-      adapter weights based on operator configuration.
-
-   *  Prompt Library.  Each task requires a defined task description and
-      specification of input and output formats.  These definitions are
-      stored in a structured prompt library.  When an operator
-      instantiates a task, the corresponding prompt template, including
-      placeholders for contextual data, is retrieved automatically.
-      Operator inputs and device data are then substituted into the
-      designated placeholders, producing a structured and consistent
-      input to the language model.
+   The framework can use libraries for foundation models, prompts, and
+   fine-tuned adapter weights [Hu22].  From the human-in-the-loop
+   perspective, the important requirement is that the selected model,
+   prompt template, adapter version, input context, and output format
+   are recorded as part of the decision context.  This allows operators
+   to understand the source of a recommendation and allows later audit
+   or reproduction of the decision process.
 
 3.2.3.  Task Agent Communication Module
 
@@ -356,82 +338,33 @@ Table of Contents
 
 3.2.4.  Task Agent Management Module
 
-   The Task Agent Management Module is responsible for the creation,
-   update, and deletion of task agents.  This module ensures that each
-   agent is appropriately configured to align with the intended network
-   management objective.
+   The Task Agent Management Module is responsible for controlled
+   creation, update, and deletion of task agents.  In this framework,
+   its main role is to bind a task agent to an operational objective,
+   permission scope, and audit context.
 
-   Agent lifecycle operations are defined as follows:
+   A task agent may be instantiated in response to an operator request,
+   an automated policy trigger, or a higher-level orchestration
+   workflow.  Creation includes parsing the high-level intent, selecting
+   an appropriate task template, initializing network context, assigning
+   credentials or permissions, and creating a session identifier for
+   audit correlation.
 
-   1.  Creation of Task Agents.  A task agent is instantiated in
-       response to an operator request, an automated policy trigger, or
-       a higher-level orchestration workflow.  The creation process
-       includes the following steps:
+   Task agent updates may be needed when network conditions, model
+   versions, prompts, or operator policies change.  Updates SHOULD
+   preserve the audit context and SHOULD record changes that may affect
+   the interpretation of later recommendations.
 
-       *  Intent Parsing: The module parses the high-level intent (e.g.,
-          "remediate BGP flapping on router R5") to identify the
-          required task type, target network scope, and performance
-          constraints.
-
-       *  Agent Template Selection: Based on the parsed intent, the
-          module selects a pre-registered agent template from the Prompt
-          Library.
-
-       *  Resource Allocation: The module allocates necessary compute
-          resources (CPU, GPU, memory) and instantiates the LLM runtime
-          environment.
-
-       *  Context Initialization: The agent is initialized with network
-          context (e.g., device inventory and topology from the Enhanced
-          Telemetry Module), security credentials, and a session
-          identifier and logging context for auditability.
-
-       *  Registration: The newly created agent is registered with its
-          metadata, initial status, and a heartbeat endpoint.
-
-   2.  Update of Task Agents.  Task agents may require updates due to
-       changing network conditions, model improvements, or revised
-       operator policies.  Updates are performed in a non-disruptive
-       manner where possible:
-
-       *  Configuration Update: Operators or automated controllers may
-          modify agent parameters (e.g., optimization thresholds, output
-          format).
-
-       *  Adapter Weight Replacement: When a newer version of fine-tuned
-          adapter weights becomes available, the module can replace the
-          adapter weights while preserving the agent's execution state,
-          provided the base foundation model remains compatible.
-
-       *  State Preservation: During updates, the module snapshots the
-          agent's working state (e.g., conversation history,
-          intermediate plans) and restores it after the update to
-          maintain task continuity.
-
-   3.  Deletion of Task Agents.  Task agents are terminated when their
-       assigned task completes, when an unrecoverable error occurs, or
-       upon an explicit teardown request.  The deletion process ensures
-       proper resource release and audit compliance:
-
-       *  Graceful Shutdown: The module issues a termination signal,
-          allowing the agent to complete pending operations (e.g.,
-          committing configuration changes, finalizing tool calls,
-          completing inter-agent communications).
-
-       *  State Archival: The final agent state, including input
-          context, generated actions, and performance metrics, is
-          serialized and stored in the audit log for traceability and
-          compliance purposes.
-
-       *  Resource Release: Compute resources (GPU memory, threads) are
-          released, and tool sessions are invalidated.
-
-       *  Deregistration: The agent entry is removed, and the lifecycle
-          event is logged.
+   When a task agent completes, fails, or is explicitly terminated, its
+   final state, generated actions, tool results, and relevant
+   performance information SHOULD be archived in the audit log.  This
+   ensures that operator decisions and LLM-assisted recommendations can
+   be traced after the task has ended.
 
    By providing structured, auditable, and policy-governed lifecycle
-   management, the Task Agent Management Module enables scalable and
-   trustworthy deployment of LLM Agent-driven network automation.
+   management, the Task Agent Management Module supports operator-
+   supervised LLM-assisted decision support rather than unconstrained
+   autonomous network control.
 
 3.3.  Config Verification Module
 
@@ -569,32 +502,27 @@ Table of Contents
 
 4.1.  Semantic Context and Provenance
 
-   LLM-assisted systems need context that is both machine-processable
-   and meaningful to operators.  Telemetry values, topology information,
+   Human review depends on context that is both machine-processable and
+   meaningful to operators.  Telemetry values, topology information,
    configuration state, and retrieved documents need scope, timestamp,
-   source, collection method, and provenance metadata.  Without such
-   metadata, an LLM agent may produce overconfident recommendations from
-   stale, incomplete, or out-of-scope information.
+   source, collection method, and provenance metadata so that operators
+   can judge whether the recommendation is based on relevant and current
+   evidence.
 
 4.2.  Uncertainty and Risk Representation
 
    Confidence scores alone are insufficient for network-management
-   decisions.  A recommendation with high model confidence may still be
-   operationally risky if it affects a large service scope, changes
-   security policy, relies on approximate data, or has not been
-   validated against local policy.  Research is needed on how to combine
-   model uncertainty, input-data uncertainty, validation status, and
-   operational impact into a representation that operators can use.
+   decisions.  Research is needed on how to present model uncertainty,
+   input-data uncertainty, validation status, and operational impact as
+   operator-facing risk information.
 
 4.3.  Human Review Workflow
 
    Human review needs to be designed so that operators can make informed
-   decisions under time pressure.  Operator-facing information should
-   expose the recommendation, supporting evidence, assumptions,
-   validation result, risk level, and possible impact without
-   overwhelming the operator with raw model output.  Open questions
-   include when to require secondary approval, how to avoid automation
-   bias, and how to support operator requests for more evidence.
+   decisions under time pressure.  Open questions include what evidence
+   to present, when to require secondary approval, how to avoid
+   automation bias, and how to support operator requests for more
+   evidence.
 
 4.4.  Accountability and Auditability
 
@@ -616,23 +544,16 @@ Table of Contents
 
    This use case illustrates how the LLM agent-assisted framework
    supports filtering recommendation generation with human oversight.
-   The Enhanced Telemetry Module retrieves traffic statistics and
-   interface metrics from network devices, enriches the raw telemetry
-   with YANG model and device-specific context, and provides a context-
-   annotated dataset to the LLM Agent Decision Module.
+   The Enhanced Telemetry Module retrieves and enriches traffic
+   statistics, and the LLM-assisted agent generates a filtering
+   recommendation with a rationale and evidence references.
 
-   The operator initiates a ddos-mitigation task.  The LLM-assisted
-   agent generates a filtering recommendation and a rationale indicating
-   which telemetry observations and retrieved documents were used.  The
-   recommendation is passed through syntax validation and access-control
-   enforcement before being shown to the operator.
-
-   The Operator Audit Module presents the task identifier, confidence
-   score, input summary, retrieved document identifiers, validation
-   results, and recommended action.  Human review is needed because the
-   operator may need to judge collateral impact, customer exceptions,
-   threat-intelligence context, and escalation policy.  The final
-   decision and any executed command are recorded in the audit log.
+   The recommendation is passed through syntax validation and access-
+   control enforcement before being shown to the operator.  Human review
+   is needed because the operator may need to judge collateral impact,
+   customer exceptions, threat-intelligence context, and escalation
+   policy.  The final operator decision and any executed command are
+   recorded in the audit log.
 
 5.2.  Traffic Scheduling and Optimization
 
@@ -642,32 +563,20 @@ Table of Contents
    sufficient responsiveness or cross-domain visibility.
 
    This use case illustrates how the framework supports LLM agent-
-   assisted traffic scheduling with operator control.
-
-   The Enhanced Telemetry Module collects link utilization, queue
-   occupancy, and delay metrics from multiple routers.  The semantic
-   enrichment process annotates each metric with human-readable labels
-   from the YANG model, including path topology information and policy
-   classifications.  An operator then initiates a traffic scheduling
-   task with constraints such as high utilization on core links and SLA
-   violations for gold-class VoIP traffic.
+   assisted traffic scheduling with operator control.  The Enhanced
+   Telemetry Module collects and enriches link utilization, queue
+   occupancy, delay metrics, topology information, and service-class
+   constraints.
 
    The LLM-assisted agent proposes a traffic-engineering adjustment,
    such as rerouting selected traffic classes through underutilized
    paths or adjusting policy parameters.  The recommendation is
-   accompanied by a rationale, expected impact, confidence score, and
-   assumptions about topology and SLA constraints.  The configuration
-   candidate is validated for syntax and checked against access-control
-   policy before operator review.
-
-   The operator reviews the recommendation, validation result, expected
-   path shift, policy constraints, and possible impact on other traffic
-   classes.  The operator may approve, modify, reject, or defer the
-   recommendation.  For example, the operator may approve the proposed
-   reroute but add a bandwidth cap on the backup path to avoid overuse.
-   The revised configuration and final operator decision are stored in
-   the audit log and forwarded to the network management system for
-   application.
+   validated before operator review.  The operator then reviews the
+   recommendation, validation result, expected path shift, policy
+   constraints, and possible impact on other traffic classes before
+   approving, modifying, rejecting, or deferring the action.  The final
+   operator decision and any revised configuration are stored in the
+   audit log.
 
 6.  Security Considerations
 
@@ -692,13 +601,14 @@ Table of Contents
    authentication, authorization, input validation, integrity
    protection, and audit logging.
 
-   Prompt injection and RAG knowledge poisoning are important risks.
+   Prompt injection and RAG knowledge poisoning are important risks
+   because they can influence operator-facing recommendations.
    Malicious telemetry fields, compromised documentation, poisoned
-   retrieval databases, or cross-agent messages may influence model
-   output.  Mitigations include context separation, structured role
-   tagging, input sanitization, integrity verification of retrieval
-   documents, versioning of knowledge sources, logging of retrieved
-   document identifiers, and deterministic validation of generated
+   retrieval databases, or cross-agent messages may affect model output.
+   Mitigations include context separation, structured role tagging,
+   input sanitization, integrity verification of retrieval documents,
+   versioning of knowledge sources, logging of retrieved document
+   identifiers, and deterministic validation of generated
    configurations.
 
    Agent identity and tool access also need protection.  Each task agent
@@ -757,12 +667,6 @@ Table of Contents
    [Hu22]     Hu, E. J., Shen, Y., Wallis, P., Allen-Zhu, Z., Li, Y.,
               Wang, S., Wang, L., and W. Chen, "LoRA Low-Rank Adaptation
               of Large Language Models", n.d..
-
-   [Huang25]  Huang, L., Yu, W., Ma, W., Zhong, W., Feng, Z., Wang, H.,
-              Chen, Q., Peng, W., Feng, X., Qin, B., and T. Liu, "A
-              Survey on Hallucination in Large Language Models
-              Principles, Taxonomy, Challenges, and Open Questions",
-              n.d..
 
    [Lewis20]  Lewis, P., Perez, E., Piktus, A., Petroni, F., Karpukhin,
               V., Goyal, N., Küttler, H., Lewis, M., Yih, W.-t.,

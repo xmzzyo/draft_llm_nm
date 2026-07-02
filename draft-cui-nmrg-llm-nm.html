@@ -1053,7 +1053,7 @@ svg {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Cui, et al.</td>
-<td class="center">Expires 2 January 2027</td>
+<td class="center">Expires 3 January 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1066,12 +1066,12 @@ svg {
 <dd class="internet-draft">draft-cui-nmrg-llm-nm-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-07-01" class="published">1 July 2026</time>
+<time datetime="2026-07-02" class="published">2 July 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2027-01-02">2 January 2027</time></dd>
+<dd class="expires"><time datetime="2027-01-03">3 January 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1129,7 +1129,7 @@ svg {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 2 January 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 3 January 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1336,16 +1336,13 @@ svg {
             <p id="section-1.4-2.1.1">What semantic context is needed for LLM-assisted systems to reason correctly over network telemetry and configuration state?<a href="#section-1.4-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.4-2.2">
-            <p id="section-1.4-2.2.1">How can confidence, uncertainty, and operational risk be represented to support human decision-making?<a href="#section-1.4-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-1.4-2.2.1">How can confidence, uncertainty, validation results, and operational risk be represented so that operators can make informed decisions?<a href="#section-1.4-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.4-2.3">
-            <p id="section-1.4-2.3.1">Which validation and access-control mechanisms are needed before LLM-generated recommendations can be considered for deployment?<a href="#section-1.4-2.3.1" class="pilcrow">¶</a></p>
+            <p id="section-1.4-2.3.1">How can human review, approval, modification, and rejection be designed as a meaningful control step rather than a procedural confirmation?<a href="#section-1.4-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.4-2.4">
-            <p id="section-1.4-2.4.1">How can human review be made meaningful rather than a procedural approval step?<a href="#section-1.4-2.4.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-1.4-2.5">
-            <p id="section-1.4-2.5.1">What information must be recorded so that operator decisions and LLM-assisted recommendations can be audited and reproduced?<a href="#section-1.4-2.5.1" class="pilcrow">¶</a></p>
+            <p id="section-1.4-2.4.1">What evidence and decision records are needed to make LLM-assisted recommendations and operator actions auditable and reproducible?<a href="#section-1.4-2.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -1426,7 +1423,7 @@ svg {
 Figure 1: The LLM agent-Assisted Network Management Framework
 </pre><a href="#section-3-1" class="pilcrow">¶</a>
 </div>
-<p id="section-3-2">Figure 1 illustrates the principal components of the LLM agent-assisted network management framework. A human operator instantiates a specific task agent (e.g., for fault analysis or topology optimization) via the Task Agent Management Module by specifying a foundation model, a prompt, and optional fine-tuned adapter parameters <span>[<a href="#Hu22" class="cite xref">Hu22</a>]</span>. The Enhanced Telemetry Module enriches raw telemetry data obtained from the underlying network management system and supplies it to the LLM Agent Decision Module. After decision-making, the generated configuration is validated for syntactic correctness and checked against access control rules. The Operator Audit Module provides a structured mechanism for human review of generated configurations; upon operator approval, configurations are issued to the network management system for deployment.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-2">Figure 1 illustrates the principal components of the LLM agent-assisted network management framework. The figure is a functional decomposition used to discuss human-supervised decision support, not a complete product architecture. A human operator instantiates a specific task agent (e.g., for fault analysis or topology optimization) via the Task Agent Management Module by specifying a foundation model, a prompt, and optional fine-tuned adapter parameters <span>[<a href="#Hu22" class="cite xref">Hu22</a>]</span>. The Enhanced Telemetry Module enriches raw telemetry data obtained from the underlying network management system and supplies it to the LLM Agent Decision Module. After decision-making, the generated configuration is validated for syntactic correctness and checked against access control rules. The Operator Audit Module provides a structured mechanism for human review of generated configurations; upon operator approval, configurations are issued to the network management system for deployment.<a href="#section-3-2" class="pilcrow">¶</a></p>
 <div id="enhanced-telemetry-module">
 <section id="section-3.1">
         <h3 id="name-enhanced-telemetry-module">
@@ -1448,8 +1445,8 @@ To improve semantic richness, the module processes retrieved data by simplifying
           <h4 id="name-rag-module">
 <a href="#section-3.2.1" class="section-number selfRef">3.2.1. </a><a href="#name-rag-module" class="section-name selfRef">RAG Module</a>
           </h4>
-<p id="section-3.2.1-1">A pre-trained LLM may lack knowledge of operator-specific configurations, vendor-specific syntax, or domain-specific operational procedures. To address this limitation, the Retrieval-Augmented Generation (RAG) approach <span>[<a href="#Lewis20" class="cite xref">Lewis20</a>]</span> is used. The RAG Module retrieves relevant information from operator-defined sources, such as device documentation and operational knowledge bases, and integrates it with the semantically enriched telemetry obtained from the Enhanced Telemetry Module.
-Retrieved textual data is stored in a database, either as raw text or in vectorized form for efficient retrieval. For a given task context, the module retrieves relevant knowledge from the database and incorporates it into the LLM input context, improving response accuracy and reducing reliance on general pre-training knowledge.<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-1">A pre-trained LLM may lack knowledge of operator-specific configurations, vendor-specific syntax, or domain-specific operational procedures. Retrieval-Augmented Generation (RAG) <span>[<a href="#Lewis20" class="cite xref">Lewis20</a>]</span> can retrieve relevant information from operator-defined sources, such as device documentation and operational knowledge bases, and combine it with semantically enriched telemetry.
+For human-in-the-loop review, retrieved evidence needs to be traceable. The identifiers, versions, timestamps, and scope of retrieved documents SHOULD be recorded so that the operator and later audit processes can understand which evidence influenced the recommendation.<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="task-agent-module">
@@ -1457,18 +1454,8 @@ Retrieved textual data is stored in a database, either as raw text or in vectori
           <h4 id="name-task-agent-module">
 <a href="#section-3.2.2" class="section-number selfRef">3.2.2. </a><a href="#name-task-agent-module" class="section-name selfRef">Task Agent Module</a>
           </h4>
-<p id="section-3.2.2-1">A task agent is created to execute a specific network management task, such as traffic analysis, traffic optimization, or fault remediation. A task agent consists of a selected foundation model, an associated prompt, and optionally, fine-tuned adapter weights.<a href="#section-3.2.2-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-3.2.2-2.1">
-              <p id="section-3.2.2-2.1.1">Foundation Model Library. Operators select an appropriate foundation model based on task requirements. Examples include general-purpose models (e.g., LLaMA, DeepSeek) and domain-specific models fine-tuned on private operational datasets. Because foundation models are trained on different datasets using different methodologies, their performance characteristics vary across tasks.<a href="#section-3.2.2-2.1.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-3.2.2-2.2">
-              <p id="section-3.2.2-2.2.1">Fine-Tuned Weight Library. For domain-specific applications, fine-tuned adapter weights can be applied on top of a foundation model to specialize it for private datasets. One established approach is to store fine-tuned weights as a low-rank difference (delta) between the original and adapted model parameters <span>[<a href="#Hu22" class="cite xref">Hu22</a>]</span>, which reduces storage requirements relative to storing complete fine-tuned model copies. The Fine-Tuned Weight Library supports selection and loading of the appropriate foundation model and adapter weights based on operator configuration.<a href="#section-3.2.2-2.2.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-3.2.2-2.3">
-              <p id="section-3.2.2-2.3.1">Prompt Library. Each task requires a defined task description and specification of input and output formats. These definitions are stored in a structured prompt library. When an operator instantiates a task, the corresponding prompt template, including placeholders for contextual data, is retrieved automatically. Operator inputs and device data are then substituted into the designated placeholders, producing a structured and consistent input to the language model.<a href="#section-3.2.2-2.3.1" class="pilcrow">¶</a></p>
-</li>
-          </ul>
+<p id="section-3.2.2-1">A task agent is created to support a specific network management task, such as traffic analysis, traffic optimization, or fault remediation. A task agent can include a selected foundation model, an associated prompt, and optionally fine-tuned adapter weights. These are deployment choices rather than the primary focus of this document.<a href="#section-3.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.2-2">The framework can use libraries for foundation models, prompts, and fine-tuned adapter weights <span>[<a href="#Hu22" class="cite xref">Hu22</a>]</span>. From the human-in-the-loop perspective, the important requirement is that the selected model, prompt template, adapter version, input context, and output format are recorded as part of the decision context. This allows operators to understand the source of a recommendation and allows later audit or reproduction of the decision process.<a href="#section-3.2.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="task-agent-communication-module">
@@ -1486,65 +1473,11 @@ Emerging agent protocols such as the Model Context Protocol (MCP) <span>[<a href
           <h4 id="name-task-agent-management-modul">
 <a href="#section-3.2.4" class="section-number selfRef">3.2.4. </a><a href="#name-task-agent-management-modul" class="section-name selfRef">Task Agent Management Module</a>
           </h4>
-<p id="section-3.2.4-1">The Task Agent Management Module is responsible for the creation, update, and deletion of task agents. This module ensures that each agent is appropriately configured to align with the intended network management objective.<a href="#section-3.2.4-1" class="pilcrow">¶</a></p>
-<p id="section-3.2.4-2">Agent lifecycle operations are defined as follows:<a href="#section-3.2.4-2" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-3.2.4-3">
-<li id="section-3.2.4-3.1">
-              <p id="section-3.2.4-3.1.1">Creation of Task Agents.
-A task agent is instantiated in response to an operator request, an automated policy trigger, or a higher-level orchestration workflow. The creation process includes the following steps:<a href="#section-3.2.4-3.1.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-3.2.4-3.1.2.1">
-                  <p id="section-3.2.4-3.1.2.1.1">Intent Parsing: The module parses the high-level intent (e.g., "remediate BGP flapping on router R5") to identify the required task type, target network scope, and performance constraints.<a href="#section-3.2.4-3.1.2.1.1" class="pilcrow">¶</a></p>
-</li>
-                <li class="normal" id="section-3.2.4-3.1.2.2">
-                  <p id="section-3.2.4-3.1.2.2.1">Agent Template Selection: Based on the parsed intent, the module selects a pre-registered agent template from the Prompt Library.<a href="#section-3.2.4-3.1.2.2.1" class="pilcrow">¶</a></p>
-</li>
-                <li class="normal" id="section-3.2.4-3.1.2.3">
-                  <p id="section-3.2.4-3.1.2.3.1">Resource Allocation: The module allocates necessary compute resources (CPU, GPU, memory) and instantiates the LLM runtime environment.<a href="#section-3.2.4-3.1.2.3.1" class="pilcrow">¶</a></p>
-</li>
-                <li class="normal" id="section-3.2.4-3.1.2.4">
-                  <p id="section-3.2.4-3.1.2.4.1">Context Initialization: The agent is initialized with network context (e.g., device inventory and topology from the Enhanced Telemetry Module), security credentials, and a session identifier and logging context for auditability.<a href="#section-3.2.4-3.1.2.4.1" class="pilcrow">¶</a></p>
-</li>
-                <li class="normal" id="section-3.2.4-3.1.2.5">
-                  <p id="section-3.2.4-3.1.2.5.1">Registration: The newly created agent is registered with its metadata, initial status, and a heartbeat endpoint.<a href="#section-3.2.4-3.1.2.5.1" class="pilcrow">¶</a></p>
-</li>
-              </ul>
-</li>
-            <li id="section-3.2.4-3.2">
-              <p id="section-3.2.4-3.2.1">Update of Task Agents.
-Task agents may require updates due to changing network conditions, model improvements, or revised operator policies. Updates are performed in a non-disruptive manner where possible:<a href="#section-3.2.4-3.2.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-3.2.4-3.2.2.1">
-                  <p id="section-3.2.4-3.2.2.1.1">Configuration Update: Operators or automated controllers may modify agent parameters (e.g., optimization thresholds, output format).<a href="#section-3.2.4-3.2.2.1.1" class="pilcrow">¶</a></p>
-</li>
-                <li class="normal" id="section-3.2.4-3.2.2.2">
-                  <p id="section-3.2.4-3.2.2.2.1">Adapter Weight Replacement: When a newer version of fine-tuned adapter weights becomes available, the module can replace the adapter weights while preserving the agent's execution state, provided the base foundation model remains compatible.<a href="#section-3.2.4-3.2.2.2.1" class="pilcrow">¶</a></p>
-</li>
-                <li class="normal" id="section-3.2.4-3.2.2.3">
-                  <p id="section-3.2.4-3.2.2.3.1">State Preservation: During updates, the module snapshots the agent's working state (e.g., conversation history, intermediate plans) and restores it after the update to maintain task continuity.<a href="#section-3.2.4-3.2.2.3.1" class="pilcrow">¶</a></p>
-</li>
-              </ul>
-</li>
-            <li id="section-3.2.4-3.3">
-              <p id="section-3.2.4-3.3.1">Deletion of Task Agents.
-Task agents are terminated when their assigned task completes, when an unrecoverable error occurs, or upon an explicit teardown request. The deletion process ensures proper resource release and audit compliance:<a href="#section-3.2.4-3.3.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-3.2.4-3.3.2.1">
-                  <p id="section-3.2.4-3.3.2.1.1">Graceful Shutdown: The module issues a termination signal, allowing the agent to complete pending operations (e.g., committing configuration changes, finalizing tool calls, completing inter-agent communications).<a href="#section-3.2.4-3.3.2.1.1" class="pilcrow">¶</a></p>
-</li>
-                <li class="normal" id="section-3.2.4-3.3.2.2">
-                  <p id="section-3.2.4-3.3.2.2.1">State Archival: The final agent state, including input context, generated actions, and performance metrics, is serialized and stored in the audit log for traceability and compliance purposes.<a href="#section-3.2.4-3.3.2.2.1" class="pilcrow">¶</a></p>
-</li>
-                <li class="normal" id="section-3.2.4-3.3.2.3">
-                  <p id="section-3.2.4-3.3.2.3.1">Resource Release: Compute resources (GPU memory, threads) are released, and tool sessions are invalidated.<a href="#section-3.2.4-3.3.2.3.1" class="pilcrow">¶</a></p>
-</li>
-                <li class="normal" id="section-3.2.4-3.3.2.4">
-                  <p id="section-3.2.4-3.3.2.4.1">Deregistration: The agent entry is removed, and the lifecycle event is logged.<a href="#section-3.2.4-3.3.2.4.1" class="pilcrow">¶</a></p>
-</li>
-              </ul>
-</li>
-          </ol>
-<p id="section-3.2.4-4">By providing structured, auditable, and policy-governed lifecycle management, the Task Agent Management Module enables scalable and trustworthy deployment of LLM Agent-driven network automation.<a href="#section-3.2.4-4" class="pilcrow">¶</a></p>
+<p id="section-3.2.4-1">The Task Agent Management Module is responsible for controlled creation, update, and deletion of task agents. In this framework, its main role is to bind a task agent to an operational objective, permission scope, and audit context.<a href="#section-3.2.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.4-2">A task agent may be instantiated in response to an operator request, an automated policy trigger, or a higher-level orchestration workflow. Creation includes parsing the high-level intent, selecting an appropriate task template, initializing network context, assigning credentials or permissions, and creating a session identifier for audit correlation.<a href="#section-3.2.4-2" class="pilcrow">¶</a></p>
+<p id="section-3.2.4-3">Task agent updates may be needed when network conditions, model versions, prompts, or operator policies change. Updates SHOULD preserve the audit context and SHOULD record changes that may affect the interpretation of later recommendations.<a href="#section-3.2.4-3" class="pilcrow">¶</a></p>
+<p id="section-3.2.4-4">When a task agent completes, fails, or is explicitly terminated, its final state, generated actions, tool results, and relevant performance information SHOULD be archived in the audit log. This ensures that operator decisions and LLM-assisted recommendations can be traced after the task has ended.<a href="#section-3.2.4-4" class="pilcrow">¶</a></p>
+<p id="section-3.2.4-5">By providing structured, auditable, and policy-governed lifecycle management, the Task Agent Management Module supports operator-supervised LLM-assisted decision support rather than unconstrained autonomous network control.<a href="#section-3.2.4-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1654,7 +1587,7 @@ Task agents are terminated when their assigned task completes, when an unrecover
         <h3 id="name-semantic-context-and-proven">
 <a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-semantic-context-and-proven" class="section-name selfRef">Semantic Context and Provenance</a>
         </h3>
-<p id="section-4.1-1">LLM-assisted systems need context that is both machine-processable and meaningful to operators. Telemetry values, topology information, configuration state, and retrieved documents need scope, timestamp, source, collection method, and provenance metadata. Without such metadata, an LLM agent may produce overconfident recommendations from stale, incomplete, or out-of-scope information.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-1">Human review depends on context that is both machine-processable and meaningful to operators. Telemetry values, topology information, configuration state, and retrieved documents need scope, timestamp, source, collection method, and provenance metadata so that operators can judge whether the recommendation is based on relevant and current evidence.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="uncertainty-and-risk-representation">
@@ -1662,7 +1595,7 @@ Task agents are terminated when their assigned task completes, when an unrecover
         <h3 id="name-uncertainty-and-risk-repres">
 <a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-uncertainty-and-risk-repres" class="section-name selfRef">Uncertainty and Risk Representation</a>
         </h3>
-<p id="section-4.2-1">Confidence scores alone are insufficient for network-management decisions. A recommendation with high model confidence may still be operationally risky if it affects a large service scope, changes security policy, relies on approximate data, or has not been validated against local policy. Research is needed on how to combine model uncertainty, input-data uncertainty, validation status, and operational impact into a representation that operators can use.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-1">Confidence scores alone are insufficient for network-management decisions. Research is needed on how to present model uncertainty, input-data uncertainty, validation status, and operational impact as operator-facing risk information.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="human-review-workflow">
@@ -1670,7 +1603,7 @@ Task agents are terminated when their assigned task completes, when an unrecover
         <h3 id="name-human-review-workflow">
 <a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-human-review-workflow" class="section-name selfRef">Human Review Workflow</a>
         </h3>
-<p id="section-4.3-1">Human review needs to be designed so that operators can make informed decisions under time pressure. Operator-facing information should expose the recommendation, supporting evidence, assumptions, validation result, risk level, and possible impact without overwhelming the operator with raw model output. Open questions include when to require secondary approval, how to avoid automation bias, and how to support operator requests for more evidence.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.3-1">Human review needs to be designed so that operators can make informed decisions under time pressure. Open questions include what evidence to present, when to require secondary approval, how to avoid automation bias, and how to support operator requests for more evidence.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="accountability-and-auditability">
@@ -1694,9 +1627,8 @@ Task agents are terminated when their assigned task completes, when an unrecover
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-ddos-intelligent-defense" class="section-name selfRef">DDoS Intelligent Defense</a>
         </h3>
 <p id="section-5.1-1">Distributed Denial of Service (DDoS) attacks represent a persistent operational threat. Conventional mitigation systems based on rate-limiting and signature matching may not adapt rapidly enough to generate fine-grained filtering rules in response to multi-dimensional telemetry patterns.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1-2">This use case illustrates how the LLM agent-assisted framework supports filtering recommendation generation with human oversight. The Enhanced Telemetry Module retrieves traffic statistics and interface metrics from network devices, enriches the raw telemetry with YANG model and device-specific context, and provides a context-annotated dataset to the LLM Agent Decision Module.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
-<p id="section-5.1-3">The operator initiates a <code>ddos-mitigation</code> task. The LLM-assisted agent generates a filtering recommendation and a rationale indicating which telemetry observations and retrieved documents were used. The recommendation is passed through syntax validation and access-control enforcement before being shown to the operator.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
-<p id="section-5.1-4">The Operator Audit Module presents the task identifier, confidence score, input summary, retrieved document identifiers, validation results, and recommended action. Human review is needed because the operator may need to judge collateral impact, customer exceptions, threat-intelligence context, and escalation policy. The final decision and any executed command are recorded in the audit log.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
+<p id="section-5.1-2">This use case illustrates how the LLM agent-assisted framework supports filtering recommendation generation with human oversight. The Enhanced Telemetry Module retrieves and enriches traffic statistics, and the LLM-assisted agent generates a filtering recommendation with a rationale and evidence references.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
+<p id="section-5.1-3">The recommendation is passed through syntax validation and access-control enforcement before being shown to the operator. Human review is needed because the operator may need to judge collateral impact, customer exceptions, threat-intelligence context, and escalation policy. The final operator decision and any executed command are recorded in the audit log.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="traffic-scheduling-and-optimization">
@@ -1705,10 +1637,8 @@ Task agents are terminated when their assigned task completes, when an unrecover
 <a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-traffic-scheduling-and-opti" class="section-name selfRef">Traffic Scheduling and Optimization</a>
         </h3>
 <p id="section-5.2-1">In large-scale networks, dynamic traffic scheduling is required to respond to fluctuating load, maintain QoS, and satisfy SLA requirements. Static or rule-based methods may not provide sufficient responsiveness or cross-domain visibility.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.2-2">This use case illustrates how the framework supports LLM agent-assisted traffic scheduling with operator control.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
-<p id="section-5.2-3">The Enhanced Telemetry Module collects link utilization, queue occupancy, and delay metrics from multiple routers. The semantic enrichment process annotates each metric with human-readable labels from the YANG model, including path topology information and policy classifications. An operator then initiates a traffic scheduling task with constraints such as high utilization on core links and SLA violations for gold-class VoIP traffic.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
-<p id="section-5.2-4">The LLM-assisted agent proposes a traffic-engineering adjustment, such as rerouting selected traffic classes through underutilized paths or adjusting policy parameters. The recommendation is accompanied by a rationale, expected impact, confidence score, and assumptions about topology and SLA constraints. The configuration candidate is validated for syntax and checked against access-control policy before operator review.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
-<p id="section-5.2-5">The operator reviews the recommendation, validation result, expected path shift, policy constraints, and possible impact on other traffic classes. The operator may approve, modify, reject, or defer the recommendation. For example, the operator may approve the proposed reroute but add a bandwidth cap on the backup path to avoid overuse. The revised configuration and final operator decision are stored in the audit log and forwarded to the network management system for application.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
+<p id="section-5.2-2">This use case illustrates how the framework supports LLM agent-assisted traffic scheduling with operator control. The Enhanced Telemetry Module collects and enriches link utilization, queue occupancy, delay metrics, topology information, and service-class constraints.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.2-3">The LLM-assisted agent proposes a traffic-engineering adjustment, such as rerouting selected traffic classes through underutilized paths or adjusting policy parameters. The recommendation is validated before operator review. The operator then reviews the recommendation, validation result, expected path shift, policy constraints, and possible impact on other traffic classes before approving, modifying, rejecting, or deferring the action. The final operator decision and any revised configuration are stored in the audit log.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1721,7 +1651,7 @@ Task agents are terminated when their assigned task completes, when an unrecover
 <p id="section-6-1">This section summarizes the main security issues introduced by LLM-assisted network management. The analysis assumes that LLM-assisted agents can access telemetry, retrieve contextual knowledge, invoke external tools, and generate recommendations or candidate configuration changes subject to human oversight.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <p id="section-6-2">Security-sensitive assets include network configuration state, telemetry data, external knowledge bases, prompts and system instructions, fine-tuned weights, agent credentials, and human audit records. Compromise of these assets may lead to service disruption, policy violations, data leakage, or unauthorized configuration changes.<a href="#section-6-2" class="pilcrow">¶</a></p>
 <p id="section-6-3">The framework introduces trust boundaries between the LLM agent and the network management system, between the agent and external toolchains, between cooperating task agents, between retrieval databases and the LLM context, and between automated decision modules and human operators. Each boundary needs explicit protection through authentication, authorization, input validation, integrity protection, and audit logging.<a href="#section-6-3" class="pilcrow">¶</a></p>
-<p id="section-6-4">Prompt injection and RAG knowledge poisoning are important risks. Malicious telemetry fields, compromised documentation, poisoned retrieval databases, or cross-agent messages may influence model output. Mitigations include context separation, structured role tagging, input sanitization, integrity verification of retrieval documents, versioning of knowledge sources, logging of retrieved document identifiers, and deterministic validation of generated configurations.<a href="#section-6-4" class="pilcrow">¶</a></p>
+<p id="section-6-4">Prompt injection and RAG knowledge poisoning are important risks because they can influence operator-facing recommendations. Malicious telemetry fields, compromised documentation, poisoned retrieval databases, or cross-agent messages may affect model output. Mitigations include context separation, structured role tagging, input sanitization, integrity verification of retrieval documents, versioning of knowledge sources, logging of retrieved document identifiers, and deterministic validation of generated configurations.<a href="#section-6-4" class="pilcrow">¶</a></p>
 <p id="section-6-5">Agent identity and tool access also need protection. Each task agent should be bound to a distinct identity and to explicit permissions, for example through NACM-based access control. Tool invocation should use authenticated access, schema validation for tool inputs and outputs, sandboxing where appropriate, and human confirmation for high-risk tool invocations.<a href="#section-6-5" class="pilcrow">¶</a></p>
 <p id="section-6-6">The LLM-assisted decision layer can itself become a denial-of-service target. Excessive task instantiation requests, high-frequency telemetry triggers, or multi-agent loops may cause resource exhaustion or delayed incident response. Mitigations include rate limiting, admission control, quotas, maximum reasoning-depth or token limits, and circuit breakers in the Task Agent Management Module.<a href="#section-6-6" class="pilcrow">¶</a></p>
 <p id="section-6-7">LLMs may generate syntactically correct but semantically invalid configurations, such as referencing non-existent interfaces, misinterpreting vendor-specific syntax, or using incorrect parameter units. Mitigations include YANG schema validation, deterministic configuration simulation, access-control checks, confidence-based escalation thresholds, explicit reasoning logs, and operator review. Human approval MUST remain the final authority for high-impact changes.<a href="#section-6-7" class="pilcrow">¶</a></p>
@@ -1771,10 +1701,6 @@ Task agents are terminated when their assigned task completes, when an unrecover
 <dt id="Hu22">[Hu22]</dt>
         <dd>
 <span class="refAuthor">Hu, E. J.</span>, <span class="refAuthor">Shen, Y.</span>, <span class="refAuthor">Wallis, P.</span>, <span class="refAuthor">Allen-Zhu, Z.</span>, <span class="refAuthor">Li, Y.</span>, <span class="refAuthor">Wang, S.</span>, <span class="refAuthor">Wang, L.</span>, and <span class="refAuthor">W. Chen</span>, <span class="refTitle">"LoRA Low-Rank Adaptation of Large Language Models"</span>, <span>n.d.</span>. </dd>
-<dd class="break"></dd>
-<dt id="Huang25">[Huang25]</dt>
-        <dd>
-<span class="refAuthor">Huang, L.</span>, <span class="refAuthor">Yu, W.</span>, <span class="refAuthor">Ma, W.</span>, <span class="refAuthor">Zhong, W.</span>, <span class="refAuthor">Feng, Z.</span>, <span class="refAuthor">Wang, H.</span>, <span class="refAuthor">Chen, Q.</span>, <span class="refAuthor">Peng, W.</span>, <span class="refAuthor">Feng, X.</span>, <span class="refAuthor">Qin, B.</span>, and <span class="refAuthor">T. Liu</span>, <span class="refTitle">"A Survey on Hallucination in Large Language Models Principles, Taxonomy, Challenges, and Open Questions"</span>, <span>n.d.</span>. </dd>
 <dd class="break"></dd>
 <dt id="Lewis20">[Lewis20]</dt>
         <dd>
