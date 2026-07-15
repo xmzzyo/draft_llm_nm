@@ -201,7 +201,7 @@ This document motivates discussion of the following research questions:
 
     Figure 1: The LLM agent-Assisted Network Management Framework
 
-Figure 1 illustrates the principal components of the LLM agent-assisted network management framework. The figure is a functional decomposition used to discuss human-supervised decision support, not a complete product architecture. A human operator instantiates a specific task agent (e.g., for fault analysis or topology optimization) via the Task Agent Management Module by specifying a foundation model, a prompt, and optional fine-tuned adapter parameters {{Hu22}}. The Enhanced Telemetry Module enriches raw telemetry data obtained from the underlying network management system and supplies it to the LLM Agent Decision Module. After decision-making, the generated configuration is validated for syntactic correctness and checked against access control rules. The Operator Audit Module provides a structured mechanism for human review of generated configurations; upon operator approval, configurations are issued to the network management system for deployment.
+Figure 1 illustrates the principal components of the LLM agent-assisted network management framework. The figure is a functional decomposition used to discuss human-supervised decision support, not a complete product architecture. A human operator instantiates a specific task agent (e.g., for fault analysis or topology optimization) via the Task Agent Management Module by specifying a foundation model, a prompt, and optional fine-tuned adapter parameters {{Hu22}}. The Enhanced Telemetry Module enriches raw telemetry data obtained from the underlying network management system and supplies it to the LLM Agent Decision Module. After decision-making, the generated configuration is validated for syntactic correctness, checked against access control rules, and classified for human review. The Operator Audit Module provides a structured mechanism for human review of generated configurations; upon operator approval, configurations are issued to the network management system for deployment.
 
 
 
@@ -236,6 +236,8 @@ A task agent may interact with external tools (e.g., Python scripts, network ver
 Emerging agent protocols such as the Model Context Protocol (MCP) {{mcp}} and Agent-to-Agent Protocol (A2A) {{a2a}} illustrate possible mechanisms for tool invocation and inter-agent coordination. This document does not require a specific agent protocol. A deployment may use any mechanism that provides authenticated tool access, schema validation for tool inputs and outputs, error propagation, and audit correlation between an LLM-assisted recommendation and the external evidence or tool results used to produce it.
 
 In multi-domain or complex scenarios, multiple task agents may collaborate to achieve a shared network management objective. Such collaboration should preserve task context, partial results, constraints, and confidence information so that handoffs remain auditable and operator review remains meaningful.
+
+Agent-to-agent communication can be peer-to-peer for task coordination, while task creation, identity assignment, permission scope, and termination remain governed by the Task Agent Management Module. In this model, the management module provides lifecycle control and audit correlation; it does not need to be a central controller in every inter-agent message exchange.
 
 
 
@@ -284,6 +286,8 @@ The Operator Audit Module provides a structured mechanism for human review of LL
 
 The purpose of this module is not only to collect an approval action. It is intended to give operators enough context to judge whether the recommendation is consistent with the operational objective, whether the supporting data is complete and fresh, whether the affected network scope is acceptable, and whether additional verification or escalation is needed.
 
+The system SHOULD classify recommendations into operator-review tiers before execution. The classification can consider operation type, affected scope, policy sensitivity, validation results, confidence score, freshness of supporting evidence, and rollback difficulty. For example, read-only analysis may require notification and audit recording; low-risk configuration changes may require single-operator approval; high-impact or low-confidence changes may require secondary approval or deferral to an established operational process. Confidence thresholds are deployment-specific and MUST NOT be the sole basis for escalation.
+
 Each audit instance MUST record the input context (e.g., input data, RAG query content, model selection, relevant configuration files) and the corresponding decision output. The audit steps include the following:
 
 - Result Verification: The operator verifies that the LLM-generated output is consistent with operational objectives and policy requirements.
@@ -297,6 +301,7 @@ Upon completion of the audit, the system records an audit decision entry to ensu
 - Timestamp of the audit action
 - LLM Task Agent ID
 - Operator decision (approve, reject, modify, or defer)
+- Review tier and risk classification
 - Final executed command
 - Operation type (e.g., configuration update, deletion, or execution)
 
@@ -357,9 +362,13 @@ Prompt injection and RAG knowledge poisoning are important risks because they ca
 
 Agent identity and tool access also need protection. Each task agent should be bound to a distinct identity and to explicit permissions, for example through NACM-based access control. Tool invocation should use authenticated access, schema validation for tool inputs and outputs, sandboxing where appropriate, and human confirmation for high-risk tool invocations.
 
+The MCP/A2A tool and inter-agent surface requires an explicit threat model. Threats include tool spoofing, malicious or compromised MCP servers, forged inter-agent messages, replayed tool responses, confused-deputy behavior, and unauthorized agent impersonation. Mitigations include mutual authentication, signed or otherwise integrity-protected messages, least-privilege tool registration, allow-listed tool schemas, freshness checks, replay protection, and audit correlation across tool calls and agent-to-agent messages.
+
 The LLM-assisted decision layer can itself become a denial-of-service target. Excessive task instantiation requests, high-frequency telemetry triggers, or multi-agent loops may cause resource exhaustion or delayed incident response. Mitigations include rate limiting, admission control, quotas, maximum reasoning-depth or token limits, and circuit breakers in the Task Agent Management Module.
 
 LLMs may generate syntactically correct but semantically invalid configurations, such as referencing non-existent interfaces, misinterpreting vendor-specific syntax, or using incorrect parameter units. Mitigations include YANG schema validation, deterministic configuration simulation, access-control checks, confidence-based escalation thresholds, explicit reasoning logs, and operator review. Human approval MUST remain the final authority for high-impact changes.
+
+The confidence score itself is not a trusted security signal. It may be affected by hallucination, prompt injection, incomplete context, poor calibration, or implementation errors in the scoring method. Deployments SHOULD treat confidence as one input to risk classification, validate it against deterministic checks and evidence quality, and record how it was produced.
 
 To support structured oversight, each generated configuration SHOULD be assigned a risk level derived from factors such as scope of impact, operation type, policy sensitivity, confidence score, and historical rollback frequency. Risk classification MUST be included in the audit record.
 
@@ -373,7 +382,7 @@ This document includes no request to IANA.
 # Acknowledgments
 {:numbered="false"}
 
-We thanks Shailesh Prabhu from Nokia for his contributions to this document.
+We thank Shailesh Prabhu from Nokia and Jaime Jiménez for their contributions to this document.
 
 # Appendix
 {:numbered="false"}
@@ -381,7 +390,7 @@ We thanks Shailesh Prabhu from Nokia for his contributions to this document.
 ## Appendix A.1 Data Model
 {:numbered="false"}
 
-This section defines the essential data models for LLM agent-assisted network management, including the LLM agent decision response and human audit records.
+This section defines illustrative data models for LLM agent-assisted network management, including the LLM agent decision response and human audit records. These models are examples for discussion and are not intended for IETF YANG module registration in their current form.
 
 ### LLM Response Data Model
 {:numbered="false"}
@@ -400,7 +409,7 @@ The LLM response YANG model is structured as follows:
 
 ~~~ yang
 module llm-response-module {
-  namespace "urn:ietf:params:xml:ns:yang:ietf-nmrg-llmn4et";
+  namespace "https://example.com/ns/yang/llm-response-module";
   prefix llmresponse;
   container llm-response {
     leaf config {
@@ -441,7 +450,7 @@ The human audit YANG model is structured as follows:
 
 ~~~ yang
 module human-audit-module {
-  namespace "urn:ietf:params:xml:ns:yang:ietf-nmrg-llmn4et";
+  namespace "https://example.com/ns/yang/human-audit-module";
   prefix llmaudit;
   import ietf-yang-types { prefix yang; }
 
@@ -464,6 +473,7 @@ module human-audit-module {
           enum approve;
           enum modify;
           enum reject;
+          enum defer;
           }
         }
       leaf modified-config {
