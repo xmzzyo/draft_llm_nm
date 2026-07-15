@@ -30,7 +30,7 @@
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.33.1
-    wcwidth 0.8.1
+    wcwidth 0.8.2
 -->
 <link href="draft-cui-nmrg-llm-nm.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1053,7 +1053,7 @@ svg {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Cui, et al.</td>
-<td class="center">Expires 3 January 2027</td>
+<td class="center">Expires 16 January 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1066,12 +1066,12 @@ svg {
 <dd class="internet-draft">draft-cui-nmrg-llm-nm-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-07-02" class="published">2 July 2026</time>
+<time datetime="2026-07-15" class="published">15 July 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2027-01-03">3 January 2027</time></dd>
+<dd class="expires"><time datetime="2027-01-16">16 January 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1129,7 +1129,7 @@ svg {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 3 January 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 16 January 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1423,7 +1423,7 @@ svg {
 Figure 1: The LLM agent-Assisted Network Management Framework
 </pre><a href="#section-3-1" class="pilcrow">¶</a>
 </div>
-<p id="section-3-2">Figure 1 illustrates the principal components of the LLM agent-assisted network management framework. The figure is a functional decomposition used to discuss human-supervised decision support, not a complete product architecture. A human operator instantiates a specific task agent (e.g., for fault analysis or topology optimization) via the Task Agent Management Module by specifying a foundation model, a prompt, and optional fine-tuned adapter parameters <span>[<a href="#Hu22" class="cite xref">Hu22</a>]</span>. The Enhanced Telemetry Module enriches raw telemetry data obtained from the underlying network management system and supplies it to the LLM Agent Decision Module. After decision-making, the generated configuration is validated for syntactic correctness and checked against access control rules. The Operator Audit Module provides a structured mechanism for human review of generated configurations; upon operator approval, configurations are issued to the network management system for deployment.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-2">Figure 1 illustrates the principal components of the LLM agent-assisted network management framework. The figure is a functional decomposition used to discuss human-supervised decision support, not a complete product architecture. A human operator instantiates a specific task agent (e.g., for fault analysis or topology optimization) via the Task Agent Management Module by specifying a foundation model, a prompt, and optional fine-tuned adapter parameters <span>[<a href="#Hu22" class="cite xref">Hu22</a>]</span>. The Enhanced Telemetry Module enriches raw telemetry data obtained from the underlying network management system and supplies it to the LLM Agent Decision Module. After decision-making, the generated configuration is validated for syntactic correctness, checked against access control rules, and classified for human review. The Operator Audit Module provides a structured mechanism for human review of generated configurations; upon operator approval, configurations are issued to the network management system for deployment.<a href="#section-3-2" class="pilcrow">¶</a></p>
 <div id="enhanced-telemetry-module">
 <section id="section-3.1">
         <h3 id="name-enhanced-telemetry-module">
@@ -1466,6 +1466,7 @@ For human-in-the-loop review, retrieved evidence needs to be traceable. The iden
 <p id="section-3.2.3-1">A task agent may interact with external tools (e.g., Python scripts, network verification tools such as Batfish, or optimization solvers) to acquire additional information or perform specific operations.
 Emerging agent protocols such as the Model Context Protocol (MCP) <span>[<a href="#mcp" class="cite xref">mcp</a>]</span> and Agent-to-Agent Protocol (A2A) <span>[<a href="#a2a" class="cite xref">a2a</a>]</span> illustrate possible mechanisms for tool invocation and inter-agent coordination. This document does not require a specific agent protocol. A deployment may use any mechanism that provides authenticated tool access, schema validation for tool inputs and outputs, error propagation, and audit correlation between an LLM-assisted recommendation and the external evidence or tool results used to produce it.<a href="#section-3.2.3-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.3-2">In multi-domain or complex scenarios, multiple task agents may collaborate to achieve a shared network management objective. Such collaboration should preserve task context, partial results, constraints, and confidence information so that handoffs remain auditable and operator review remains meaningful.<a href="#section-3.2.3-2" class="pilcrow">¶</a></p>
+<p id="section-3.2.3-3">Agent-to-agent communication can be peer-to-peer for task coordination, while task creation, identity assignment, permission scope, and termination remain governed by the Task Agent Management Module. In this model, the management module provides lifecycle control and audit correlation; it does not need to be a central controller in every inter-agent message exchange.<a href="#section-3.2.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="task-agent-management-module">
@@ -1536,42 +1537,46 @@ Emerging agent protocols such as the Model Context Protocol (MCP) <span>[<a href
         </h3>
 <p id="section-3.4-1">The Operator Audit Module provides a structured mechanism for human review of LLM-generated configurations prior to deployment. The output of the LLM Decision Module includes both the generated configuration and an associated confidence score. The configuration is validated against the YANG model and subject to access control enforcement. The confidence score (e.g., on a scale of 0 to 100) provides operators with a quantitative reference for assessing the reliability of the recommendation.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
 <p id="section-3.4-2">The purpose of this module is not only to collect an approval action. It is intended to give operators enough context to judge whether the recommendation is consistent with the operational objective, whether the supporting data is complete and fresh, whether the affected network scope is acceptable, and whether additional verification or escalation is needed.<a href="#section-3.4-2" class="pilcrow">¶</a></p>
-<p id="section-3.4-3">Each audit instance MUST record the input context (e.g., input data, RAG query content, model selection, relevant configuration files) and the corresponding decision output. The audit steps include the following:<a href="#section-3.4-3" class="pilcrow">¶</a></p>
+<p id="section-3.4-3">The system SHOULD classify recommendations into operator-review tiers before execution. The classification can consider operation type, affected scope, policy sensitivity, validation results, confidence score, freshness of supporting evidence, and rollback difficulty. For example, read-only analysis may require notification and audit recording; low-risk configuration changes may require single-operator approval; high-impact or low-confidence changes may require secondary approval or deferral to an established operational process. Confidence thresholds are deployment-specific and MUST NOT be the sole basis for escalation.<a href="#section-3.4-3" class="pilcrow">¶</a></p>
+<p id="section-3.4-4">Each audit instance MUST record the input context (e.g., input data, RAG query content, model selection, relevant configuration files) and the corresponding decision output. The audit steps include the following:<a href="#section-3.4-4" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.4-4.1">
-            <p id="section-3.4-4.1.1">Result Verification: The operator verifies that the LLM-generated output is consistent with operational objectives and policy requirements.<a href="#section-3.4-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.4-5.1">
+            <p id="section-3.4-5.1.1">Result Verification: The operator verifies that the LLM-generated output is consistent with operational objectives and policy requirements.<a href="#section-3.4-5.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.4-4.2">
-            <p id="section-3.4-4.2.1">Compliance Check: The operator confirms that the output adheres to applicable regulatory standards and operational policies.<a href="#section-3.4-4.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.4-5.2">
+            <p id="section-3.4-5.2.1">Compliance Check: The operator confirms that the output adheres to applicable regulatory standards and operational policies.<a href="#section-3.4-5.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.4-4.3">
-            <p id="section-3.4-4.3.1">Security Verification: The operator checks the output for potential security issues, such as misconfigurations or unintended access changes.<a href="#section-3.4-4.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.4-5.3">
+            <p id="section-3.4-5.3.1">Security Verification: The operator checks the output for potential security issues, such as misconfigurations or unintended access changes.<a href="#section-3.4-5.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.4-4.4">
-            <p id="section-3.4-4.4.1">Correction: If issues are identified, the operator documents the findings and applies corrective modifications.<a href="#section-3.4-4.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.4-5.4">
+            <p id="section-3.4-5.4.1">Correction: If issues are identified, the operator documents the findings and applies corrective modifications.<a href="#section-3.4-5.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-3.4-5">Upon completion of the audit, the system records an audit decision entry to ensure traceability of operator actions. The audit record includes:<a href="#section-3.4-5" class="pilcrow">¶</a></p>
+<p id="section-3.4-6">Upon completion of the audit, the system records an audit decision entry to ensure traceability of operator actions. The audit record includes:<a href="#section-3.4-6" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.4-6.1">
-            <p id="section-3.4-6.1.1">Timestamp of the audit action<a href="#section-3.4-6.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.4-7.1">
+            <p id="section-3.4-7.1.1">Timestamp of the audit action<a href="#section-3.4-7.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.4-6.2">
-            <p id="section-3.4-6.2.1">LLM Task Agent ID<a href="#section-3.4-6.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.4-7.2">
+            <p id="section-3.4-7.2.1">LLM Task Agent ID<a href="#section-3.4-7.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.4-6.3">
-            <p id="section-3.4-6.3.1">Operator decision (approve, reject, modify, or defer)<a href="#section-3.4-6.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.4-7.3">
+            <p id="section-3.4-7.3.1">Operator decision (approve, reject, modify, or defer)<a href="#section-3.4-7.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.4-6.4">
-            <p id="section-3.4-6.4.1">Final executed command<a href="#section-3.4-6.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.4-7.4">
+            <p id="section-3.4-7.4.1">Review tier and risk classification<a href="#section-3.4-7.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.4-6.5">
-            <p id="section-3.4-6.5.1">Operation type (e.g., configuration update, deletion, or execution)<a href="#section-3.4-6.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.4-7.5">
+            <p id="section-3.4-7.5.1">Final executed command<a href="#section-3.4-7.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.4-7.6">
+            <p id="section-3.4-7.6.1">Operation type (e.g., configuration update, deletion, or execution)<a href="#section-3.4-7.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-3.4-7">The Operator Audit Module also provides explainability support to improve transparency in LLM-assisted decision-making. Each LLM-generated configuration includes a structured rationale indicating the key factors that influenced the decision. For example, if the system recommends increasing bandwidth allocation, the decision log indicates whether this was driven by high latency observed in telemetry, an SLA threshold breach, or another contributing factor.<a href="#section-3.4-7" class="pilcrow">¶</a></p>
-<p id="section-3.4-8">The audit process additionally supports counterfactual reasoning, enabling operators to assess the projected outcome if no action is taken. For example, the system may indicate that without intervention, packet loss is expected to increase by a specified percentage within a defined time window. This provides operators with a comparative basis for evaluating proposed actions.<a href="#section-3.4-8" class="pilcrow">¶</a></p>
-<p id="section-3.4-9">If an LLM agent decision is based on incomplete or uncertain data, the system flags it accordingly. For example, if real-time telemetry data is insufficient, the confidence score is lowered and the condition is noted in the audit record, allowing operators to exercise appropriate judgment.<a href="#section-3.4-9" class="pilcrow">¶</a></p>
+<p id="section-3.4-8">The Operator Audit Module also provides explainability support to improve transparency in LLM-assisted decision-making. Each LLM-generated configuration includes a structured rationale indicating the key factors that influenced the decision. For example, if the system recommends increasing bandwidth allocation, the decision log indicates whether this was driven by high latency observed in telemetry, an SLA threshold breach, or another contributing factor.<a href="#section-3.4-8" class="pilcrow">¶</a></p>
+<p id="section-3.4-9">The audit process additionally supports counterfactual reasoning, enabling operators to assess the projected outcome if no action is taken. For example, the system may indicate that without intervention, packet loss is expected to increase by a specified percentage within a defined time window. This provides operators with a comparative basis for evaluating proposed actions.<a href="#section-3.4-9" class="pilcrow">¶</a></p>
+<p id="section-3.4-10">If an LLM agent decision is based on incomplete or uncertain data, the system flags it accordingly. For example, if real-time telemetry data is insufficient, the confidence score is lowered and the condition is noted in the audit record, allowing operators to exercise appropriate judgment.<a href="#section-3.4-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1653,9 +1658,11 @@ Emerging agent protocols such as the Model Context Protocol (MCP) <span>[<a href
 <p id="section-6-3">The framework introduces trust boundaries between the LLM agent and the network management system, between the agent and external toolchains, between cooperating task agents, between retrieval databases and the LLM context, and between automated decision modules and human operators. Each boundary needs explicit protection through authentication, authorization, input validation, integrity protection, and audit logging.<a href="#section-6-3" class="pilcrow">¶</a></p>
 <p id="section-6-4">Prompt injection and RAG knowledge poisoning are important risks because they can influence operator-facing recommendations. Malicious telemetry fields, compromised documentation, poisoned retrieval databases, or cross-agent messages may affect model output. Mitigations include context separation, structured role tagging, input sanitization, integrity verification of retrieval documents, versioning of knowledge sources, logging of retrieved document identifiers, and deterministic validation of generated configurations.<a href="#section-6-4" class="pilcrow">¶</a></p>
 <p id="section-6-5">Agent identity and tool access also need protection. Each task agent should be bound to a distinct identity and to explicit permissions, for example through NACM-based access control. Tool invocation should use authenticated access, schema validation for tool inputs and outputs, sandboxing where appropriate, and human confirmation for high-risk tool invocations.<a href="#section-6-5" class="pilcrow">¶</a></p>
-<p id="section-6-6">The LLM-assisted decision layer can itself become a denial-of-service target. Excessive task instantiation requests, high-frequency telemetry triggers, or multi-agent loops may cause resource exhaustion or delayed incident response. Mitigations include rate limiting, admission control, quotas, maximum reasoning-depth or token limits, and circuit breakers in the Task Agent Management Module.<a href="#section-6-6" class="pilcrow">¶</a></p>
-<p id="section-6-7">LLMs may generate syntactically correct but semantically invalid configurations, such as referencing non-existent interfaces, misinterpreting vendor-specific syntax, or using incorrect parameter units. Mitigations include YANG schema validation, deterministic configuration simulation, access-control checks, confidence-based escalation thresholds, explicit reasoning logs, and operator review. Human approval MUST remain the final authority for high-impact changes.<a href="#section-6-7" class="pilcrow">¶</a></p>
-<p id="section-6-8">To support structured oversight, each generated configuration SHOULD be assigned a risk level derived from factors such as scope of impact, operation type, policy sensitivity, confidence score, and historical rollback frequency. Risk classification MUST be included in the audit record.<a href="#section-6-8" class="pilcrow">¶</a></p>
+<p id="section-6-6">The MCP/A2A tool and inter-agent surface requires an explicit threat model. Threats include tool spoofing, malicious or compromised MCP servers, forged inter-agent messages, replayed tool responses, confused-deputy behavior, and unauthorized agent impersonation. Mitigations include mutual authentication, signed or otherwise integrity-protected messages, least-privilege tool registration, allow-listed tool schemas, freshness checks, replay protection, and audit correlation across tool calls and agent-to-agent messages.<a href="#section-6-6" class="pilcrow">¶</a></p>
+<p id="section-6-7">The LLM-assisted decision layer can itself become a denial-of-service target. Excessive task instantiation requests, high-frequency telemetry triggers, or multi-agent loops may cause resource exhaustion or delayed incident response. Mitigations include rate limiting, admission control, quotas, maximum reasoning-depth or token limits, and circuit breakers in the Task Agent Management Module.<a href="#section-6-7" class="pilcrow">¶</a></p>
+<p id="section-6-8">LLMs may generate syntactically correct but semantically invalid configurations, such as referencing non-existent interfaces, misinterpreting vendor-specific syntax, or using incorrect parameter units. Mitigations include YANG schema validation, deterministic configuration simulation, access-control checks, confidence-based escalation thresholds, explicit reasoning logs, and operator review. Human approval MUST remain the final authority for high-impact changes.<a href="#section-6-8" class="pilcrow">¶</a></p>
+<p id="section-6-9">The confidence score itself is not a trusted security signal. It may be affected by hallucination, prompt injection, incomplete context, poor calibration, or implementation errors in the scoring method. Deployments SHOULD treat confidence as one input to risk classification, validate it against deterministic checks and evidence quality, and record how it was produced.<a href="#section-6-9" class="pilcrow">¶</a></p>
+<p id="section-6-10">To support structured oversight, each generated configuration SHOULD be assigned a risk level derived from factors such as scope of impact, operation type, policy sensitivity, confidence score, and historical rollback frequency. Risk classification MUST be included in the audit record.<a href="#section-6-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="IANA">
@@ -1724,7 +1731,7 @@ Emerging agent protocols such as the Model Context Protocol (MCP) <span>[<a href
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="appendix-A-1">We thanks Shailesh Prabhu from Nokia for his contributions to this document.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">We thank Shailesh Prabhu from Nokia and Jaime Jiménez for their contributions to this document.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="appendix">
@@ -1737,7 +1744,7 @@ Emerging agent protocols such as the Model Context Protocol (MCP) <span>[<a href
         <h3 id="name-appendix-a1-data-model">
 <a href="#name-appendix-a1-data-model" class="section-name selfRef">Appendix A.1 Data Model</a>
         </h3>
-<p id="appendix-B.1-1">This section defines the essential data models for LLM agent-assisted network management, including the LLM agent decision response and human audit records.<a href="#appendix-B.1-1" class="pilcrow">¶</a></p>
+<p id="appendix-B.1-1">This section defines illustrative data models for LLM agent-assisted network management, including the LLM agent decision response and human audit records. These models are examples for discussion and are not intended for IETF YANG module registration in their current form.<a href="#appendix-B.1-1" class="pilcrow">¶</a></p>
 <div id="llm-response-data-model">
 <section id="appendix-B.1.1">
           <h4 id="name-llm-response-data-model">
@@ -1757,7 +1764,7 @@ module: llm-response-module
 <div class="lang-yang sourcecode" id="appendix-B.1.1-4">
 <pre>
 module llm-response-module {
-  namespace "urn:ietf:params:xml:ns:yang:ietf-nmrg-llmn4et";
+  namespace "https://example.com/ns/yang/llm-response-module";
   prefix llmresponse;
   container llm-response {
     leaf config {
@@ -1802,7 +1809,7 @@ module: human-audit-module
 <div class="lang-yang sourcecode" id="appendix-B.1.2-4">
 <pre>
 module human-audit-module {
-  namespace "urn:ietf:params:xml:ns:yang:ietf-nmrg-llmn4et";
+  namespace "https://example.com/ns/yang/human-audit-module";
   prefix llmaudit;
   import ietf-yang-types { prefix yang; }
 
@@ -1825,6 +1832,7 @@ module human-audit-module {
           enum approve;
           enum modify;
           enum reject;
+          enum defer;
           }
         }
       leaf modified-config {
